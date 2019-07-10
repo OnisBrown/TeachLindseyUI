@@ -8,7 +8,7 @@
 			canvas { width: 100%; height: 100% }
 		</style>
 	</head>
-	<body>
+	<body style="height: 100vh; width:100vw; position: fixed;">
 		<script src="blockly/blockly_compressed.js"></script>
 		<script src="blockly/javascript_compressed.js"></script>
 
@@ -16,11 +16,16 @@
 		<script src="blockly/msg/js/en.js"></script>
 		<script src="Scripts/main.js"></script>
 
-		<h1> Testing </h1>
+		<h1 style="height: 2%; position: relative; top: 0px;"> Testing </h1>
 
-		<div id="blocklyDiv" style="height: 90vh; width: 70vw; position: relative;"></div>
+		<div id="blocklyDiv" style="height: 90%; width: 60%; float:left;"></div>
 
-		<div id="codeDiv" style="height: 10vh; width: 20vw; position: relative"> </div>
+		<div id="codeDiv" style="height: 90%; width: 20%; border-color: black; margin-left: 60%; text-align: ">
+
+		</div>
+
+		<button onclick="codeViewer()" style="bottom: 0"> view code </button>
+		<button onclick="executeCode()" style="bottom: 0"> run code </button>
 
 		<xml id="toolbox" style="display: none">
 			<category name="Control">
@@ -57,15 +62,24 @@
 					}
 		});
 
-		function codeViewer(event) {
+		function codeViewer() { // viewer for the code produced
 		  var code = Blockly.JavaScript.workspaceToCode(workspace);
-		  document.getElementById('codeDiv').value = code;
+		  document.getElementById('codeDiv').innerHTML = code;
 		}
 
+		function executeCode() {
+			window.LoopTrap = 100;
+			Blockly.JavaScript.INFINITE_LOOP_TRAP = 'if(--window.LoopTrap == 0) throw "Infinite loop.";\n';
+			var code = Blockly.JavaScript.workspaceToCode(workspace);
+			try{
+				eval(code);
+			}
+			catch (e){
+				alert(e);
+			}
+		}
 
-
-		workspace.addChangeListener(codeViewer);
-
+		Blockly.JavaScript.addReservedWords('code'); //make code a reserved word
 
 	</script>
 </html>
