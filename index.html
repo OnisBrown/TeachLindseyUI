@@ -20,7 +20,7 @@
 
 		<div id="blocklyDiv" style="height: 90%; width: 60%; float:left;"></div>
 
-		<div id="codeDiv" style="height: 90%; width: 20%; border-color: black; margin-left: 60%; text-align: ">
+		<div id="codeDiv" style="height: 90%; width: 20%; border-color: black; margin-left: 60%; text-align: center;">
 
 		</div>
 
@@ -66,6 +66,10 @@
 		  var code = Blockly.JavaScript.workspaceToCode(workspace);
 		  document.getElementById('codeDiv').innerHTML = code;
 		}
+
+		// function codeParse(obj){
+		// 	return Function(obj)
+		// }
 
 		function executeCode() {
 			window.LoopTrap = 100;
