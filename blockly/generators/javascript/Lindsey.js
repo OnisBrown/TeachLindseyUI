@@ -1,3 +1,5 @@
+import "./roswebcomponents/scripts/rwc.js";
+
 Blockly.JavaScript['Location'] = function(block) {
   //GoTo a location
   var choice = block.getFieldValue('location');
