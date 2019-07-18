@@ -1,5 +1,3 @@
-import "./roswebcomponents/scripts/rwc.js";
-
 Blockly.JavaScript['Location'] = function(block) {
   //GoTo a location
   var choice = block.getFieldValue('location');
@@ -9,8 +7,9 @@ Blockly.JavaScript['Location'] = function(block) {
 
 Blockly.JavaScript['GoTo'] = function(block) {
   //GoTo a location
-  var choice = Blockly.JavaScript.valueToCode(block,'location', Blockly.JavaScript.ORDER_ATOMIC) || "'failing to grab var'";
+  var choice = Blockly.JavaScript.valueToCode(block,'location', Blockly.JavaScript.ORDER_ATOMIC) || "failing to grab var";
   console.log(choice);
-  var code = "alert('" + choice + "')";
+
+  var code = "alert('" + choice + "'); rwcActionGoToNode(22)";
   return code;
 };
