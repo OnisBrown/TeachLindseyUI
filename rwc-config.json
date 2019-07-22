@@ -1,0 +1,53 @@
+{
+    "actions": {
+        "actionServers": {
+            "move_base": {
+                "actionServerName": "/move_base",
+                "actionName": "move_base_msgs/MoveBaseAction"
+            },
+            "topological_navigation": {
+                "actionServerName": "/topological_navigation",
+                "actionName": "topological_navigation/GotoNodeAction"
+            },
+            "speak": {
+                "actionServerName": "/speak",
+                "actionName": "mary_tts/maryttsAction"
+            }
+        },
+        "topics": {
+            "volume": {
+                "topicName": "/volume/percentChange",
+                "topicMessageType": "std_msgs/Int8"
+            }
+        }
+    },
+    "listeners": {
+        "odom": {
+            "topicName": "/odom",
+            "topicMessageType": "nav_msgs/Odometry"
+        },
+        "nearest_person_pose": {
+            "topicName": "/people_tracker/pose",
+            "topicMessageType": "geometry_msgs/PoseStamped"
+        },
+        "people_pose_array": {
+            "topicName": "/people_tracker/pose_array",
+            "topicMessageType": "geometry_msgs/PoseArray"
+        },
+        "current_node": {
+            "topicName": "/current_node",
+            "topicMessageType": "std_msgs/String"
+        },
+        "battery_state": {
+            "topicName": "/battery_state",
+            "topicMessageType": "scitos_msgs/BatteryState"
+        },
+        "volume": {
+            "topicName": "/volume/percent",
+            "topicMessageType": "std_msgs/Int8"
+        },
+        "camera_snapshot": {
+            "uri": "/roswebcomponents/images/qr-code.png"
+        }
+    }
+}
