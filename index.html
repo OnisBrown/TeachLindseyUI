@@ -26,7 +26,6 @@
 		<script  src="blockly/blocks/LindNav.js"></script>
 
 		<script src="blockly/msg/js/en.js"></script>
-		<script src="Scripts/main.js"></script>
 
 		<h1 style="height: 2%; position: relative; top: 0px; font-size: 8pt"> Testing </h1>
 
@@ -68,40 +67,5 @@
 		</xml>
 	</body>
 
-	<script>
-		var workspace = Blockly.inject('blocklyDiv',
-			{toolbox: document.getElementById('toolbox'),
-			 grid:
-					{
-						spacing:15,
-						length:4,
-						colour:'#ccc',
-						snap:true
-					}
-		});
-
-		function codeViewer() { // viewer for the code produced
-		  var code = Blockly.JavaScript.workspaceToCode(workspace);
-		  document.getElementById('codeDiv').innerHTML = code;
-		}
-
-		// function codeParse(obj){
-		// 	return Function(obj)
-		// }
-
-		function executeCode() {
-			window.LoopTrap = 100;
-			Blockly.JavaScript.INFINITE_LOOP_TRAP = 'if(--window.LoopTrap == 0) throw "Infinite loop.";\n';
-			var code = Blockly.JavaScript.workspaceToCode(workspace);
-			try{
-				eval(code);
-			}
-			catch (e){
-				alert(e);
-			}
-		}
-
-		Blockly.JavaScript.addReservedWords('code'); //make code a reserved word
-
-	</script>
+	<script onload="init()" src="Scripts/main.js"></script>
 </html>
