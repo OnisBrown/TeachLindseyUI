@@ -40,3 +40,32 @@ Blockly.Blocks['GoTo'] = {
     });
   }
 };
+
+Blockly.Blocks['move'] = {
+  init: function() {
+    this.jsonInit({
+      "message0": 'move x: %1 y: %2 z: %3 units',
+      "args0": [
+        {
+          "type": "field_number",
+          "name": "x",
+          "check": "Number"
+        },
+        {
+          "type": "field_number",
+          "name": "y",
+          "check": "Number"
+        },
+        {
+          "type": "field_number",
+          "name": "z",
+          "check": "Number"
+        }
+      ],
+      "nextStatement": null,
+      "previousStatement": null,
+      "colour": 160,
+      "tooltip": "move Lindsey forward x metres",
+    });
+  }
+};
