@@ -10,6 +10,6 @@ Blockly.JavaScript['GoTo'] = function(block) {
   var choice = Blockly.JavaScript.valueToCode(block,'location', Blockly.JavaScript.ORDER_ATOMIC) || "failing to grab var";
   console.log(choice);
 
-  var code = "alert('" + choice + "'); rwcActionGoToNode(22)";
+  var code = "alert('" + choice + "'); rwcActionGoToNode('WayPoint22')";
   return code;
 };

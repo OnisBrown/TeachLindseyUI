@@ -20,6 +20,8 @@ Blockly.Blocks['Location'] = {
   }
 };
 
+
+
 Blockly.Blocks['GoTo'] = {
   init: function() {
     this.jsonInit({

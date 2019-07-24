@@ -29,14 +29,16 @@
 
 		<h1 style="height: 2%; position: relative; top: 0px; font-size: 8pt"> Testing </h1>
 
+		<!-- toolbox and workspace div -->
 		<div id="blocklyDiv" style="height: 90%; width: 60%; float:left;"></div>
+		<!-- code display div -->
+		<div id="codeDiv" style="height: 90%; width: 20%; border-color: black; margin-left: 60%; text-align: center;"></div>
 
-		<div id="codeDiv" style="height: 90%; width: 20%; border-color: black; margin-left: 60%; text-align: center;">
-
-		</div>
-
+		<!-- buttons for viewing and launching script -->
 		<button onclick="codeViewer()" style="bottom: 0"> view code </button>
 		<button onclick="executeCode()" style="bottom: 0"> run code </button>
+
+		<!-- Toolbox definition -->
 
 		<xml id="toolbox" style="display: none">
 
@@ -62,6 +64,7 @@
 
 			<category name="Speach">
 				<block type="give_speech"></block>
+				<block type="Script"></block>
 			</category>
 
 		</xml>
