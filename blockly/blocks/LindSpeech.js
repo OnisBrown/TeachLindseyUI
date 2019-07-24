@@ -1,14 +1,11 @@
 Blockly.Blocks['Script'] = {
   init: function() {
     this.jsonInit({
-      "message0": '%1 Exibit',
+      "message0": 'place speech here %1',
       "args0": [
         {
           "type": "field_input",
-          "name": "location",
-          "options": [
-
-          ]
+          "name": "script",
         }
       ],
       "output": "String",
