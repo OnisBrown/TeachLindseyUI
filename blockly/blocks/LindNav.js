@@ -7,9 +7,9 @@ Blockly.Blocks['Location'] = {
           "type": "field_dropdown",
           "name": "location",
           "options": [
-            ["Viking ship", "boat"],
-            ["Roman Currency", "coins"],
-            ["Ancient clay Bowls", "bowls"]
+            ["Viking ship", "12"],
+            ["Roman Currency", "14"],
+            ["Ancient clay Bowls", "16"]
           ]
         }
       ],
