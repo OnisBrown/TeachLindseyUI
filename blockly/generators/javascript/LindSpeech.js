@@ -8,8 +8,8 @@ Blockly.JavaScript['Script'] = function(block) {
 Blockly.JavaScript['give_speech'] = function(block) {
   //GoTo a location
   var paragraph = Blockly.JavaScript.valueToCode(block,'script', Blockly.JavaScript.ORDER_ATOMIC) || "failed to parse speech";
-  console.log("doing it");
+  console.log(paragraph);
 
-  var code = "alert('" + paragraph + "'); rwcActionSay('" + paragraph + "');";
+  var code = "rwcActionSay('" + paragraph + "');";
   return code;
 };
