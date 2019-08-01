@@ -22,6 +22,6 @@ Blockly.JavaScript['move'] = function(block) {
    vector.z = Blockly.JavaScript.valueToCode(block,'z', Blockly.JavaScript.ORDER_ATOMIC) || 0;
 
   console.log(vector.x + ' ' + vector.y + ' ' + vector.z);
-  var code = "rwcActionSetPoseRelative(2, 0, 0);"
+  var code = "rwcActionSetPoseRelative(" + vector.x + ", " + vector.y + ", " + vecotr.z + ");"
   return code;
 };
