@@ -10,40 +10,27 @@ Blockly.JavaScript['GoTo'] = function(block) {
   var choice = Blockly.JavaScript.valueToCode(block,'location', Blockly.JavaScript.ORDER_ATOMIC) || "failing to grab var";
   console.log(choice);
 
-  var code = "goToCode('" + choice + "');";
+  //var code = "goToCode('" + choice + "');";
+  var code = "goToCode(" + choice + "); "
   return code;
 };
 
 Blockly.JavaScript['move'] = function(block) {
   //move in a direction
-  var vector = {x:0, y:0, z:0};
-   vector.x = Blockly.JavaScript.valueToCode(block,'x', Blockly.JavaScript.ORDER_ATOMIC) || 0;
-   vector.y = Blockly.JavaScript.valueToCode(block,'y', Blockly.JavaScript.ORDER_ATOMIC) || 0;
-   vector.z = Blockly.JavaScript.valueToCode(block,'z', Blockly.JavaScript.ORDER_ATOMIC) || 0;
+  var vector = [0, 0, 0];
+  vector[0] = Blockly.JavaScript.valueToCode(block,'x', Blockly.JavaScript.ORDER_ATOMIC) || 10;
+  vector[1] = Blockly.JavaScript.valueToCode(block,'y', Blockly.JavaScript.ORDER_ATOMIC) || 0;
+  vector[2] = Blockly.JavaScript.valueToCode(block,'z', Blockly.JavaScript.ORDER_ATOMIC) || 0;
 
-  console.log(vector.x + ' ' + vector.y + ' ' + vector.z);
+  console.log(vector[0] + ' ' + vector[1] + ' ' + vector[2]);
   var code = "moveCode("+ vector +");"
   return code;
 };
 
-
 function moveCode(vector){
-	if(Goalstatus.movement == false){
-		Goalstatus.movement = true;
-		rwcActionSetPoseRelative(+ vector.x, vector.y, vecotr.z).on("result", function(status){Goalstatus.movement = false});
-		return;
-	}
-		return moveCode(vector);
-	// Goalstatus.movement = true;
-	// rwcActionSetPoseRelative(+ vector.x, vector.y, vecotr.z).on("result", function(status){Goalstatus.movement = false});
-	// while(Goalstatus.movement == true){}
+	rwcActionSetPoseRelative(vector[0], vector[1], vector[2]).on("result", function(status){Goalstatus.movement = false});
 }
 
-function GoToCode(choice){
-	if(Goalstatus.movement == false){
-		Goalstatus.movement = true;
-		rwcActionActionGoToNode("WayPoint" + choice).on("result", function(status){Goalstatus.movement = false});
-		return;
-	}
-	return goToCode(choice);
+function goToCode(choice){
+  rwcActionGoToNode("WayPoint" + choice).on("result", function(status){console.log(status)});
 }
