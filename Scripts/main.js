@@ -20,11 +20,7 @@ function codeViewer() { // viewer for the code produced
   document.getElementById('codeDiv').innerHTML = code;
 }
 
-// function codeParse(obj){
-// 	return Function(obj)
-// }
-
-function executeCode() {
+function executeCode() { // executes code made by blocks
   window.LoopTrap = 100;
   Blockly.JavaScript.INFINITE_LOOP_TRAP = 'if(--window.LoopTrap == 0) throw "Infinite loop.";\n';
   var code = Blockly.JavaScript.workspaceToCode(workspace);
