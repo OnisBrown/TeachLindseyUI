@@ -33,7 +33,7 @@ function moveCode(vector){
 		rwcActionSetPoseRelative(+ vector.x, vector.y, vecotr.z).on("result", function(status){Goalstatus.movement = false});
 		return;
 	}
-	return moveCode(x, y, z);
+	return moveCode(vector);
 }
 
 function GoToCode(choice){
@@ -42,5 +42,5 @@ function GoToCode(choice){
 		rwcActionActionGoToNode("WayPoint" + choice).on("result", function(status){Goalstatus.movement = false});
 		return;
 	}
-	return goToCode(x, y, z);
+	return goToCode(choice);
 }
