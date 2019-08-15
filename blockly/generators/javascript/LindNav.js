@@ -10,7 +10,7 @@ Blockly.JavaScript['GoTo'] = function(block) {
   var choice = Blockly.JavaScript.valueToCode(block,'location', Blockly.JavaScript.ORDER_ATOMIC) || "failing to grab var";
   console.log(choice);
 
-  var code = "rwcActionGoToNode('WayPoint" + choice + "');";
+  var code = "goToCode('" + choice + "');";
   return code;
 };
 
@@ -22,6 +22,25 @@ Blockly.JavaScript['move'] = function(block) {
    vector.z = Blockly.JavaScript.valueToCode(block,'z', Blockly.JavaScript.ORDER_ATOMIC) || 0;
 
   console.log(vector.x + ' ' + vector.y + ' ' + vector.z);
-  var code = "rwcActionSetPoseRelative(" + vector.x + ", " + vector.y + ", " + vecotr.z + ");"
+  var code = "moveCode("+ vector +");"
   return code;
 };
+
+
+function moveCode(vector){
+	if(Goalstatus.movement == false){
+		Goalstatus.movement = true;
+		rwcActionSetPoseRelative(+ vector.x, vector.y, vecotr.z).on("result", function(status){Goalstatus.movement = false});
+		return;
+	}
+	return moveCode(x, y, z);
+}
+
+function GoToCode(choice){
+	if(Goalstatus.movement == false){
+		Goalstatus.movement = true;
+		rwcActionActionGoToNode("WayPoint" + choice).on("result", function(status){Goalstatus.movement = false});
+		return;
+	}
+	return goToCode(x, y, z);
+}
