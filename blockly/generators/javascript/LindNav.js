@@ -33,7 +33,10 @@ function moveCode(vector){
 		rwcActionSetPoseRelative(+ vector.x, vector.y, vecotr.z).on("result", function(status){Goalstatus.movement = false});
 		return;
 	}
-	return moveCode(vector);
+		return moveCode(vector);
+	// Goalstatus.movement = true;
+	// rwcActionSetPoseRelative(+ vector.x, vector.y, vecotr.z).on("result", function(status){Goalstatus.movement = false});
+	// while(Goalstatus.movement == true){}
 }
 
 function GoToCode(choice){
