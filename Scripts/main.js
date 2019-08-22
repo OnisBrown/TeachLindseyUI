@@ -53,7 +53,7 @@ function Picker(){
         rwcActionGoToAndDescribeExhibit(Number(current[1])).on("result", function(status){console.log(status); Picker();});
         break;
       case 'move':
-        rwcActionSetPoseRelative(current[1][0], current[1][1], current[1][2]).on("result", function(status){console.log(status); Picker();});
+        rwcActionSetPoseRelative(current[1][1], current[1][1], current[1][2]).on("result", function(status){console.log(status); Picker();});
         break;
     }
   }

@@ -39,28 +39,31 @@ Blockly.Blocks['goToDescribe'] = {
 Blockly.Blocks['move'] = {
   init: function() {
     this.jsonInit({
-      "message0": 'move x: %1 y: %2 z: %3 units',
+      "message0": 'move x: %1 y: %2 z: %3 metres',
       "args0": [
         {
           "type": "field_number",
           "name": "x",
-          "check": "Number"
+          "min": -10,
+          "max": 10
         },
         {
           "type": "field_number",
           "name": "y",
-          "check": "Number"
+          "min": -10,
+          "max": 10
         },
         {
           "type": "field_number",
           "name": "z",
-          "check": "Number"
+          "min": -10,
+          "max": 10
         }
       ],
       "nextStatement": null,
       "previousStatement": null,
       "colour": 160,
-      "tooltip": "move Lindsey forward x metres",
+      "tooltip": "move Lindsey x, y, z metres",
     });
   }
 };

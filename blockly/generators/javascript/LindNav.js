@@ -19,16 +19,15 @@ function goToCode(choice){
 
 Blockly.JavaScript['move'] = function(block) {
   //move in a direction
-  var vector = [0, 0, 0];
-  vector[0] = Blockly.JavaScript.valueToCode(block,'x', Blockly.JavaScript.ORDER_ATOMIC) || 0.5;
-  vector[1] = Blockly.JavaScript.valueToCode(block,'y', Blockly.JavaScript.ORDER_ATOMIC) || 0;
-  vector[2] = Blockly.JavaScript.valueToCode(block,'z', Blockly.JavaScript.ORDER_ATOMIC) || 0;
-  var code = "moveCode("+ vector +");"
+  var vector = new Array(0, 0, 0);
+  vector[0] = block.getFieldValue('x');
+  vector[1] = block.getFieldValue('y');
+  vector[2] = block.getFieldValue('z');
+  var code = "moveCode(["+ vector[0] + ", " + vector[1] + ", " + vector[2] + "]);"; //Only passes the first value if written normally
   return code;
 };
 
 function moveCode(vector){
-	//rwcActionSetPoseRelative(vector[0], vector[1], vector[2]).on("result", function(status){Goalstatus.movement = false});
 	commandQueue.push(['move', vector]);
 }
 
