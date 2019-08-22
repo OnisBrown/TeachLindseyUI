@@ -20,8 +20,6 @@ Blockly.Blocks['location'] = {
   }
 };
 
-
-
 Blockly.Blocks['goTo'] = {
   init: function() {
     this.jsonInit({
@@ -70,4 +68,22 @@ Blockly.Blocks['move'] = {
   }
 };
 
-Blockly.Blocks['GoToDescribe']
+Blockly.Blocks['goToDescribe'] = {
+  init: function() {
+    this.jsonInit({
+      "message0": 'Go to %1 and give the standard talk',
+      "args0": [
+        {
+          "type": "input_value",
+          "name": "location",
+          "check": "String"
+
+        }
+      ],
+      "nextStatement": null,
+      "previousStatement": null,
+      "colour": 160,
+      "tooltip": "Insert a location Block to get the premade talk on that exhibit",
+    });
+  }
+};

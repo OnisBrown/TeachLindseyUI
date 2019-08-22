@@ -2,6 +2,7 @@ var workspace
 
 var commandQueue = new Array();
 var queueCounter = 0;
+var queueIndex = 0;
 
 function init(){
   workspace = Blockly.inject('blocklyDiv',
@@ -32,5 +33,23 @@ function executeCode() { // executes code made by blocks
   }
   catch (e){
     alert(e);
+  }
+  finally{
+    Picker();
+  }
+}
+
+function Picker(){
+  if commandQueue.length() > 0 {
+    
+  }
+  var current = commandQueue.pop();
+  switch(current[0]){
+    case 'goTo':
+      rwcActionGoToNode("WayPoint" + choice).on("result", function(status){console.log(status); Picker();});
+    case 'goToDesc':
+      rwcActionGoToAndDescribeExhibit(choice).on("result", function(status){console.log(status); Picker();});
+    case 'move':
+      rwcActionSetPoseRelative(vector[0], vector[1], vector[2]).on("result", function(status){console.log(status); Picker();});
   }
 }

@@ -1,4 +1,4 @@
-function  idleAn = {
+function idleAn(){
 
 
 }
@@ -6,4 +6,4 @@ function  idleAn = {
 var goalStatus = {
   speech: false,
 	movement: false,
-}
+};
