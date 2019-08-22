@@ -40,15 +40,15 @@ function executeCode() { // executes code made by blocks
 }
 
 function Picker(){
-  if commandQueue.length() > 0 {
-    
+  if (commandQueue.length() > 0) {
+
   }
   var current = commandQueue.pop();
   switch(current[0]){
     case 'goTo':
-      rwcActionGoToNode("WayPoint" + choice).on("result", function(status){console.log(status); Picker();});
+      rwcActionGoToNode("WayPoint" + current[1]).on("result", function(status){console.log(status); Picker();});
     case 'goToDesc':
-      rwcActionGoToAndDescribeExhibit(choice).on("result", function(status){console.log(status); Picker();});
+      rwcActionGoToAndDescribeExhibit(current[1]).on("result", function(status){console.log(status); Picker();});
     case 'move':
       rwcActionSetPoseRelative(vector[0], vector[1], vector[2]).on("result", function(status){console.log(status); Picker();});
   }
