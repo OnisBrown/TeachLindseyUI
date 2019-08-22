@@ -1,4 +1,4 @@
-Blockly.Blocks['Location'] = {
+Blockly.Blocks['location'] = {
   init: function() {
     this.jsonInit({
       "message0": '%1 Exibit',
@@ -22,7 +22,7 @@ Blockly.Blocks['Location'] = {
 
 
 
-Blockly.Blocks['GoTo'] = {
+Blockly.Blocks['goTo'] = {
   init: function() {
     this.jsonInit({
       "message0": 'Go to %1',
@@ -69,3 +69,5 @@ Blockly.Blocks['move'] = {
     });
   }
 };
+
+Blockly.Blocks['GoToDescribe']

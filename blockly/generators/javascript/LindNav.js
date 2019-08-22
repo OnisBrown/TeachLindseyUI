@@ -1,11 +1,11 @@
-Blockly.JavaScript['Location'] = function(block) {
+Blockly.JavaScript['location'] = function(block) {
   //Pick a location
   var choice = block.getFieldValue('location');
   var code =choice;
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
-Blockly.JavaScript['GoTo'] = function(block) {
+Blockly.JavaScript['goTo'] = function(block) {
   //GoTo a location
   var choice = Blockly.JavaScript.valueToCode(block,'location', Blockly.JavaScript.ORDER_ATOMIC) || "failing to grab var";
   console.log(choice);

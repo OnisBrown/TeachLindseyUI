@@ -1,9 +1,9 @@
-var IdleAn = {
+function  idleAn = {
 
 
 }
 
-var Goalstatus = {
-	speech: false,
+var goalStatus = {
+  speech: false,
 	movement: false,
 }

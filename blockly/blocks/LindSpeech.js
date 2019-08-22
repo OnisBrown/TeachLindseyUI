@@ -1,4 +1,4 @@
-Blockly.Blocks['Script'] = {
+Blockly.Blocks['script'] = {
   init: function() {
     this.jsonInit({
       "message0": 'place speech here %1',
@@ -16,7 +16,7 @@ Blockly.Blocks['Script'] = {
 };
 
 
-Blockly.Blocks['give_speech'] = {
+Blockly.Blocks['giveSpeech'] = {
   init: function() {
     this.jsonInit({
       "message0": 'say %1',
