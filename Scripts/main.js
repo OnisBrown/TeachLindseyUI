@@ -40,16 +40,23 @@ function executeCode() { // executes code made by blocks
 }
 
 function Picker(){
+  console.log(commandQueue);
   if (commandQueue.length > 0) {
-
+    var current = commandQueue.shift();
+    console.log(current[0] + " " + current[1]);
+    switch(current[0]){
+      case 'goTo':
+        rwcActionGoToNode("WayPoint" + current[1]).on("result", function(status){console.log(status); Picker();});
+        break;
+      case 'goToDesc':
+        rwcActionGoToAndDescribeExhibit(current[1]).on("result", function(status){console.log(status); Picker();});
+        break;
+      case 'move':
+        rwcActionSetPoseRelative(vector[0], vector[1], vector[2]).on("result", function(status){console.log(status); Picker();});
+        break;
+    }
   }
-  var current = commandQueue.pop();
-  switch(current[0]){
-    case 'goTo':
-      rwcActionGoToNode("WayPoint" + current[1]).on("result", function(status){console.log(status); Picker();});
-    case 'goToDesc':
-      rwcActionGoToAndDescribeExhibit(current[1]).on("result", function(status){console.log(status); Picker();});
-    case 'move':
-      rwcActionSetPoseRelative(vector[0], vector[1], vector[2]).on("result", function(status){console.log(status); Picker();});
+  else{
+    return;
   }
 }
