@@ -90,7 +90,7 @@ Blockly.Blocks['location'] = {
 Blockly.Blocks['exhibitLs1'] = {
   init: function() {
     this.jsonInit({
-      "message0": 'Death and burial tour exhibits: %1',
+      "message0": 'Death and burial tour exhibit: %1',
       "args0": [
         {
           "type": "field_dropdown",
@@ -115,7 +115,7 @@ Blockly.Blocks['exhibitLs1'] = {
 Blockly.Blocks['exhibitLs2'] = {
   init: function() {
     this.jsonInit({
-      "message0": 'Tools and technology exhibits: %1',
+      "message0": 'Tools and technology exhibit: %1',
       "args0": [
         {
           "type": "field_dropdown",
@@ -139,7 +139,7 @@ Blockly.Blocks['exhibitLs2'] = {
 Blockly.Blocks['exhibitLs3'] = {
   init: function() {
     this.jsonInit({
-      "message0": 'Religion and belief exhibits: %1',
+      "message0": 'Religion and belief exhibit: %1',
       "args0": [
         {
           "type": "field_dropdown",
@@ -163,7 +163,7 @@ Blockly.Blocks['exhibitLs3'] = {
 Blockly.Blocks['exhibitLs4'] = {
   init: function() {
     this.jsonInit({
-      "message0": 'Art and design exhibits: %1',
+      "message0": 'Art and design exhibit: %1',
       "args0": [
         {
           "type": "field_dropdown",

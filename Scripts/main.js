@@ -1,8 +1,8 @@
 var workspace
 
 var commandQueue = new Array();
-var queueCounter = 0;
-var queueIndex = 0;
+// var queueCounter = 0;
+// var queueIndex = 0;
 
 function init(){
   workspace = Blockly.inject('blocklyDiv',
@@ -52,7 +52,7 @@ function Picker(){
         rwcActionGoToAndDescribeExhibit(current[1]).on("result", function(status){console.log(status); Picker();});
         break;
       case 'move':
-        rwcActionSetPoseRelative(vector[0], vector[1], vector[2]).on("result", function(status){console.log(status); Picker();});
+        rwcActionSetPoseRelative(current[1][0], current[1][1], current[1][2]).on("result", function(status){console.log(status); Picker();});
         break;
     }
   }
