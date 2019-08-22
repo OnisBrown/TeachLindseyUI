@@ -63,7 +63,7 @@ Blockly.Blocks['move'] = {
       "nextStatement": null,
       "previousStatement": null,
       "colour": 160,
-      "tooltip": "move Lindsey x, y, z metres",
+      "tooltip": "move Lindsey x, y, z metres +- 10 metre per move",
     });
   }
 };
