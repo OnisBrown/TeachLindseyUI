@@ -1,4 +1,4 @@
-function idleAn(){
+async function idleAn(){
 
 
 }
