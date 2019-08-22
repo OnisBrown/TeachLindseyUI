@@ -49,7 +49,8 @@ function Picker(){
         rwcActionGoToNode("WayPoint" + current[1]).on("result", function(status){console.log(status); Picker();});
         break;
       case 'goToDesc':
-        rwcActionGoToAndDescribeExhibit(current[1]).on("result", function(status){console.log(status); Picker();});
+        console.log(current[1] + " here");
+        rwcActionGoToAndDescribeExhibit(Number(current[1])).on("result", function(status){console.log(status); Picker();});
         break;
       case 'move':
         rwcActionSetPoseRelative(current[1][0], current[1][1], current[1][2]).on("result", function(status){console.log(status); Picker();});
