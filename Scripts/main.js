@@ -1,5 +1,8 @@
 var workspace
 
+var commandQueue = new Array();
+var queueCounter = 0;
+
 function init(){
   workspace = Blockly.inject('blocklyDiv',
     {toolbox: document.getElementById('toolbox'),

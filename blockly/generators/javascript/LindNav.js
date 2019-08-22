@@ -28,9 +28,10 @@ Blockly.JavaScript['move'] = function(block) {
 };
 
 function moveCode(vector){
-	rwcActionSetPoseRelative(vector[0], vector[1], vector[2]).on("result", function(status){Goalstatus.movement = false});
+	//rwcActionSetPoseRelative(vector[0], vector[1], vector[2]).on("result", function(status){Goalstatus.movement = false});
+	commandQueue.push([])
 }
 
 function goToCode(choice){
-  rwcActionGoToNode("WayPoint" + choice).on("result", function(status){console.log(status)});
+//rwcActionGoToNode("WayPoint" + choice).on("result", function(status){console.log(status)});
 }
