@@ -15,10 +15,5 @@ Blockly.JavaScript['giveSpeech'] = function(block) {
 };
 
 function giveSpeechCode(paragraph){
-	if(Goalstatus.speech == false){
-		Goalstatus.speech = true;
-		rwcActionSay(paragraph).on("result", function(status){Goalstatus.speech = false});
-		return;
-	}
-	return giveSpeechCode(paragraph);
+  commandQueue.push(['speech', paragraph]);
 }
