@@ -40,7 +40,7 @@ function executeCode() { // executes code made by blocks
 }
 
 function Picker(){
-  if (commandQueue.length() > 0) {
+  if (commandQueue.length > 0) {
 
   }
   var current = commandQueue.pop();
