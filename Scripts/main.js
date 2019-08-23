@@ -49,8 +49,8 @@ function Picker(){
         rwcActionGoToNode("WayPoint" + current[1]).on("result", function(status){console.log(status); Picker();});
         break;
       case 'goToDesc':
-        console.log(current[1] + " here");
-        rwcActionGoToAndDescribeExhibit(Number(current[1])).on("result", function(status){console.log(status); Picker();});
+        console.log(current[1]);
+        rwcActionGoToAndDescribeExhibit(current[1]).on("result", function(status){console.log(status); Picker();});
         break;
       case 'move':
         rwcActionSetPoseRelative(current[1][0], current[1][1], current[1][2]).on("result", function(status){console.log(status); Picker();});
@@ -58,6 +58,10 @@ function Picker(){
       case 'speech':
         rwcActionSay(current[1]).on("result", function(status){console.log(status); Picker();});
         break;
+      case 'desc':
+        console.log(current[1]);
+        rwcActionDescribeExhibit(current[1]).on("result", function(status){console.log(status); Picker();});
+      break;
     }
   }
   else{

@@ -34,3 +34,22 @@ Blockly.Blocks['giveSpeech'] = {
     });
   }
 };
+
+Blockly.Blocks['describe'] = {
+  init: function() {
+    this.jsonInit({
+      "message0": 'Give a standard talk on %1',
+      "args0": [
+        {
+          "type": "input_value",
+          "name": "exhibit",
+          "check": "String"
+        }
+      ],
+      "nextStatement": null,
+      "previousStatement": null,
+      "colour": 160,
+      "tooltip": "Insert an exhibitLs Block to get the premade talk on that exhibit",
+    });
+  }
+};

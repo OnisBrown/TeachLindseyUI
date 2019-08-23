@@ -17,3 +17,13 @@ Blockly.JavaScript['giveSpeech'] = function(block) {
 function giveSpeechCode(paragraph){
   commandQueue.push(['speech', paragraph]);
 }
+
+Blockly.JavaScript['describe'] = function(block){ // describe an exhibit
+  var choice = Blockly.JavaScript.valueToCode(block,'exhibit', Blockly.JavaScript.ORDER_ATOMIC) || "failing to get exhibit name";
+  var code = "goToDescCode(" + choice + ");"
+  return code;
+};
+
+function goToDescCode(choice){
+  commandQueue.push(['desc', Number(choice)]);
+}
