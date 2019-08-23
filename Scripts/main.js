@@ -61,7 +61,7 @@ function Picker(){
       case 'desc':
         console.log(current[1]);
         rwcActionDescribeExhibit(current[1]).on("result", function(status){console.log(status); Picker();});
-      break;
+        break;
     }
   }
   else{
