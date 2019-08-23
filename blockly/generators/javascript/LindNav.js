@@ -13,7 +13,6 @@ Blockly.JavaScript['goTo'] = function(block) {
 };
 
 function goToCode(choice){
-//rwcActionGoToNode("WayPoint" + choice).on("result", function(status){console.log(status)});
   commandQueue.push(['goTo', choice]);
 }
 
@@ -32,39 +31,39 @@ function moveCode(vector){
 }
 
 Blockly.JavaScript['exhibitLs1'] = function(block) {
-  //Pick a location
+  //Pick an exhibit
   var choice = block.getFieldValue('exhibit');
   var code =choice;
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
 Blockly.JavaScript['exhibitLs2'] = function(block) {
-  //Pick a location
+  //Pick an exhibit
   var choice = block.getFieldValue('exhibit');
   var code =choice;
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
 Blockly.JavaScript['exhibitLs3'] = function(block) {
-  //Pick a location
+  //Pick an exhibit
   var choice = block.getFieldValue('exhibit');
   var code =choice;
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
 Blockly.JavaScript['exhibitLs4'] = function(block) {
-  //Pick a location
+  //Pick an exhibit
   var choice = block.getFieldValue('exhibit');
   var code =choice;
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
-Blockly.JavaScript['goToDescribe'] = function(block){
+Blockly.JavaScript['goToDescribe'] = function(block){ // go to and describe an exhibit
   var choice = Blockly.JavaScript.valueToCode(block,'exhibit', Blockly.JavaScript.ORDER_ATOMIC) || "failing to get exhibit name";
   var code = "goToDescCode(" + choice + ");"
   return code;
 };
 
 function goToDescCode(choice){
-  commandQueue.push(['goToDesc', choice]);
+  commandQueue.push(['goToDesc', Number(choice)]);
 }
