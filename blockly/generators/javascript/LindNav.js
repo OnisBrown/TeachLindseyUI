@@ -60,10 +60,21 @@ Blockly.JavaScript['exhibitLs4'] = function(block) {
 
 Blockly.JavaScript['goToDescribe'] = function(block){ // go to and describe an exhibit
   var choice = Blockly.JavaScript.valueToCode(block,'exhibit', Blockly.JavaScript.ORDER_ATOMIC) || "failing to get exhibit name";
-  var code = "goToDescCode(" + choice + ");"
+  var code = "goToDescCode('" + choice + "');"
   return code;
 };
 
 function goToDescCode(choice){
-  commandQueue.push(['goToDesc', Number(choice)]);
+  commandQueue.push(['goToDesc', choice]);
+}
+
+Blockly.JavaScript['startTour'] = function(block) {
+  //Pick an exhibit
+  var choice = block.getFieldValue('tour');
+  var code = "startTourCode('" + choice + "')";
+  return code;
+};
+
+function goToDescCode(choice){
+  commandQueue.push(['startTour', choice]);
 }

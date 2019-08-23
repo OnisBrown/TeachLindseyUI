@@ -77,7 +77,7 @@ Blockly.Blocks['location'] = {
           "type": "field_dropdown",
           "name": "location",
           "options": [
-            ["Viking ship", "12"],
+            ["Barrows", "17"],
             ["Roman Currency", "14"],
             ["Ancient clay Bowls", "16"]
           ]
@@ -183,6 +183,30 @@ Blockly.Blocks['exhibitLs4'] = {
       "output": "String",
       "colour": 160,
       "tooltip": "Pick an exhibit from the drop down menu",
+    });
+  }
+};
+
+Blockly.Blocks['startTour'] = {
+  init: function() {
+    this.jsonInit({
+      "message0": 'choose a stock tour: %1',
+      "args0": [
+        {
+          "type": "field_dropdown",
+          "name": "tour",
+          "options": [
+            ["Death and Burial tour", "death"],
+            ["Tools and technology tour", "tools"],
+            ["Religion and belief tour", "religion"],
+            ["Art and design tour", "art"]
+          ]
+        }
+      ],
+      "nextStatement": null,
+      "previousStatement": null,
+      "colour": 160,
+      "tooltip": "Pick a tour from one of the pre-established ones",
     });
   }
 };
