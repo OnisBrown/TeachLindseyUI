@@ -75,6 +75,6 @@ Blockly.JavaScript['startTour'] = function(block) {
   return code;
 };
 
-function goToDescCode(choice){
+function startTourCode(choice){
   commandQueue.push(['startTour', choice]);
 }
