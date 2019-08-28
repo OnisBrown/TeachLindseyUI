@@ -50,7 +50,7 @@ function Picker(){
         break;
       case 'goToDesc':
         console.log(current[1]);
-        rwcActionGoToAndDescribeExhibit(current[1]).on("result", function(status){console.log(status); Picker();});
+        rwcActionGoToAndDescribeExhibit(current[1]).on("result", function(){Picker();});
         break;
       case 'move':
         rwcActionSetPoseRelative(current[1][0], current[1][1], current[1][2]).on("result", function(status){console.log(status); Picker();});
@@ -60,10 +60,10 @@ function Picker(){
         break;
       case 'desc':
         console.log(current[1]);
-        rwcActionDescribeExhibit(current[1]).on("result", function(status){console.log(status); Picker();});
+        rwcActionDescribeExhibit(current[1]).on("result", function(){Picker();});
         break;
       case 'startTour':
-        rwcActionStartTour(current[1]).on("result", function(status){console.log(status); Picker();});
+        rwcActionStartTour(current[1]).on("result", function(){ Picker();});
         break;
     }
   }
