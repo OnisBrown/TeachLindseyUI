@@ -48,7 +48,7 @@ Blockly.Blocks['describe'] = {
       ],
       "nextStatement": null,
       "previousStatement": null,
-      "colour": 160,
+      "style":"procedure_blocks",
       "tooltip": "Insert an exhibitLs Block to get the premade talk on that exhibit",
     });
   }

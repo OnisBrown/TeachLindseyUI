@@ -1,8 +1,15 @@
 var workspace
-
+var xml_txt
 var commandQueue = new Array();
-// var queueCounter = 0;
-// var queueIndex = 0;
+var commandQueueL2 = new Array();
+
+function updater(event){
+  var code = Blockly.JavaScript.workspaceToCode(workspace);
+  document.getElementById('codeDiv').innerHTML = code;
+
+  var xml = Blockly.Xml.workspaceToDom(workspace);
+  xml_txt = Blockly.Xml.domToPrettyText(xml);
+}
 
 function init(){
   workspace = Blockly.inject('blocklyDiv',
@@ -13,15 +20,45 @@ function init(){
           length:4,
           colour:'#ccc',
           snap:true
-        }
+        },
+    theme: Blockly.Theme('highcontrast', 'highcontrast')
   });
-
+  workspace.addChangeListener(updater);
   Blockly.JavaScript.addReservedWords('code'); //make code a reserved word
+
+  if(typeof xml_txt != 'undefined'){
+    var xml = Blockly.Xml.textToDom(xml_txt);
+    Blockly.Xml.domToWorkspace(xml, workspace);
+  }
 }
 
-function codeViewer() { // viewer for the code produced
-  var code = Blockly.JavaScript.workspaceToCode(workspace);
-  document.getElementById('codeDiv').innerHTML = code;
+// function codeViewer() { // viewer for the code produced
+//   var code = Blockly.JavaScript.workspaceToCode(workspace);
+//   document.getElementById('codeDiv').innerHTML = code;
+// }
+
+// function saveCode(){
+//   var pom = document.createElement('a');
+//   var filename = "save.xml";
+//   var bb = new Blob([xml_txt], {type: 'text/plain'});
+//   pom.setAttribute('href', window.URL.createObjectURL(bb));
+//   pom.setAttribute('download', filename);
+//   pom.draggable = true;
+//   pom.classList.add('dragout');
+//   pom.click();
+//
+// }
+
+function checkPeople(){
+  rwcListenerGetPeoplePositions().then(function(value){returnPeople(value)});
+  console.log("called listener");
+}
+
+function returnPeople(peoplePos){
+  console.log("listener responded");
+  rwcActionGazeAtPosition(peoplePos[0], peoplePos[1], peoplePos[2], 10);
+  console.log(peoplePos);
+  alert(peoplePos);
 }
 
 function executeCode() { // executes code made by blocks

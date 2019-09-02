@@ -30,7 +30,7 @@ Blockly.Blocks['goToDescribe'] = {
       ],
       "nextStatement": null,
       "previousStatement": null,
-      "colour": 160,
+      "style":"procedure_blocks",
       "tooltip": "Insert an exhibitLs Block to get the premade talk on that exhibit",
     });
   }
@@ -109,7 +109,7 @@ Blockly.Blocks['exhibitLs1'] = {
         }
       ],
       "output": "String",
-      "colour": 160,
+      "style":"procedure_blocks",
       "tooltip": "Pick an exhibit from the drop down menu",
     });
   }
@@ -133,7 +133,7 @@ Blockly.Blocks['exhibitLs2'] = {
         }
       ],
       "output": "String",
-      "colour": 160,
+      "style":"procedure_blocks",
       "tooltip": "Pick an exhibit from the drop down menu",
     });
   }
@@ -157,7 +157,7 @@ Blockly.Blocks['exhibitLs3'] = {
         }
       ],
       "output": "String",
-      "colour": 160,
+      "style":"procedure_blocks",
       "tooltip": "Pick an exhibit from the drop down menu",
     });
   }
@@ -181,7 +181,7 @@ Blockly.Blocks['exhibitLs4'] = {
         }
       ],
       "output": "String",
-      "colour": 160,
+      "style":"procedure_blocks",
       "tooltip": "Pick an exhibit from the drop down menu",
     });
   }
@@ -205,7 +205,7 @@ Blockly.Blocks['startTour'] = {
       ],
       "nextStatement": null,
       "previousStatement": null,
-      "colour": 160,
+      "style":"procedure_blocks",
       "tooltip": "Pick a tour from one of the pre-established ones",
     });
   }
