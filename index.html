@@ -16,7 +16,7 @@
 		<script src="blockly/blocks_compressed.js"></script>
 		<script src="blockly/msg/js/en.js"></script>
 
-		<!-- roswebcomponents dependancies -->
+		<!-- roswebcomponents dependancies see repo here https://github.com/laurencejbelliott/roswebcomponents -->
 		<script src="https://code.jquery.com/jquery-3.4.1.min.js"
 		integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
 		crossorigin="anonymous"></script>
@@ -37,7 +37,7 @@
 
 
 
-		<h1 style="height: 2%; position: relative; top: 0px; font-size: 8pt"> Testing </h1>
+		<h1 style="height: 2%; position: relative; top: 0px; font-size: 10pt"> TeachLindsey </h1>
 
 		<!-- toolbox and workspace div -->
 		<div id="blocklyDiv" style="height: 90%; width: 60%; float:left;"></div>
@@ -45,21 +45,21 @@
 		<div id="codeDiv" style="height: 90%; width: 20%; border-color: black; margin-left: 60%; text-align: center;"></div>
 
 		<!-- buttons for viewing and launching script -->
-		<button onclick="codeViewer()" style="bottom: 0"> view code </button>
+		<!-- <button onclick="saveCode()" style="bottom: 0"> save code </button> -->
 		<button onclick="executeCode()" style="bottom: 0"> run code </button>
-
+		<button onclick="checkPeople()" style="bottom: 0"> check Humans </button>
 		<!-- Toolbox definition -->
 
 		<xml id="toolbox" style="display: none">
 
-			<category name="Activities">
+			<category name="Activities" categorystyle="procedure_category">
 				<block type="startTour">
 			</category>
 
-			<category name="Navigation">
+			<category name="Navigation" categorystyle="list_category">
 				<block type="move"></block>
 				<block type="goTo"></block>
-				<block type="location"></block>
+				<block type="location" ></block>
 				<block type="goToDescribe"></block>
 				<block type="exhibitLs1"></block>
 				<block type="exhibitLs2"></block>
@@ -67,7 +67,7 @@
 				<block type="exhibitLs4"></block>
 			</category>
 
-			<category name="Speech">
+			<category name="Speech" categorystyle="text_category">
 				<block type="giveSpeech"></block>
 				<block type="script"></block>
 				<block type="describe"></block>
