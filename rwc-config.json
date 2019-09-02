@@ -1,4 +1,5 @@
 {
+    "rosbridge_websocket_url": "ws://127.0.0.1:9090",
     "actions": {
         "actionServers": {
             "move_base": {
@@ -12,11 +13,23 @@
             "speak": {
                 "actionServerName": "/speak",
                 "actionName": "mary_tts/maryttsAction"
+            },
+            "move_base_custom_example": {
+                "actionServerName": "/move_base",
+                "actionName": "move_base_msgs/MoveBaseAction"
+            },
+            "gaze": {
+                "actionServerName": "/gaze_at_pose",
+                "actionName": "strands_gazing/GazeAtPoseAction"
             }
         },
         "topics": {
-            "volume": {
+            "volumeChange": {
                 "topicName": "/volume/percentChange",
+                "topicMessageType": "std_msgs/Int8"
+            },
+            "volumeSet": {
+                "topicName": "/volume/percentSet",
                 "topicMessageType": "std_msgs/Int8"
             }
         }
@@ -38,6 +51,10 @@
             "topicName": "/current_node",
             "topicMessageType": "std_msgs/String"
         },
+        "odom_custom_example": {
+            "topicName": "/odom",
+            "topicMessageType": "nav_msgs/Odometry"
+        },
         "battery_state": {
             "topicName": "/battery_state",
             "topicMessageType": "scitos_msgs/BatteryState"
@@ -46,8 +63,16 @@
             "topicName": "/volume/percent",
             "topicMessageType": "std_msgs/Int8"
         },
+        "gaze": {
+            "topicName": "/rwc/gaze_pose",
+            "topicMessageType": "geometry_msgs/PoseStamped"
+        },
+        "task_events": {
+            "topicName": "/task_executor/events",
+            "topicMessageType": "strands_executive_msgs/TaskEvent"
+        },
         "camera_snapshot": {
-            "uri": "/roswebcomponents/images/qr-code.png"
+            "uri": "http://localhost:8080/snapshot?topic=/head_xtion/rgb/image_color"
         }
     }
 }
