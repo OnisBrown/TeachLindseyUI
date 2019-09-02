@@ -20,10 +20,10 @@ function giveSpeechCode(paragraph){
 
 Blockly.JavaScript['describe'] = function(block){ // describe an exhibit
   var choice = Blockly.JavaScript.valueToCode(block,'exhibit', Blockly.JavaScript.ORDER_ATOMIC) || "failing to get exhibit name";
-  var code = "goToDescCode('" + choice + "');"
+  var code = "descCode('" + choice + "');"
   return code;
 };
 
-function goToDescCode(choice){
+function descCode(choice){
   commandQueue.push(['desc', choice]);
 }
