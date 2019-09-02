@@ -68,12 +68,16 @@ Blockly.JavaScript['goToDescribe'] = function(block){ // go to and describe an e
 Blockly.JavaScript['goToDescribeWhile'] = function(block){ // go to and describe an exhibit
   var choice = Blockly.JavaScript.valueToCode(block,'exhibit', Blockly.JavaScript.ORDER_ATOMIC) || "failing to get exhibit name";
   var extras = Blockly.JavaScript.statementToCode(block, 'DO');
+  extras = extras.split(";");
   var code = "goToDescCode('" + choice + "'); gotToWhile("+ extras +")";
   return code;
 };
 
-function gotoWhile(extras){
-  
+function gotoWhileCode(extras){
+  commandQueue.push(['goToDescWhile', choice]);
+  for (let i in extras){
+    commandQueueL2.push(extras[i]);
+  }
 }
 
 function goToDescCode(choice){
