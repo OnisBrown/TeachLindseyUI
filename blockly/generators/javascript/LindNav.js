@@ -64,6 +64,18 @@ Blockly.JavaScript['goToDescribe'] = function(block){ // go to and describe an e
   return code;
 };
 
+
+Blockly.JavaScript['goToDescribeWhile'] = function(block){ // go to and describe an exhibit
+  var choice = Blockly.JavaScript.valueToCode(block,'exhibit', Blockly.JavaScript.ORDER_ATOMIC) || "failing to get exhibit name";
+  var extras = Blockly.JavaScript.statementToCode(block, 'DO');
+  var code = "goToDescCode('" + choice + "'); gotToWhile("+ extras +")";
+  return code;
+};
+
+function gotoWhile(extras){
+  
+}
+
 function goToDescCode(choice){
   commandQueue.push(['goToDesc', choice]);
 }

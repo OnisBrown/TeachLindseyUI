@@ -17,24 +17,28 @@ Blockly.Blocks['goTo'] = {
   }
 };
 
-// Blockly.Blocks['goToDescribeWhile'] = {
-//   init: function() {
-//     this.jsonInit({
-//       "message0": 'Go to %1 and give the standard talk',
-//       "args0": [
-//         {
-//           "type": "input_value",
-//           "name": "exhibit",
-//           "check": "String"
-//         }
-//       ],
-//       "nextStatement": null,
-//       "previousStatement": null,
-//       "style":"procedure_blocks",
-//       "tooltip": "Insert an exhibitLs Block to get the premade talk on that exhibit",
-//     });
-//   }
-// };
+Blockly.Blocks['goToDescribeWhile'] = {
+  init: function() {
+    this.jsonInit({
+      "message0": 'Go to %1 and give the standard talk',
+      "args0": [
+        {
+          "type": "input_value",
+          "name": "exhibit",
+          "check": "String"
+        }
+      ],
+      "message1": 'While going to exhibit do %1',
+      "args1": [
+        {"type": "input_statement", "name": "DO"}
+      ],
+      "nextStatement": null,
+      "previousStatement": null,
+      "style":"procedure_blocks",
+      "tooltip": "Insert an exhibitLs Block to get the premade talk on that exhibit",
+    });
+  }
+};
 
 Blockly.Blocks['goToDescribe'] = {
   init: function() {
