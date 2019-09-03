@@ -30,7 +30,7 @@ Blockly.Blocks['giveSpeech'] = {
       "nextStatement": null,
       "previousStatement": null,
       "colour": 160,
-      "tooltip": "Insert a Location Block",
+      "tooltip": "Insert a scrypt",
     });
   }
 };
@@ -68,7 +68,7 @@ Blockly.Blocks['askYNQuestion'] = {
       "nextStatement": null,
       "previousStatement": null,
       "style":"logic_blocks",
-      "tooltip": "Insert an exhibitLs Block to get the premade talk on that exhibit",
+      "tooltip": "type a question to ask",
     });
   }
 };

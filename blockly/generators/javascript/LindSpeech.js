@@ -1,12 +1,10 @@
 Blockly.JavaScript['script'] = function(block) {
-  //GoTo a location
   var paragraph = block.getFieldValue('script');
   var code = paragraph;
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
 Blockly.JavaScript['giveSpeech'] = function(block) {
-  //GoTo a location
   var paragraph = Blockly.JavaScript.valueToCode(block,'script', Blockly.JavaScript.ORDER_ATOMIC) || "failed to parse speech";
   console.log(paragraph);
 
@@ -29,7 +27,6 @@ function descCode(choice){
 }
 
 Blockly.JavaScript['askYNQuestion'] = function(block) {
-  //GoTo a location
   var question = block.getFieldValue('question') || "failed to parse speech";
   var code = "askYNQuestionCode('" + question + "');";
   return code;
