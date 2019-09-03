@@ -2,6 +2,29 @@ var workspace
 var xml_txt
 var commandQueue = new Array();
 var commandQueueL2 = new Array();
+var dictExhibits = {
+  "1.1": 17,
+  "1.2": 12,
+  "1.3": 11,
+  "1.4": 8,
+  "1.5": 6,
+  "1.5": 3,
+  "2.1": 19,
+  "2.2": 18,
+  "2.3": 14,
+  "2.1": 7,
+  "2.1": 2,
+  "2.1": 13,
+  "2.1": 10,
+  "2.1": 6,
+  "2.1": 4,
+  "2.1": 3,
+  "2.1": 16,
+  "2.1": 15,
+  "2.1": 9,
+  "2.1": 5,
+  "2.1": 3
+}
 
 function updater(event){
   var code = Blockly.JavaScript.workspaceToCode(workspace);
@@ -83,7 +106,9 @@ function Picker(){
     console.log(current[0] + " " + current[1]);
     switch(current[0]){
       case 'goTo':
-        rwcActionGoToNode("WayPoint" + current[1]).on("result", function(status){console.log(status); Picker();});
+        var node = dictExhibits[current[1]];
+        console.log(node);
+        rwcActionGoToNode("WayPoint" + node).on("result", function(status){console.log(status); Picker();});
         break;
       case 'goToDesc':
         console.log(current[1]);
@@ -101,6 +126,10 @@ function Picker(){
         break;
       case 'startTour':
         rwcActionStartTour(current[1]).on("result", function(){ Picker();});
+        break;
+      case 'YNQ&A':
+        //rwcActionSay(current[1]);
+        rwcActionYesNoModal(current[1]).on("result", function(status){console.log(status); Picker();});
         break;
     }
   }

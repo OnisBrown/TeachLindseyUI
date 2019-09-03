@@ -11,7 +11,7 @@ Blockly.Blocks['goTo'] = {
       ],
       "nextStatement": null,
       "previousStatement": null,
-      "colour": 160,
+      "style":"procedure_blocks",
       "tooltip": "Insert a Location Block",
     });
   }
@@ -87,28 +87,6 @@ Blockly.Blocks['move'] = {
       "previousStatement": null,
       "colour": 160,
       "tooltip": "move Lindsey x, y, z metres +- 10 metre per move",
-    });
-  }
-};
-
-Blockly.Blocks['location'] = {
-  init: function() {
-    this.jsonInit({
-      "message0": '%1 Exhibit',
-      "args0": [
-        {
-          "type": "field_dropdown",
-          "name": "location",
-          "options": [
-            ["Barrows", "17"],
-            ["Roman Currency", "14"],
-            ["Ancient clay Bowls", "16"]
-          ]
-        }
-      ],
-      "output": "String",
-      "colour": 160,
-      "tooltip": "Pick a location from the drop down menu",
     });
   }
 };

@@ -27,3 +27,14 @@ Blockly.JavaScript['describe'] = function(block){ // describe an exhibit
 function descCode(choice){
   commandQueue.push(['desc', choice]);
 }
+
+Blockly.JavaScript['askYNQuestion'] = function(block) {
+  //GoTo a location
+  var question = block.getFieldValue('question') || "failed to parse speech";
+  var code = "askYNQuestionCode('" + question + "');";
+  return code;
+};
+
+function askYNQuestionCode(question){
+  commandQueue.push(['YNQ&A', question]);
+}
