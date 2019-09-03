@@ -78,6 +78,7 @@ function gotoWhileCode(extras){
   for (let i in extras){
     commandQueueL2.push(extras[i]);
   }
+  commandQueueL2.push("*");
 }
 
 function goToDescCode(choice){
