@@ -5,7 +5,7 @@ Blockly.Blocks['goTo'] = {
       "args0": [
         {
           "type": "input_value",
-          "name": "location",
+          "name": "exhibit",
           "check": "String"
         }
       ],
