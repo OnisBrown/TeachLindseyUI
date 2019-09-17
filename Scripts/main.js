@@ -2,7 +2,7 @@ var workspace
 var xml_txt
 var commandQueue = new Array();
 var commandQueueL2 = new Array();
-var dictExhibits = {
+var dictExhibits = { //list of nodes for each exhibit to match goto function
   "1.1": 17,
   "1.2": 12,
   "1.3": 11,
@@ -54,11 +54,6 @@ function init(){
     Blockly.Xml.domToWorkspace(xml, workspace);
   }
 }
-
-// function codeViewer() { // viewer for the code produced
-//   var code = Blockly.JavaScript.workspaceToCode(workspace);
-//   document.getElementById('codeDiv').innerHTML = code;
-// }
 
 // function saveCode(){
 //   var pom = document.createElement('a');

@@ -24,28 +24,7 @@ function moveCode(vector){
 	commandQueue.push(['move', vector]);
 }
 
-Blockly.JavaScript['exhibitLs1'] = function(block) {
-  //Pick an exhibit
-  var choice = block.getFieldValue('exhibit');
-  var code =choice;
-  return [code, Blockly.JavaScript.ORDER_ATOMIC];
-};
-
-Blockly.JavaScript['exhibitLs2'] = function(block) {
-  //Pick an exhibit
-  var choice = block.getFieldValue('exhibit');
-  var code =choice;
-  return [code, Blockly.JavaScript.ORDER_ATOMIC];
-};
-
-Blockly.JavaScript['exhibitLs3'] = function(block) {
-  //Pick an exhibit
-  var choice = block.getFieldValue('exhibit');
-  var code =choice;
-  return [code, Blockly.JavaScript.ORDER_ATOMIC];
-};
-
-Blockly.JavaScript['exhibitLs4'] = function(block) {
+Blockly.JavaScript['exhibitLs'] = function(block) {
   //Pick an exhibit
   var choice = block.getFieldValue('exhibit');
   var code =choice;
