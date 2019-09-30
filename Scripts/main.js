@@ -2,6 +2,12 @@ var workspace
 var xml_txt
 var commandQueue = new Array();
 var commandQueueL2 = new Array();
+quaternion = {
+  x:0,
+  y:0,
+  z:0,
+  w:1
+}
 var dictExhibits = { //list of nodes for each exhibit to match goto function
   "1.1": 17,
   "1.2": 12,
@@ -24,6 +30,20 @@ var dictExhibits = { //list of nodes for each exhibit to match goto function
   "2.1": 9,
   "2.1": 5,
   "2.1": 3
+}
+
+function quatCalc(angle){
+  var b = angle/2;
+  var s1 = 0; //sin(0/2)
+  var s2 = 0;
+  var s3 = Math.sin(b);
+  var c1 = 1;//cos(0/2)
+  var c2 = 1;
+  var c3 = Math.cos(b);
+
+  quaternion.z = c1*c2*s3;
+  quaternion.w = c1*c2*c3;
+
 }
 
 function updater(event){
@@ -110,6 +130,10 @@ function Picker(){
         rwcActionSetPoseRelative(current[1][0], current[1][1], current[1][2]).on("result", function(status){console.log(status); Picker();});
         break;
       case 'speech':
+        // rotate before speech
+        quatCalc(180);
+        console.log(quaternion);
+        rwcActionSetPoseRelative(0, 0, 0, quaternion).on("result", function(status){console.log(status);});
         rwcActionSay(current[1]).on("result", function(status){console.log(status); Picker();});
         break;
       case 'desc':
