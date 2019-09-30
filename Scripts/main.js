@@ -34,6 +34,10 @@ function updater(event){
   xml_txt = Blockly.Xml.domToPrettyText(xml);
 }
 
+async function onClick(){
+
+}
+
 function init(){
   workspace = Blockly.inject('blocklyDiv',
     {toolbox: document.getElementById('toolbox'),
@@ -55,20 +59,9 @@ function init(){
   }
 }
 
-// function saveCode(){
-//   var pom = document.createElement('a');
-//   var filename = "save.xml";
-//   var bb = new Blob([xml_txt], {type: 'text/plain'});
-//   pom.setAttribute('href', window.URL.createObjectURL(bb));
-//   pom.setAttribute('download', filename);
-//   pom.draggable = true;
-//   pom.classList.add('dragout');
-//   pom.click();
-//
-// }
-
 function checkPeople(){
   console.log("calling listener");
+  rwcActionGazeAtPosition(0, 1, 2, 10)
   rwcListenerGetPeoplePositions(null, true).then(function(peoplePosiTopic){
     peoplePosiTopic.subscribe(function(msg){
       console.log(msg);
