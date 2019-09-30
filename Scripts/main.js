@@ -68,8 +68,12 @@ function init(){
 // }
 
 function checkPeople(){
-  rwcListenerGetPeoplePositions().then(function(value){returnPeople(value)});
-  console.log("called listener");
+  console.log("calling listener");
+  rwcListenerGetPeoplePositions(null, true).then(function(peoplePosiTopic){
+    peoplePosiTopic.subscribe(function(msg){
+      console.log(msg);
+    })
+  });
 }
 
 function returnPeople(peoplePos){
