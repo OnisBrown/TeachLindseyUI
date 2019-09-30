@@ -1,0 +1,90 @@
+<html>
+    <head>
+        <title>rwc testing</title>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="styles/jquery.spin.css" rel="stylesheet" type="text/css">
+        <link
+            rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+            crossorigin="anonymous">
+        <link rel="stylesheet" href="styles/rwc-styles.css">
+        <link rel="stylesheet" href="styles/rwc-user-styles.css">
+        <script
+			  src="https://code.jquery.com/jquery-3.4.1.min.js"
+			  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+			  crossorigin="anonymous"></script>
+        <script src="scripts/jquery.spin.js"></script>
+        <script
+            src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+        <script src="scripts/jsQR.js"></script>
+        <script src="scripts/mobile-detect.min.js"></script>
+        <script src="scripts/eventemitter2.js"></script>
+        <script src="scripts/roslib.min.js"></script>
+        <script src="scripts/rwc.js?v=1.0"></script>
+    </head>
+    <body>
+        <h1>ROS Web Components Testing Page</h1>
+
+        <rwc-button-action-start data-id="speakActionStartDupe"
+        data-text="Say hello!"
+        data-action="say"
+        data-action-parameters="Hello everyone!"
+        data-disabled="true"></rwc-button-action-start>
+        <br><br>
+        <rwc-button-action-start data-id="toNodeActionStartDupe"
+        data-text="Go to WayPoint20!"
+        data-action="goToNode"
+        data-action-parameters="WayPoint20"></rwc-button-action-start>
+        <br><br>
+        <rwc-button-action-start
+        data-id="moveActionStartCustomDupe"
+        data-text="Forward 0.5m!"
+        data-action="move_base_custom_example"
+        data-goal-msg-path="json-msgs/forward-half-m.json">
+        </rwc-button-action-start>
+        <br><br>
+        <rwc-text-custom-action-start
+        data-id="moveActionStartDupe"
+        data-text="Forward 0.5m!"
+        data-action-server-name="/move_base"
+        data-action-name="move_base_msgs/MoveBaseAction"
+        data-goal-msg-path="json-msgs/forward-half-m.json">
+        </rwc-text-custom-action-start>
+        <rwc-button-load-page
+        data-id="loadDupePageButton"
+        data-text="Load main page"
+        data-href="test.html">
+        </rwc-button-load-page>
+        <br><br>
+        <p>
+            Current node: <rwc-text-listener
+            data-listener="getNode"></rwc-text-listener>
+            <br>
+            Current page: '<rwc-text-listener
+            data-listener="getCurrentPage"></rwc-text-listener>'
+            <br>
+            Robot position: '<rwc-text-listener
+            data-listener="getPosition"
+            data-live="false"></rwc-text-listener>'
+            <br>
+            Volume: <rwc-text-listener
+            data-listener="getVolumePercent"></rwc-text-listener>%
+            <br>
+            Robot position custom: <rwc-text-listener
+            data-listener="odom_custom_example"
+            data-field-selector="pose.pose.position"></rwc-text-listener>
+            <br>
+            Click to say <rwc-text-action-start data-id="speakActionStartTextDupe"
+            data-text="good day!"
+            data-action="say"
+            data-action-parameters="Good day everyone!"></rwc-text-action-start>
+        </p>
+        <rwc-img-action-start
+        data-id="speakActionStartImgDupe"
+        src="images/lcas-logo.png"
+        data-action="say"
+        data-action-parameters="You have clicked the L-CAS logo!"></rwc-img-custom-action-start>
+    </body>
+</html>
