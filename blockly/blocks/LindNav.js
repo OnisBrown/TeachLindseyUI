@@ -89,7 +89,7 @@ moveJSON = {
   ],
   "nextStatement": null,
   "previousStatement": null,
-  "colour": 160,
+  "style":"logic_blocks",
   "tooltip": "move Lindsey x, y, z metres +- 10 metre per move",
 };
 

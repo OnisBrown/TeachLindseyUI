@@ -70,25 +70,12 @@ askYNQuestionJSON = {
   ],
   "nextStatement": null,
   "previousStatement": null,
-  "style":"logic_blocks",
+  "colour": 160,
   "tooltip": "type a question to ask"
 };
 
 Blockly.Blocks['askYNQuestion'] = {
   init: function() {
-    this.jsonInit({
-      "message0": 'Ask a question %1',
-      "args0": [
-        {
-          "type": "field_input",
-          "name": "question",
-          "check": "String"
-        }
-      ],
-      "nextStatement": null,
-      "previousStatement": null,
-      "style":"logic_blocks",
-      "tooltip": "type a question to ask"
-    });
+    this.jsonInit(askYNQuestionJSON);
   }
 };
