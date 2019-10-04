@@ -18,3 +18,7 @@ localSocket.onclose = function(e){
     console.log("connection died");
   }
 }
+
+socket.onerror = function(e) {
+  console.log('[error] ${e.message}');
+};
