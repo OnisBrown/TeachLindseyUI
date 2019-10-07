@@ -2,7 +2,9 @@ var workspace
 var xml_txt
 var commandQueue = new Array();
 var commandQueueL2 = new Array();
-quaternion = {
+var passives = new Worker('../webWorkers/Passives.js');
+var botStream = new Worker('../webWorkers/ChatSocket.js')
+qtn = {
   x:0,
   y:0,
   z:0,
@@ -33,16 +35,16 @@ var dictExhibits = { //list of nodes for each exhibit to match goto function
 }
 
 function quatCalc(angle){
-  var b = angle/2;
+  var b = (angle*(Math.PI/180))/2;
   var s1 = 0; //sin(0/2)
-  var s2 = 0;
-  var s3 = Math.sin(b);
   var c1 = 1;//cos(0/2)
-  var c2 = 1;
+  var s2 = 0;//sin(0/2)
+  var c2 = 1;//cos(0/2)
+  var s3 = Math.sin(b);
   var c3 = Math.cos(b);
 
-  quaternion.z = c1*c2*s3;
-  quaternion.w = c1*c2*c3;
+  qtn.z = c1*c2*s3;
+  qtn.w = c1*c2*c3;
 
 }
 
@@ -52,10 +54,6 @@ function updater(event){
 
   var xml = Blockly.Xml.workspaceToDom(workspace);
   xml_txt = Blockly.Xml.domToPrettyText(xml);
-}
-
-async function onClick(){
-
 }
 
 function init(){
@@ -77,16 +75,6 @@ function init(){
     var xml = Blockly.Xml.textToDom(xml_txt);
     Blockly.Xml.domToWorkspace(xml, workspace);
   }
-}
-
-function checkPeople(){
-  console.log("calling listener");
-  rwcActionGazeAtPosition(0, 1, 2, 10)
-  rwcListenerGetPeoplePositions(null, true).then(function(peoplePosiTopic){
-    peoplePosiTopic.subscribe(function(msg){
-      console.log(msg);
-    })
-  });
 }
 
 function returnPeople(peoplePos){
@@ -127,18 +115,21 @@ function Picker(){
         rwcActionGoToAndDescribeExhibit(current[1]).on("result", function(){Picker();});
         break;
       case 'move':
-        rwcActionSetPoseRelative(current[1][0], current[1][1], current[1][2]).on("result", function(status){console.log(status); Picker();});
+        quatCalc(current[1][3]);
+        console.log(qtn);
+        rwcActionSetPoseRelative(current[1][0], current[1][1], current[1][2], qtn).on("result", function(status){console.log(status); Picker();});
         break;
       case 'speech':
-        // rotate before speech
-        quatCalc(180);
-        console.log(quaternion);
-        rwcActionSetPoseRelative(0, 0, 0, quaternion).on("result", function(status){console.log(status);});
-        rwcActionSay(current[1]).on("result", function(status){console.log(status); Picker();});
+        // start rotations while talking
+        talking = true;
+        talkingAn();
+        rwcActionSay(current[1]).on("result", function(status){talking = false; Picker();});
         break;
       case 'desc':
         console.log(current[1]);
-        rwcActionDescribeExhibit(current[1]).on("result", function(){Picker();});
+        talking = true;
+        talkingAn();
+        rwcActionDescribeExhibit(current[1]).on("result", function(){ talking = false; Picker();});
         break;
       case 'startTour':
         rwcActionStartTour(current[1]).on("result", function(){ Picker();});
