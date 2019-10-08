@@ -16,22 +16,22 @@ var dictExhibits = { //list of nodes for each exhibit to match goto function
   "1.3": 11,
   "1.4": 8,
   "1.5": 6,
-  "1.5": 3,
+  "1.6": 3,
   "2.1": 19,
   "2.2": 18,
   "2.3": 14,
-  "2.1": 7,
-  "2.1": 2,
-  "2.1": 13,
-  "2.1": 10,
-  "2.1": 6,
-  "2.1": 4,
-  "2.1": 3,
-  "2.1": 16,
-  "2.1": 15,
-  "2.1": 9,
-  "2.1": 5,
-  "2.1": 3
+  "2.4": 7,
+  "2.5": 2,
+  "3.1": 13,
+  "3.2": 10,
+  "3.3": 6,
+  "3.4": 4,
+  "3.5": 3,
+  "4.1": 16,
+  "4.2": 15,
+  "4.3": 9,
+  "4.4": 5,
+  "4.5": 3
 }
 
 function quatCalc(angle){
@@ -77,11 +77,8 @@ function init(){
   }
 }
 
-function returnPeople(peoplePos){
-  console.log("listener responded");
-  rwcActionGazeAtPosition(peoplePos[0], peoplePos[1], peoplePos[2], 10);
-  console.log(peoplePos);
-  alert(peoplePos);
+function Gaze(){
+  rwcActionGazeAtPosition();
 }
 
 function executeCode() { // executes code made by blocks
