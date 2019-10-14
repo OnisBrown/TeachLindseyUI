@@ -12,11 +12,12 @@ function goToCode(choice){
 
 Blockly.JavaScript['move'] = function(block) {
   //move in a direction
-  var vector = new Array(0, 0, 0);
+  var vector = new Array(0, 0, 0, 0);
   vector[0] = block.getFieldValue('x');
   vector[1] = block.getFieldValue('y');
   vector[2] = block.getFieldValue('z');
-  var code = "moveCode(["+ vector[0] + ", " + vector[1] + ", " + vector[2] + "]);"; //Only passes the first value if written normally
+  vector[3] = block.getFieldValue('D');
+  var code = "moveCode(["+ vector[0] + ", " + vector[1] + ", " + vector[2] + ", "+ vector[3] + "]);"; //Only passes the first value if written normally
   return code;
 };
 
