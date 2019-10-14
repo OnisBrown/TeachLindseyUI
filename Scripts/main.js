@@ -3,12 +3,13 @@ var xml_txt;
 var commandQueue = new Array();
 var commandQueueL2 = new Array();
 var passWork = new Worker('../webWorkers/Passives.js');
-
 var botStream = new Worker('../webWorkers/ChatSocket.js');
 
-var  passMsg ={
-  head:"",
-  content: ""
+var startPos = {
+  x: 0,
+  y: 0,
+  z: 0,
+  q: qtn
 };
 
 var qtn = { //struct for quaternion
@@ -17,6 +18,7 @@ var qtn = { //struct for quaternion
   z:0,
   w:1
 };
+
 var dictExhibits = { //list of nodes for each exhibit to match goto function
   "1.1": 17,
   "1.2": 12,
@@ -92,6 +94,11 @@ function Gaze(){
   rwcActionGazeAtPosition();
 }
 
+function setStartPos(){
+  var pos = rwcListenerGetPosition();
+  var ang = rwcListenerGetOrientation();
+}
+
 function executeCode() { // executes code made by blocks
   passMsg.head = 0;
   window.LoopTrap = 100;
@@ -129,14 +136,13 @@ function Picker(){
         rwcActionSetPoseRelative(current[1][0], current[1][1], current[1][2], qtn).on("result", function(status){console.log(status); Picker();});
         break;
       case 'speech':
-        // start rotations while talking
-        passMsg.head = 
-        passWork.pub(passMsg)
+        setStartPos();
+        passWork.postMessage("speaking");
         rwcActionSay(current[1]).on("result", function(status){talking = false; Picker();});
         break;
       case 'desc':
         console.log(current[1]);
-        rwcActionDescribeExhibit(current[1]).on("result", function(){ talking = false; Picker();});
+        rwcActionDescribeExhibit(current[1]).on("result", function(){talking = false; Picker();});
         break;
       case 'startTour':
         rwcActionStartTour(current[1]).on("result", function(){ Picker();});
@@ -152,5 +158,20 @@ function Picker(){
   }
 }
 
-passWork.addEventListener('message', function(event){console.log(event.data);});
+passWork.addEventListener('message', function(event){
+  if(event.data == (1 || -1)){
+    console.log("turning")
+    var ang = 45;
+    quatCalc(ang*event.data);
+    rwcActionSetPoseRelative(0, 0, 0, qtn)
+    if(!talking){
+      passWork.terminate();
+      rwcActionSetPoseRelative(startPos.x, startPos.y, startPos.z, startPos.q);
+    }
+  }
+  // switch(event.data){
+  //
+  // }
+});
+
 passWork.addEventListener('error', function(event){console.error("error: ", event);});

@@ -1,9 +1,22 @@
-var talking = true;
-var exhibAng = 90;
+var pivotSwitch = 1;
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+
+
+self.onmessage = function(event){
+  switch(event.data){
+    case "speaking":
+      talkingClock();
+      break;
+  }
+}
 
 async function checkPeople(){
   console.log("calling listener");
-  rwcActionGazeAtPosition(0, 1, 2, 10)
+  rwcActionGazeAtPosition(0, 1, 2, 10);
   rwcListenerGetPeoplePositions(null, true).then(function(peoplePosiTopic){
     peoplePosiTopic.subscribe(function(msg){
       console.log(msg);
@@ -18,13 +31,10 @@ function returnPeople(peoplePos){
   alert(peoplePos);
 }
 
-async function talkingAn(){
-  quatCalc(exhibAng);
-  if(talking){
-    console.log("toggle" + talking + " " + exhibAng);
-    rwcActionSetPoseRelative(0,0,0, qtn).on("result", function(status){exhibAng *= -1; talkingAn();});
-  }
-  else{
-    return;
-  }
+  async function talkingClock(){
+    self.postMessage(pivotSwitch);
+    pivotSwitch *= -1;
+    pInterval = 1;
+    await sleep(pInterval*1000);
+    talkingClock();
 }
