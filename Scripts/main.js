@@ -2,7 +2,7 @@ var workspace;
 var xml_txt;
 var commandQueue = new Array();
 var commandQueueL2 = new Array();
-var passWork = new Worker('../webWorkers/Passives.js');
+var pivWork = new Worker('../webWorkers/pivPass.js');
 var botStream = new Worker('../webWorkers/ChatSocket.js');
 var talking;
 
@@ -48,10 +48,6 @@ var dictExhibits = { //list of nodes for each exhibit to match goto function
   "4.4": 5,
   "4.5": 3
 };
-
-// function passWorkMessage(e){
-//   console.log("message " + e);
-// }
 
 function quatCalc(angle){
   var b = (angle*(Math.PI/180))/2;
@@ -132,10 +128,10 @@ function executeCode() { // executes code made by blocks
   }
 }
 
-passWork.addEventListener('message', function(event){
+pivWork.addEventListener('message', function(event){
   var ang = 45;
   if(!talking){
-    passWork.postMessage("stopSpeaking");
+    pivWork.postMessage("stopSpeaking");
     console.log(startPos)
     rwcActionSetPoseMap(startPos.x, startPos.y, startPos.z, startPos.q);
   }
@@ -143,7 +139,9 @@ passWork.addEventListener('message', function(event){
   rwcActionSetPoseRelative(0, 0, 0, qtn)
 
 });
-passWork.addEventListener('error', function(event){console.error("error: ", event);});
+
+
+pivWork.addEventListener('error', function(event){console.error("error: ", event);});
 
 function Picker(){
   console.log(commandQueue);
@@ -166,13 +164,13 @@ function Picker(){
       case 'speech':
         setStartPos();
         talking = true;
-        passWork.postMessage("speaking");
+        pivWork.postMessage("speaking");
         rwcActionSay(current[1]).on("result", function(status){talking = false; Picker();});
         break;
       case 'desc':
         talking = true;
         setStartPos();
-        passWork.postMessage("speaking");
+        pivWork.postMessage("speaking");
         rwcActionDescribeExhibit(current[1]).on("result", function(){talking = false; Picker();});
         break;
       case 'startTour':

@@ -904,6 +904,10 @@ function rwcActionSay(phrase){
 
 // Action function 'rwcActionGazeAtPosition'
 function rwcActionGazeAtPosition(x, y, z, secs){
+  var currentTime = new Date();
+  var rsecs = Math.floor(currentTime.getTime()/1000);
+  var rnsecs = Math.round(1000000000*(currentTime.getTime()/1000-secs));
+
   var rwcPoseTopic = new ROSLIB.Topic({
     ros : ros,
     name : configJSON.listeners.gaze.topicName,
@@ -913,8 +917,8 @@ function rwcActionGazeAtPosition(x, y, z, secs){
   header = {
     seq: 0,
     stamp: {
-      secs: 1,
-      nsecs:1},
+      secs: rsecs,
+      nsecs:rnsecs},
     frame_id: "/map"
   };
   position = new ROSLIB.Vector3(null);
@@ -922,6 +926,7 @@ function rwcActionGazeAtPosition(x, y, z, secs){
   position.y = y;
   position.z = z;
   orientation = new ROSLIB.Quaternion({x:0, y:0, z:0, w:1.0});
+
   var poseStamped = new ROSLIB.Message({
     header: header,
     pose: {
@@ -930,7 +935,7 @@ function rwcActionGazeAtPosition(x, y, z, secs){
     }
   });
   rwcPoseTopic.publish(poseStamped);
-  console.log("Gaze pose published...");
+  console.log("Gaze pose published to " + configJSON.listeners.gaze.topicName);
 
   var gazeActionClient = new ROSLIB.ActionClient({
     ros: ros,
