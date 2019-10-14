@@ -1,15 +1,22 @@
-var workspace
-var xml_txt
+var workspace;
+var xml_txt;
 var commandQueue = new Array();
 var commandQueueL2 = new Array();
-var passives = new Worker('../webWorkers/Passives.js');
-var botStream = new Worker('../webWorkers/ChatSocket.js')
-qtn = {
+var passWork = new Worker('../webWorkers/Passives.js');
+
+var botStream = new Worker('../webWorkers/ChatSocket.js');
+
+var  passMsg ={
+  head:"",
+  content: ""
+};
+
+var qtn = { //struct for quaternion
   x:0,
   y:0,
   z:0,
   w:1
-}
+};
 var dictExhibits = { //list of nodes for each exhibit to match goto function
   "1.1": 17,
   "1.2": 12,
@@ -32,7 +39,11 @@ var dictExhibits = { //list of nodes for each exhibit to match goto function
   "4.3": 9,
   "4.4": 5,
   "4.5": 3
-}
+};
+
+// function passWorkMessage(e){
+//   console.log("message " + e);
+// }
 
 function quatCalc(angle){
   var b = (angle*(Math.PI/180))/2;
@@ -82,6 +93,7 @@ function Gaze(){
 }
 
 function executeCode() { // executes code made by blocks
+  passMsg.head = 0;
   window.LoopTrap = 100;
   Blockly.JavaScript.INFINITE_LOOP_TRAP = 'if(--window.LoopTrap == 0) throw "Infinite loop.";\n';
   var code = Blockly.JavaScript.workspaceToCode(workspace);
@@ -118,14 +130,12 @@ function Picker(){
         break;
       case 'speech':
         // start rotations while talking
-        talking = true;
-        talkingAn();
+        passMsg.head = 
+        passWork.pub(passMsg)
         rwcActionSay(current[1]).on("result", function(status){talking = false; Picker();});
         break;
       case 'desc':
         console.log(current[1]);
-        talking = true;
-        talkingAn();
         rwcActionDescribeExhibit(current[1]).on("result", function(){ talking = false; Picker();});
         break;
       case 'startTour':
@@ -141,3 +151,6 @@ function Picker(){
     return;
   }
 }
+
+passWork.addEventListener('message', function(event){console.log(event.data);});
+passWork.addEventListener('error', function(event){console.error("error: ", event);});
