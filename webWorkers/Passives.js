@@ -1,5 +1,5 @@
 var pivotSwitch = 1;
-
+var talking;
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -9,8 +9,12 @@ function sleep(ms) {
 self.onmessage = function(event){
   switch(event.data){
     case "speaking":
+      talking = true;
       talkingClock();
       break;
+    case "stopSpeaking":
+      talking = false;
+      break
   }
 }
 
@@ -32,9 +36,12 @@ function returnPeople(peoplePos){
 }
 
   async function talkingClock(){
+    if(!talking){
+      return;
+    }
     self.postMessage(pivotSwitch);
     pivotSwitch *= -1;
-    pInterval = 1;
+    pInterval = 3;
     await sleep(pInterval*1000);
     talkingClock();
 }

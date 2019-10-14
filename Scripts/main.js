@@ -4,12 +4,18 @@ var commandQueue = new Array();
 var commandQueueL2 = new Array();
 var passWork = new Worker('../webWorkers/Passives.js');
 var botStream = new Worker('../webWorkers/ChatSocket.js');
+var talking;
 
 var startPos = {
   x: 0,
   y: 0,
   z: 0,
-  q: qtn
+  q: {
+    x:0,
+    y:0,
+    z:0,
+    w:1
+    }
 };
 
 var qtn = { //struct for quaternion
@@ -95,12 +101,23 @@ function Gaze(){
 }
 
 function setStartPos(){
-  var pos = rwcListenerGetPosition();
-  var ang = rwcListenerGetOrientation();
+
+  rwcListenerGetPosition().then(function(pos){
+    startPos.x = pos[0];
+    startPos.y = pos[1];
+    startPos.z = pos[2];
+  });
+
+  var ang = rwcListenerGetOrientation().then(function(ang){
+    console.log(ang);
+    startPos.q.x = ang[0];
+    startPos.q.y = ang[1];
+    startPos.q.z = ang[2];
+    startPos.q.w = ang[3];
+  });
 }
 
 function executeCode() { // executes code made by blocks
-  passMsg.head = 0;
   window.LoopTrap = 100;
   Blockly.JavaScript.INFINITE_LOOP_TRAP = 'if(--window.LoopTrap == 0) throw "Infinite loop.";\n';
   var code = Blockly.JavaScript.workspaceToCode(workspace);
@@ -115,6 +132,19 @@ function executeCode() { // executes code made by blocks
   }
 }
 
+passWork.addEventListener('message', function(event){
+  var ang = 45;
+  if(!talking){
+    passWork.postMessage("stopSpeaking");
+    console.log(startPos)
+    rwcActionSetPoseMap(startPos.x, startPos.y, startPos.z, startPos.q);
+  }
+  quatCalc(ang*event.data);
+  rwcActionSetPoseRelative(0, 0, 0, qtn)
+
+});
+passWork.addEventListener('error', function(event){console.error("error: ", event);});
+
 function Picker(){
   console.log(commandQueue);
   if (commandQueue.length > 0) {
@@ -123,11 +153,9 @@ function Picker(){
     switch(current[0]){
       case 'goTo':
         var node = dictExhibits[current[1]];
-        console.log(node);
         rwcActionGoToNode("WayPoint" + node).on("result", function(status){console.log(status); Picker();});
         break;
       case 'goToDesc':
-        console.log(current[1]);
         rwcActionGoToAndDescribeExhibit(current[1]).on("result", function(){Picker();});
         break;
       case 'move':
@@ -137,11 +165,14 @@ function Picker(){
         break;
       case 'speech':
         setStartPos();
+        talking = true;
         passWork.postMessage("speaking");
         rwcActionSay(current[1]).on("result", function(status){talking = false; Picker();});
         break;
       case 'desc':
-        console.log(current[1]);
+        talking = true;
+        setStartPos();
+        passWork.postMessage("speaking");
         rwcActionDescribeExhibit(current[1]).on("result", function(){talking = false; Picker();});
         break;
       case 'startTour':
@@ -157,21 +188,3 @@ function Picker(){
     return;
   }
 }
-
-passWork.addEventListener('message', function(event){
-  if(event.data == (1 || -1)){
-    console.log("turning")
-    var ang = 45;
-    quatCalc(ang*event.data);
-    rwcActionSetPoseRelative(0, 0, 0, qtn)
-    if(!talking){
-      passWork.terminate();
-      rwcActionSetPoseRelative(startPos.x, startPos.y, startPos.z, startPos.q);
-    }
-  }
-  // switch(event.data){
-  //
-  // }
-});
-
-passWork.addEventListener('error', function(event){console.error("error: ", event);});
