@@ -36,5 +36,5 @@ function returnPeople(peoplePos){
 }
 
 async function gazingClock(){
-
+  
 }

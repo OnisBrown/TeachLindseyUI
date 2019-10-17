@@ -3,6 +3,7 @@ var xml_txt;
 var commandQueue = new Array();
 var commandQueueL2 = new Array();
 var pivWork = new Worker('../webWorkers/pivPass.js');
+var gazeWork = new Worker('../webWorkers/gazePass.js');
 var botStream = new Worker('../webWorkers/ChatSocket.js');
 var talking;
 
@@ -97,7 +98,6 @@ function Gaze(){
 }
 
 function setStartPos(){
-
   rwcListenerGetPosition().then(function(pos){
     startPos.x = pos[0];
     startPos.y = pos[1];
