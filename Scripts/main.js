@@ -93,10 +93,6 @@ function init(){
   }
 }
 
-function Gaze(){
-  rwcActionGazeAtPosition();
-}
-
 function setStartPos(){
   rwcListenerGetPosition().then(function(pos){
     startPos.x = pos[0];
@@ -140,8 +136,15 @@ pivWork.addEventListener('message', function(event){
 
 });
 
-
 pivWork.addEventListener('error', function(event){console.error("error: ", event);});
+
+function personDist(perCoord){
+	var dist = 0;
+	rwcListenerGetPosition().then(function(pos){
+		dist = Math.sqrt(Math.pow((perCoord[0]-pos[0]),2) + Math.pow((perCoord[1]-pos[1]),2) + Math.pow((perCoord[2]-pos[2]),2));
+	});
+	return dist;
+}
 
 function Picker(){
   console.log(commandQueue);
@@ -149,6 +152,15 @@ function Picker(){
     var current = commandQueue.shift();
     console.log(current[0] + " " + current[1]);
     switch(current[0]){
+			case "waitPer":
+				rwcListenerGetNearestPersonPosition(null, true).then(function(myTopic){
+					var dist = 0;
+					myTopic.subscribe(function(msg){
+						dist = personDist(msg.pose.pose.position);
+						console.log("Person is: " + dist + " metres away");
+					});
+				});
+				break;
       case 'goTo':
         var node = dictExhibits[current[1]];
         rwcActionGoToNode("WayPoint" + node).on("result", function(status){console.log(status); Picker();});
