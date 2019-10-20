@@ -9,4 +9,4 @@ This project aims to establish accessible ways to create robot behaviours on a h
 download the repo to your local/remote server. In the repo root run `sudo git submodule init` and `sudo git submodule --recursive --remote`. This will pull the roswebcomponents repo which handles various topic publications and listneners
 ### dependancies for museum content based blocks ( the blocks are purple at the moment)
 
-For stock descriptions and blaocks based on museum content functions there needs to be a symlink to lindimp/lindimp_museum_content/config/exhibitors_definition.json
+For stock descriptions and blocks based on museum content functions there needs to be a symlink to lindimp/lindimp_museum_content/config/exhibitors_definition.json
