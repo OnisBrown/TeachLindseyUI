@@ -91,7 +91,7 @@ function init(){
     var xml = Blockly.Xml.textToDom(xml_txt);
     Blockly.Xml.domToWorkspace(xml, workspace);
   }
-}
+}n dist
 
 function setStartPos(){
   rwcListenerGetPosition().then(function(pos){
@@ -153,11 +153,15 @@ function Picker(){
     console.log(current[0] + " " + current[1]);
     switch(current[0]){
 			case "waitPer":
+        console.log("waiting for person...")
 				rwcListenerGetNearestPersonPosition(null, true).then(function(myTopic){
-					var dist = 0;
 					myTopic.subscribe(function(msg){
+            var dist;
 						dist = personDist(msg.pose.pose.position);
 						console.log("Person is: " + dist + " metres away");
+            if(dist <= current[1]){
+              Picker();
+            }
 					});
 				});
 				break;
