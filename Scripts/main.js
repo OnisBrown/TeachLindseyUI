@@ -91,7 +91,7 @@ function init(){
     var xml = Blockly.Xml.textToDom(xml_txt);
     Blockly.Xml.domToWorkspace(xml, workspace);
   }
-}n dist
+}
 
 function setStartPos(){
   rwcListenerGetPosition().then(function(pos){
