@@ -50,6 +50,20 @@ var dictExhibits = { //list of nodes for each exhibit to match goto function
   "4.5": 3
 };
 
+// create a dictionary of exhibit keys and their matching waypoints
+var dynDictExhibits = {};
+function setExhbits(){
+  var exhibitsRaw;
+  $.getJSON("exhibitors_definition.json",
+  function(json){
+    exhibitorsJSON = json;
+    exhibitsRaw = exhibitorsJSON.exhibitors;
+    for(i =0; i < exhibitsRaw.length; i++){
+      dynDictExhibits[exhibitsRaw[i].key] = exhibitsRaw[i].waypoint;
+    }
+  });
+}
+
 function quatCalc(angle){
   var b = (angle*(Math.PI/180))/2;
   var s1 = 0; //sin(0/2)
@@ -64,6 +78,11 @@ function quatCalc(angle){
 
 }
 
+function Gaze(){
+  quatCalc(0);
+  rwcActionGazeAtPosition(0,0,0,3);
+}
+
 function updater(event){
   var code = Blockly.JavaScript.workspaceToCode(workspace);
   document.getElementById('codeDiv').innerHTML = code;
@@ -73,6 +92,7 @@ function updater(event){
 }
 
 function init(){
+  setExhbits();
   workspace = Blockly.inject('blocklyDiv',
     {toolbox: document.getElementById('toolbox'),
      grid:
@@ -94,6 +114,7 @@ function init(){
 }
 
 function setStartPos(){
+  console.log("start postioin logged");
   rwcListenerGetPosition().then(function(pos){
     startPos.x = pos[0];
     startPos.y = pos[1];
@@ -128,11 +149,14 @@ pivWork.addEventListener('message', function(event){
   var ang = 45;
   if(!talking){
     pivWork.postMessage("stopSpeaking");
-    console.log(startPos)
+    console.log("final position at" + startPos)
     rwcActionSetPoseMap(startPos.x, startPos.y, startPos.z, startPos.q);
   }
-  quatCalc(ang*event.data);
-  rwcActionSetPoseRelative(0, 0, 0, qtn)
+  else{
+    quatCalc(ang*event.data);
+    rwcActionSetPoseRelative(0, 0, 0, qtn)
+  }
+
 
 });
 
@@ -166,8 +190,8 @@ function Picker(){
 				});
 				break;
       case 'goTo':
-        var node = dictExhibits[current[1]];
-        rwcActionGoToNode("WayPoint" + node).on("result", function(status){console.log(status); Picker();});
+        var node = dynDictExhibits[current[1]];
+        rwcActionGoToNode(node).on("result", function(status){console.log(status); Picker();});
         break;
       case 'goToDesc':
         rwcActionGoToAndDescribeExhibit(current[1]).on("result", function(){Picker();});
@@ -184,8 +208,8 @@ function Picker(){
         rwcActionSay(current[1]).on("result", function(status){talking = false; Picker();});
         break;
       case 'desc':
-        talking = true;
         setStartPos();
+        talking = true;
         pivWork.postMessage("speaking");
         rwcActionDescribeExhibit(current[1]).on("result", function(){talking = false; Picker();});
         break;
