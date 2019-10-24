@@ -195,6 +195,7 @@ function Picker(){
         break;
       case 'goToNode':
         var node = "WayPoint" + current[1];
+        console.log(node);
         rwcActionGoToNode(node).on("result", function(status){console.log(status); Picker();});
         break;
       case 'goToDesc':
