@@ -193,6 +193,10 @@ function Picker(){
         var node = dynDictExhibits[current[1]];
         rwcActionGoToNode(node).on("result", function(status){console.log(status); Picker();});
         break;
+      case 'goToNode':
+        var node = "waypoint" + current[1];
+        rwcActionGoToNode(node).on("result", function(status){console.log(status); Picker();});
+        break;
       case 'goToDesc':
         rwcActionGoToAndDescribeExhibit(current[1]).on("result", function(){Picker();});
         break;

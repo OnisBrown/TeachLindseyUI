@@ -10,6 +10,17 @@ function goToCode(choice){
   commandQueue.push(['goTo', choice]);
 }
 
+Blockly.JavaScript['goToNode'] = function(block) {
+  //GoTo a location
+  var choice = block.getFieldValue('waypoint');
+  var code = "goToNodeCode(" + choice + "); ";
+  return code;
+};
+
+function goToNodeCode(choice){
+  commandQueue.push(['goToNode', choice]);
+}
+
 Blockly.JavaScript['move'] = function(block) {
   //move in a direction
   var vector = new Array(0, 0, 0, 0);

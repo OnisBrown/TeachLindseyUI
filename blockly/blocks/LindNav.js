@@ -19,6 +19,27 @@ Blockly.Blocks['goTo'] = {
   }
 };
 
+var goToNodeJSON ={
+      "message0": 'Go to %1',
+      "args0": [
+        {
+          "type": "field_number",
+          "name": "waypoint",
+          "check": "String"
+        }
+      ],
+      "nextStatement": null,
+      "previousStatement": null,
+      "style":"procedure_blocks",
+      "tooltip": "type a waypoint"
+};
+
+Blockly.Blocks['goToNode'] = {
+  init: function() {
+    this.jsonInit(goToJSON);
+  }
+};
+
 goToDescribeWhileJSON = {
       "message0": 'Go to %1 and give the standard talk',
       "args0": [
