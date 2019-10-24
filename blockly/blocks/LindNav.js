@@ -20,7 +20,7 @@ Blockly.Blocks['goTo'] = {
 };
 
 var goToNodeJSON ={
-      "message0": 'Go to %1',
+      "message0": 'Go to waypoint # %1',
       "args0": [
         {
           "type": "field_number",
@@ -36,7 +36,7 @@ var goToNodeJSON ={
 
 Blockly.Blocks['goToNode'] = {
   init: function() {
-    this.jsonInit(goToJSON);
+    this.jsonInit(goToNodeJSON);
   }
 };
 
