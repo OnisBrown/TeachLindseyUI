@@ -182,8 +182,8 @@ function Picker(){
 					myTopic.subscribe(function(msg){
             var dist;
 						dist = personDist(msg.pose.position);
-            if(dist <= current[1] && dist !=0){
-              console.log("found person")
+            if(dist < current[1] && dist >0){
+              console.log("found person");
               Picker();
               return;
             }
