@@ -114,7 +114,7 @@ function init(){
 }
 
 function setStartPos(){
-  console.log("start postioin logged");
+  console.log("current position logged");
   rwcListenerGetPosition().then(function(pos){
     startPos.x = pos[0];
     startPos.y = pos[1];
@@ -166,7 +166,6 @@ function personDist(perCoord){
 	var dist = 0;
 	setStartPos();
 	dist = Math.sqrt(Math.pow((perCoord.x-startPos.x),2) + Math.pow((perCoord.y-startPos.x),2) + Math.pow((perCoord.z-startPos.x),2));
-  console.log(dist);
   return dist;
 }
 
@@ -182,7 +181,6 @@ function Picker(){
 					myTopic.subscribe(function(msg){
             var dist;
 						dist = personDist(msg.pose.position);
-            console.log(dist);
             if(dist < current[1] && dist >0){
               console.log("found person");
               Picker();
