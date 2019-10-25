@@ -13,12 +13,12 @@ function waitPersonCode(dist)
 
 Blockly.JavaScript['askOQuestion'] = function(block) {
   //GoTo a location
-  var dist = block.getFieldValue('distance');
-  var code = "waitPersonCode(" + dist + "); ";
+  var dist = block.getFieldValue('prompt');
+  var code = "askOCode(" + "\"hello\"" + "); ";
   return code;
 };
 
-function waitPersonCode(dist)
+function askOCode(dist)
 {
 	commandQueue.push(["askO", dist]);
 }
