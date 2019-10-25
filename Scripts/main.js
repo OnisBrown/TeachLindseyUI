@@ -54,7 +54,7 @@ var qtn = { //struct for quaternion
 var dynDictExhibits = {};
 function setExhbits(){
   var exhibitsRaw;
-  $.getJSON("exhibitors_definition.json",
+  $.getJSON("fablabExhibits.json",
   function(json){
     exhibitorsJSON = json;
     exhibitsRaw = exhibitorsJSON.exhibitors;
