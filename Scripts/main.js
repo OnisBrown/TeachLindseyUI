@@ -181,6 +181,7 @@ function Picker(){
 				rwcListenerGetNearestPersonPosition(null, true).then(function(myTopic){
 					myTopic.subscribe(function(msg){
             var dist;
+            console.log(msg);
 						dist = personDist(msg.pose.pose.position);
 						console.log("Person is: " + dist + " metres away");
             if(dist <= current[1]){
