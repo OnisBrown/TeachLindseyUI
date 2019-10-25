@@ -80,7 +80,7 @@ function quatCalc(angle){
 
 function Gaze(){
   quatCalc(0);
-  rwcActionGazeAtPosition(0,0,0,3);
+  rwcActionGazeAtNearestPerson(3);
 }
 
 function updater(event){
