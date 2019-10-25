@@ -80,7 +80,7 @@ function quatCalc(angle){
 
 function Gaze(){
   quatCalc(0);
-  rwcActionGazeAtNearestPerson(3);
+  rwcActionGazeAtNearestPerson(10);
 }
 
 function updater(event){
@@ -224,6 +224,13 @@ function Picker(){
         //rwcActionSay(current[1]);
         rwcActionYesNoModal(current[1]).on("result", function(status){console.log(status); Picker();});
         break;
+        case 'askO':
+          rwcActionSay(current[1]);
+          rwcActionStartDialogue()
+          rwcListenerGetDialogue().then(function(script){
+            alert(script);
+          });
+          break;
     }
   }
   else{
