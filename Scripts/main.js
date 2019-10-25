@@ -184,8 +184,9 @@ function Picker(){
             console.log(msg);
 						dist = personDist(msg.pose.position);
 						console.log("Person is: " + dist + " metres away");
-            if(dist <= current[1]){
+            if(dist <= current[1] && dist !=0){
               Picker();
+              return;
             }
 					});
 				});
