@@ -178,7 +178,7 @@ function Picker(){
 				rwcListenergetnearestDist(null, true).then(function(myTopic){
 					myTopic.subscribe(function(msg){
             var dist;
-						dist = msg;
+						dist = msg.min_distance;
             console.log(dist);
             if(dist < current[1] && dist >0){
               console.log("found person");
