@@ -182,8 +182,8 @@ function Picker(){
             console.log(dist);
             if(dist < current[1] && dist >0){
               console.log("found person");
+              myTopic.unsubscribe();
               Picker();
-              return;
             }
 					});
 				});
