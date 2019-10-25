@@ -4,6 +4,8 @@ var waitPersonJSON ={
         {
           "type": "field_number",
           "name": "distance",
+          "min": 1,
+          "max": 5
         }
       ],
       "nextStatement": null,

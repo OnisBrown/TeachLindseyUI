@@ -25,8 +25,6 @@ var goToNodeJSON ={
         {
           "type": "field_number",
           "name": "waypoint",
-          "min": 1,
-          "max": 5
         }
       ],
       "nextStatement": null,
