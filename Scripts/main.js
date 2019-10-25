@@ -166,8 +166,8 @@ function personDist(perCoord){
 	var dist = 0;
 	rwcListenerGetPosition().then(function(pos){
 		dist = Math.sqrt(Math.pow((perCoord[0]-pos[0]),2) + Math.pow((perCoord[1]-pos[1]),2) + Math.pow((perCoord[2]-pos[2]),2));
-	});
-	return dist;
+    return dist;
+  });
 }
 
 function Picker(){
