@@ -164,8 +164,9 @@ pivWork.addEventListener('error', function(event){console.error("error: ", event
 
 function personDist(perCoord){
 	var dist = 0;
-  console.log(perCoord);
+  console.log(perCoord.x);
 	rwcListenerGetPosition().then(function(pos){
+    console.log(pos);
 		dist = Math.sqrt(Math.pow((perCoord.x-pos[0]),2) + Math.pow((perCoord.y-pos[1]),2) + Math.pow((perCoord.z-pos[2]),2));
     return dist;
   });
