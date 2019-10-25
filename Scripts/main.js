@@ -26,29 +26,29 @@ var qtn = { //struct for quaternion
   w:1
 };
 
-var dictExhibits = { //list of nodes for each exhibit to match goto function
-  "1.1": 17,
-  "1.2": 12,
-  "1.3": 11,
-  "1.4": 8,
-  "1.5": 6,
-  "1.6": 3,
-  "2.1": 19,
-  "2.2": 18,
-  "2.3": 14,
-  "2.4": 7,
-  "2.5": 2,
-  "3.1": 13,
-  "3.2": 10,
-  "3.3": 6,
-  "3.4": 4,
-  "3.5": 3,
-  "4.1": 16,
-  "4.2": 15,
-  "4.3": 9,
-  "4.4": 5,
-  "4.5": 3
-};
+// var dictExhibits = { //list of nodes for each exhibit to match goto function
+//   "1.1": 17,
+//   "1.2": 12,
+//   "1.3": 11,
+//   "1.4": 8,
+//   "1.5": 6,
+//   "1.6": 3,
+//   "2.1": 19,
+//   "2.2": 18,
+//   "2.3": 14,
+//   "2.4": 7,
+//   "2.5": 2,
+//   "3.1": 13,
+//   "3.2": 10,
+//   "3.3": 6,
+//   "3.4": 4,
+//   "3.5": 3,
+//   "4.1": 16,
+//   "4.2": 15,
+//   "4.3": 9,
+//   "4.4": 5,
+//   "4.5": 3
+// };
 
 // create a dictionary of exhibit keys and their matching waypoints
 var dynDictExhibits = {};
@@ -182,7 +182,7 @@ function Picker(){
 					myTopic.subscribe(function(msg){
             var dist;
             console.log(msg);
-						dist = personDist(msg.pose.pose.position);
+						dist = personDist(msg.pose.position);
 						console.log("Person is: " + dist + " metres away");
             if(dist <= current[1]){
               Picker();
