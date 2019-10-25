@@ -227,6 +227,6 @@ function Picker(){
     }
   }
   else{
-    return;
+    console.alert("end of script");
   }
 }
