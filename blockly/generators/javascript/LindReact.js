@@ -19,3 +19,24 @@ Blockly.Blocks['waitPerson'] = {
     this.jsonInit(waitPersonJSON);
   }
 };
+
+var askOQuestionJSON ={
+      "message0": 'Prompt for dialogue: %1',
+      "args0": [
+        {
+          "type": "field_input",
+          "name": "prompt",
+          "check":"String"
+        }
+      ],
+      "nextStatement": null,
+      "previousStatement": null,
+      "style":"procedure_blocks",
+      "tooltip": "waits for a person to get within distance before "
+};
+
+Blockly.Blocks['askOQuestion'] = {
+  init: function() {
+    this.jsonInit(askOQuestionJSON);
+  }
+};
