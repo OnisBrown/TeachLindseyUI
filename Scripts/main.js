@@ -4,7 +4,7 @@ var commandQueue = new Array();
 var commandQueueL2 = new Array();
 var pivWork = new Worker('../webWorkers/pivPass.js');
 var gazeWork = new Worker('../webWorkers/gazePass.js');
-var botStream = new Worker('../webWorkers/ChatSocket.js');
+//var botStream = new Worker('../webWorkers/ChatSocket.js');
 var talking;
 
 var startPos = {
@@ -80,7 +80,8 @@ function quatCalc(angle){
 
 function Gaze(){
   quatCalc(0);
-  rwcActionGazeAtNearestPerson(10);
+  //rwcActionGazeAtNearestPerson(10);
+  rwcActionGazeAtPosition(0,0,0, 30);
 }
 
 function updater(event){
