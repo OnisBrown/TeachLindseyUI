@@ -114,7 +114,6 @@ function init(){
 }
 
 function setStartPos(){
-  console.log("current position logged");
   rwcListenerGetPosition().then(function(pos){
     startPos.x = pos[0];
     startPos.y = pos[1];
@@ -122,7 +121,6 @@ function setStartPos(){
   });
 
   var ang = rwcListenerGetOrientation().then(function(ang){
-    console.log(ang);
     startPos.q.x = ang[0];
     startPos.q.y = ang[1];
     startPos.q.z = ang[2];
