@@ -160,12 +160,12 @@ pivWork.addEventListener('message', function(event){
 
 pivWork.addEventListener('error', function(event){console.error("error: ", event);});
 
-function personDist(perCoord){
-	var dist = 0;
-	setStartPos();
-	dist = Math.sqrt(Math.pow((perCoord.x-startPos.x),2) + Math.pow((perCoord.y-startPos.x),2) + Math.pow((perCoord.z-startPos.x),2));
-  return dist;
-}
+// function personDist(perCoord){
+// 	var dist = 0;
+// 	setStartPos();
+// 	dist = Math.sqrt(Math.pow((perCoord.x-startPos.x),2) + Math.pow((perCoord.y-startPos.x),2) + Math.pow((perCoord.z-startPos.x),2));
+//   return dist;
+// }
 
 function Picker(){
   console.log(commandQueue);
@@ -175,10 +175,10 @@ function Picker(){
     switch(current[0]){
 			case "waitPer":
         console.log("waiting for person...")
-				rwcListenerGetNearestPersonPosition(null, true).then(function(myTopic){
+				rwcListenergetnearestDist(null, true).then(function(myTopic){
 					myTopic.subscribe(function(msg){
             var dist;
-						dist = personDist(msg.pose.position);
+						dist = msg;
             console.log(dist);
             if(dist < current[1] && dist >0){
               console.log("found person");
