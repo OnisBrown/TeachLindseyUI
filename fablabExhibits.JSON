@@ -29,13 +29,12 @@
     },
     {
       "key": "1.3",
-      "title": "chair",
+      "title": "baxter",
       "names":[],
-      "waypoint":"WayPoint3",
-      "short_description":"It's a Gaming chair",
-      "description": "This is part of a study on the effcts of motion on players in virtual reality",
-      "additional_description": "if you'd like to take part in the study email
-      Benjamin Williams on bwilliams@lincoln.ac.uk"
+      "waypoint":"WayPoint7",
+      "short_description":"It's just another robot",
+      "description": "it's name is Baxter",
+      "additional_description": "Baxter is an industrial robot built by Rethink Robotics, a start-up company founded by Rodney Brooks. Baxter was introduced in September 2011, and was succeeded by the robot Sawyer. Baxter is a two-armed robot with an animated face. It is 3 feet tall and weighs 165 lbs without its pedestal; with its pedestal it is between 5'10\" – 6'3\" tall and weighs 306 lbs.[1] It is used for simple industrial jobs such as loading, unloading, sorting, and handling of materials. Brooks stated that Baxter was designed to perform the dull tasks on a production line."
     },
   ]
 }
