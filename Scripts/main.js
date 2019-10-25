@@ -164,11 +164,10 @@ pivWork.addEventListener('error', function(event){console.error("error: ", event
 
 function personDist(perCoord){
 	var dist = 0;
-	rwcListenerGetPosition().then(function(pos){
-		dist = Math.sqrt(Math.pow((perCoord.x-pos[0]),2) + Math.pow((perCoord.y-pos[1]),2) + Math.pow((perCoord.z-pos[2]),2));
-    console.log(dist);
-    return dist;
-  });
+	setStartPos();
+	dist = Math.sqrt(Math.pow((perCoord.x-startPos.x),2) + Math.pow((perCoord.y-startPos.x),2) + Math.pow((perCoord.z-startPos.x),2));
+  console.log(dist);
+  return dist;
 }
 
 function Picker(){
@@ -182,7 +181,7 @@ function Picker(){
 				rwcListenerGetNearestPersonPosition(null, true).then(function(myTopic){
 					myTopic.subscribe(function(msg){
             var dist;
-						dist = await personDist(msg.pose.position);
+						dist = personDist(msg.pose.position);
             console.log(dist);
             if(dist < current[1] && dist >0){
               console.log("found person");
