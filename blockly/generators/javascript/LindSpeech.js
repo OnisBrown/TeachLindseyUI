@@ -5,7 +5,7 @@ Blockly.JavaScript['script'] = function(block) {
 };
 
 Blockly.JavaScript['giveSpeech'] = function(block) {
-  var paragraph = Blockly.JavaScript.valueToCode(block,'script', Blockly.JavaScript.ORDER_ATOMIC) || "failed to parse speech";
+  var paragraph = block.getFieldValue('script');
   var code = "giveSpeechCode('" + paragraph + "');";
   return code;
 };
