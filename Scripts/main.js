@@ -26,30 +26,6 @@ var qtn = { //struct for quaternion
   w:1
 };
 
-// var dictExhibits = { //list of nodes for each exhibit to match goto function
-//   "1.1": 17,
-//   "1.2": 12,
-//   "1.3": 11,
-//   "1.4": 8,
-//   "1.5": 6,
-//   "1.6": 3,
-//   "2.1": 19,
-//   "2.2": 18,
-//   "2.3": 14,
-//   "2.4": 7,
-//   "2.5": 2,
-//   "3.1": 13,
-//   "3.2": 10,
-//   "3.3": 6,
-//   "3.4": 4,
-//   "3.5": 3,
-//   "4.1": 16,
-//   "4.2": 15,
-//   "4.3": 9,
-//   "4.4": 5,
-//   "4.5": 3
-// };
-
 // create a dictionary of exhibit keys and their matching waypoints
 var dynDictExhibits = {};
 function setExhbits(){
@@ -81,7 +57,7 @@ function quatCalc(angle){
 function Gaze(){
   quatCalc(0);
   //rwcActionGazeAtNearestPerson(10);
-  rwcActionGazeAtPosition(0,0,0, 30);
+  rwcActionGazeAtPosition(1,20,2, 5);
 }
 
 function updater(event){
@@ -226,10 +202,15 @@ function Picker(){
         rwcActionYesNoModal(current[1]).on("result", function(status){console.log(status); Picker();});
         break;
         case 'askO':
-          rwcActionSay(current[1]);
-          rwcActionStartDialogue()
-          rwcListenerGetDialogue().then(function(script){
-            alert(script);
+          rwcActionSay(current[1]).on("result", function(status){
+            console.log("speaking");
+            rwcActionStartDialogue().on("result", function(status){
+              console.log("listening");
+              rwcListenerGetDialogue().then(function(script){
+                console.log("listened");
+                alert(script);
+              });
+            });
           });
           break;
     }
