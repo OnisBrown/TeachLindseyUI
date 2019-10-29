@@ -80,3 +80,28 @@ Blockly.JavaScript['startTour'] = function(block) {
 function startTourCode(choice){
   commandQueue.push(['startTour', choice]);
 }
+
+Blockly.JavaScript['gazePos'] = function(block) {
+  var vector = new Array(0, 0, 0, 0);
+  vector[0] = block.getFieldValue('x');
+  vector[1] = block.getFieldValue('y');
+  vector[2] = block.getFieldValue('z');
+  vector[3] = block.getFieldValue('T');
+  var code = "gazePosCode(["+ vector[0] + ", " + vector[1] + ", " + vector[2] + ", "+ vector[3] + "]);";
+  return code;
+};
+
+function gazePosCode(vector){
+	commandQueue.push(['gazeAtPosition', vector]);
+}
+
+Blockly.JavaScript['gazePer'] = function(block) {
+  var time;
+  time = block.getFieldValue('T');
+  var code = "gazePerCode(" + time +");";
+  return code;
+};
+
+function gazePerCode(time){
+	commandQueue.push(['gazeAtPerson', time]);
+}

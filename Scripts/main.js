@@ -56,8 +56,8 @@ function quatCalc(angle){
 
 function Gaze(){
   quatCalc(0);
-  //rwcActionGazeAtNearestPerson(10);
-  rwcActionGazeAtPosition(1,20,2, 5);
+  rwcActionGazeAtPosition(10,10,10, 5);
+  //rwcActionGazeAtNearestPerson(5);
 }
 
 function updater(event){
@@ -212,6 +212,12 @@ function Picker(){
               });
             });
           });
+          break;
+        case 'gazeAtPosition':
+          rwcActionGazeAtPosition(current[1][0], current[1][1], current[1][2], current[1][3]).on("result", function(status){console.log(status); Picker();});
+          break;
+        case 'gazeAtPerson':
+          rwcActionGazeAtNearestPerson(current[1]).on("result", function(status){console.log(status); Picker();});
           break;
     }
   }

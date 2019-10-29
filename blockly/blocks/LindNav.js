@@ -192,3 +192,59 @@ Blockly.Blocks['startTour'] = {
     this.jsonInit(startTourJSON);
   }
 };
+
+gazePosJSON = {
+  "message0": 'look towards x: %1 y: %2 z: %3 for %4 seconds',
+  "args0": [
+    {
+      "type": "field_number",
+      "name": "x",
+    },
+    {
+      "type": "field_number",
+      "name": "y",
+    },
+    {
+      "type": "field_number",
+      "name": "z",
+    },
+    {
+      "type": "field_number",
+      "name": "T",
+      "min": 1,
+      "max": 60
+    }
+  ],
+  "nextStatement": null,
+  "previousStatement": null,
+  "style":"logic_blocks",
+  "tooltip": "look at a certain spot for a number of seconds",
+};
+
+Blockly.Blocks['gazePos'] = {
+  init: function() {
+    this.jsonInit(gazePosJSON);
+  }
+};
+
+gazePerJSON = {
+  "message0": 'look towards nearest person for %1 seconds',
+  "args0": [
+    {
+      "type": "field_number",
+      "name": "T",
+      "min": 1,
+      "max": 60
+    }
+  ],
+  "nextStatement": null,
+  "previousStatement": null,
+  "style":"logic_blocks",
+  "tooltip": "have lindsey look at hte nearest person",
+};
+
+Blockly.Blocks['gazePer'] = {
+  init: function() {
+    this.jsonInit(gazePerJSON);
+  }
+};
