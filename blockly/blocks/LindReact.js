@@ -1,7 +1,7 @@
 Blockly.JavaScript['waitPerson'] = function(block) {
   //GoTo a location
   var dist = block.getFieldValue('distance');
-  var code = "waitPersonCode(" + dist + "); ";
+  var code = "waitPersonCode(" + dist + ");\n";
   return code;
 };
 
@@ -14,7 +14,7 @@ function waitPersonCode(dist)
 Blockly.JavaScript['askOQuestion'] = function(block) {
   //GoTo a location
   var prompt = block.getFieldValue('prompt');
-  var code = `askOCode("${prompt}");`;
+  var code = `askOCode("${prompt}");\n`;
   return code;
 };
 

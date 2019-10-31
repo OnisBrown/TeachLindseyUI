@@ -65,7 +65,6 @@ function quatCalc(angle){
 function updater(event){
   var code = Blockly.JavaScript.workspaceToCode(workspace);
   document.getElementById('codeDiv').innerHTML = code;
-
   var xml = Blockly.Xml.workspaceToDom(workspace);
   xml_txt = Blockly.Xml.domToPrettyText(xml);
 }
@@ -294,14 +293,15 @@ function Picker(){ // stack of commands from blocks
         case 'askO':
           rwcActionSay(current[1]).on("result", function(status){
             console.log("speaking");
-            rwcActionStartDialogue().on("result", function(status){
-              console.log("listening");
-              rwcListenerGetDialogue().then(function(script){
-                console.log("listened");
-                alert(script);
+            rwcActionStartDialogue();
+            rwcListenerGetDialogue().then(function(script){
+              console.log("listened");
+              rwcActionSay(script).on("result", function(status){
+                Picker();
               });
             });
           });
+
           break;
         case 'gazeAtPosition':
           rwcActionGazeAtPosition(current[1][0], current[1][1], current[1][2], current[1][3]).on("result", function(status){console.log(status); Picker();});
