@@ -14,7 +14,7 @@ function waitPersonCode(dist)
 Blockly.JavaScript['askOQuestion'] = function(block) {
   //GoTo a location
   var prompt = block.getFieldValue('prompt');
-  var code = "askOCode('" + prompt + "'); ";
+  var code = `askOCode("${prompt}");`;
   return code;
 };
 

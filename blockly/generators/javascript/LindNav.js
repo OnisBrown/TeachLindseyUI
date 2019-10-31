@@ -45,7 +45,8 @@ Blockly.JavaScript['exhibitLs'] = function(block) {
 
 Blockly.JavaScript['goToDescribe'] = function(block){ // go to and describe an exhibit
   var choice = Blockly.JavaScript.valueToCode(block,'exhibit', Blockly.JavaScript.ORDER_ATOMIC) || "failing to get exhibit name";
-  var code = "goToDescCode('" + choice + "');"
+  var behaviours = [block.getFieldValue('gaze').toLowerCase(), block.getFieldValue('pivot').toLowerCase()];
+  var code = "goToDescCode('" + choice + "', "+ behaviours[0]+ ", " + behaviours[1] + ");"
   return code;
 };
 
@@ -53,8 +54,9 @@ Blockly.JavaScript['goToDescribe'] = function(block){ // go to and describe an e
 Blockly.JavaScript['goToDescribeWhile'] = function(block){ // go to and describe an exhibit
   var choice = Blockly.JavaScript.valueToCode(block,'exhibit', Blockly.JavaScript.ORDER_ATOMIC) || "failing to get exhibit name";
   var extras = Blockly.JavaScript.statementToCode(block, 'DO');
+  var behaviours = [block.getFieldValue('gaze').toLowerCase(), block.getFieldValue('pivot').toLowerCase()];
   extras = extras.split(";");
-  var code = "goToDescCode('" + choice + "'); gotToWhile("+ extras +")";
+  var code = "goToDescCode('" + choice + "', "+ behaviours[0]+ ", " + behaviours[1] + "); gotToWhile("+ extras +")";
   return code;
 };
 
@@ -66,8 +68,8 @@ function gotoWhileCode(extras){
   commandQueueL2.push("*");
 }
 
-function goToDescCode(choice){
-  commandQueue.push(['goToDesc', choice]);
+function goToDescCode(choice, behaviours1, behaviours2){
+  commandQueue.push(['goToDesc', choice, [behaviours1,behaviours2]);
 }
 
 Blockly.JavaScript['startTour'] = function(block) {

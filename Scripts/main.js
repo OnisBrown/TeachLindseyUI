@@ -221,7 +221,19 @@ function Picker(){ // stack of commands from blocks
         rwcActionGoToNode(node).on("result", function(status){console.log(status); Picker();});
         break;
       case 'goToDesc':
-        rwcActionGoToAndDescribeExhibit(current[1]).on("result", function(){Picker();});
+        var node = dynDictExhibits[current[1]];
+        rwcActionGoToNode(node).on("result", function(status){
+          console.log(status);
+          if(current[2][0]){
+            gazeWork.postMessage("speaking");
+          }
+          if(current[2][1]){
+            setStartPos();
+            pivWork.postMessage("speaking");
+          }
+          rwcActionDescribeExhibit(current[1]).on("result", function(){talking = false;Picker();});
+        });
+
         break;
       case 'move':
         quatCalc(current[1][3]);
@@ -229,15 +241,25 @@ function Picker(){ // stack of commands from blocks
         rwcActionSetPoseRelative(current[1][0], current[1][1], current[1][2], qtn).on("result", function(status){console.log(status); Picker();});
         break;
       case 'speech':
-        setStartPos();
         talking = true;
-        pivWork.postMessage("speaking");
+
+        if(current[2][0]){
+          gazeWork.postMessage("speaking");
+        }
+        if(current[2][1]){
+          setStartPos();
+          pivWork.postMessage("speaking");
+        }
         rwcActionSay(current[1]).on("result", function(status){talking = false; Picker();});
         break;
       case 'desc':
-        setStartPos();
-        talking = true;
-        pivWork.postMessage("speaking");
+        if(current[2][0]){
+          gazeWork.postMessage("speaking");
+        }
+        if(current[2][1]){
+          setStartPos();
+          pivWork.postMessage("speaking");
+        }
         rwcActionDescribeExhibit(current[1]).on("result", function(){talking = false; Picker();});
         break;
       case 'startTour':

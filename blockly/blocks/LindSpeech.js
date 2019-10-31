@@ -26,6 +26,19 @@ giveSpeechJSON = {
       "check": "String"
     }
   ],
+  "message1": 'behaviour toggles: gaze %1 pivoting %2',
+  "args1": [
+    {
+      "type": "field_checkbox",
+      "name":"gaze",
+      "checked": true
+    },
+    {
+      "type": "field_checkbox",
+      "name":"pivot",
+      "checked": true
+    }
+  ],
   "nextStatement": null,
   "previousStatement": null,
   "colour": 160,
@@ -45,6 +58,19 @@ describeJSON = {
       "type": "input_value",
       "name": "exhibit",
       "check": "String"
+    },
+  ],
+  "message1": 'behaviour toggles: gaze %1 pivoting %2',
+  "args1": [
+    {
+      "type": "field_checkbox",
+      "name":"gaze",
+      "checked": true
+    },
+    {
+      "type": "field_checkbox",
+      "name":"pivot",
+      "checked": true
     }
   ],
   "nextStatement": null,
