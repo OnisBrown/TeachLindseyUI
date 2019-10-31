@@ -87,7 +87,7 @@ Blockly.JavaScript['gazePos'] = function(block) {
   vector[1] = block.getFieldValue('y');
   vector[2] = block.getFieldValue('z');
   vector[3] = block.getFieldValue('T');
-  var code = "gazePosCode(["+ vector[0] + ", " + vector[1] + ", " + vector[2] + ", "+ vector[3] + "]);";
+  var code = "gazePosCode(["+ vector[0] + ", " + vector[1] + ", " + vector[2] + ", "+ vector[3] +"]);";
   return code;
 };
 
