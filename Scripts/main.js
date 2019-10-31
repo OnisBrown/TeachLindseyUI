@@ -54,12 +54,6 @@ function quatCalc(angle){
 
 }
 
-function Gaze(){
-  quatCalc(0);
-  rwcActionGazeAtPosition(10,10,10, 5);
-  //rwcActionGazeAtNearestPerson(5);
-}
-
 function updater(event){
   var code = Blockly.JavaScript.workspaceToCode(workspace);
   document.getElementById('codeDiv').innerHTML = code;
@@ -137,33 +131,85 @@ pivWork.addEventListener('message', function(event){
 
 pivWork.addEventListener('error', function(event){console.error("error: ", event);});
 
-// function personDist(perCoord){
-// 	var dist = 0;
-// 	setStartPos();
-// 	dist = Math.sqrt(Math.pow((perCoord.x-startPos.x),2) + Math.pow((perCoord.y-startPos.x),2) + Math.pow((perCoord.z-startPos.x),2));
-//   return dist;
-// }
+gazeWork.addEventListener('message', function(event){
+  var ang = 45;
+  if(!talking){
+    gazeWork.postMessage("stopSpeaking");
+    rwcActionGazeAtNearestPerson(3);
+  }
+  else{
+    quatCalc(ang*event.data);
+    rwcActionGazeAtPosition([3,10,2,2]);
+  }
 
-function Picker(){
+
+});
+
+gazeWork.addEventListener('error', function(event){console.error("error: ", event);});
+
+function personSense(range){
+  console.log("waiting for person...");
+  var preempt = false
+  setTimeout((function(){ preempt = true }, 60*1000); //times out the waiting after a minute.
+  rwcListenergetnearestDist(null, true).then(function(myTopic){
+    myTopic.subscribe(function(msg){
+      var dist;
+      dist = msg.min_distance;
+      console.log(dist);
+      if((dist < range && dist >0) OR preempt){
+        console.log("found person");
+        myTopic.unsubscribe();
+        return preempt;
+      }
+    });
+  });
+}
+
+function targetAngle(position){
+
+}
+
+function Demo(){
+  rwcActionGoToNode("WayPoint5").on("result", function(status){
+    console.log(status);
+    personSense(1);
+    rwcActionGazeAtNearestPerson(10);
+    rwcActionSay("Hello! Welcome to the tour, follow me around the fablab").on("result", function(status){
+      rwcActionGoToNode("WayPoint7").on("result", function(status){
+        gazeWork.postMessage("speaking");
+        pivWork.postMessage("speaking");
+        rwcActionSay("this is baxter the robot").on("result", function(status){
+          talking = false;
+          rwcActionGoToNode("WayPoint1").on("result", function(status){
+            gazeWork.postMessage("speaking");
+            pivWork.postMessage("speaking");
+            rwcActionSay("this some water").on("result", function(status){
+              talking = false;
+              rwcActionGoToNode("WayPoint5").on("result", function(status){
+                gazeWork.postMessage("speaking");
+                pivWork.postMessage("speaking");
+                rwcActionSay("hope you've enjoyed your tour").on("result", function(status){
+                  talking = false;
+                  rwcActionGoToNode("WayPoint1");
+                });
+              });
+            });
+          });
+        });
+      });
+    });
+  });
+}
+
+function Picker(){ // stack of commands from blocks
   console.log(commandQueue);
   if (commandQueue.length > 0) {
     var current = commandQueue.shift();
     console.log(current[0] + " " + current[1]);
     switch(current[0]){
 			case "waitPer":
-        console.log("waiting for person...")
-				rwcListenergetnearestDist(null, true).then(function(myTopic){
-					myTopic.subscribe(function(msg){
-            var dist;
-						dist = msg.min_distance;
-            console.log(dist);
-            if(dist < current[1] && dist >0){
-              console.log("found person");
-              myTopic.unsubscribe();
-              Picker();
-            }
-					});
-				});
+          personSense(current[1]);
+          Picker();
 				break;
       case 'goTo':
         var node = dynDictExhibits[current[1]];
@@ -222,6 +268,6 @@ function Picker(){
     }
   }
   else{
-    alert("end of script");
+    alert("Plan finished!");
   }
 }
