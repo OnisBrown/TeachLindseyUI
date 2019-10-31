@@ -28,7 +28,7 @@ async function talkingClock(){
   }
   self.postMessage(pivotSwitch);
   pivotSwitch *= -1;
-  pInterval = 3;
+  pInterval = 7;
   await sleep(pInterval*1000);
   talkingClock();
 }
