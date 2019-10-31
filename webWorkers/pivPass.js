@@ -14,7 +14,7 @@ self.onmessage = function(event){
       break;
     case "stopSpeaking":
       talking = false;
-      break
+      break;
   }
 }
 
@@ -23,13 +23,13 @@ async function gazingClock(){
 }
 
 async function talkingClock(){
+  pInterval = 7;
   await sleep(pInterval*1000);
   if(!talking){
     return;
   }
   self.postMessage(pivotSwitch);
   pivotSwitch *= -1;
-  pInterval = 7;
 
   talkingClock();
 }

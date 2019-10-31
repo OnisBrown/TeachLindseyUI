@@ -19,12 +19,13 @@ self.onmessage = function(event){
 }
 
 async function gazingClock(){
+  gInterval = 3;
+  await sleep(gInterval*1000);
   if(!talking){
     return;
   }
+  console.log("looking away" + away);
   self.postMessage(away);
   away = !away;
-  gInterval = 3;
-  await sleep(gInterval*1000);
   gazingClock();
 }
