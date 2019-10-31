@@ -28,16 +28,17 @@ var qtn = { //struct for quaternion
 
 // create a dictionary of exhibit keys and their matching waypoints
 var dynDictExhibits = {};
-function setExhbits(){
+function setExhbitsDict(){
   var exhibitsRaw;
-  $.getJSON("fablabExhibits.json",
-  function(json){
+  $.getJSON("fablab.json", function(json){
     exhibitorsJSON = json;
     exhibitsRaw = exhibitorsJSON.exhibitors;
     for(i =0; i < exhibitsRaw.length; i++){
       dynDictExhibits[exhibitsRaw[i].key] = exhibitsRaw[i].waypoint;
     }
-  });
+  }).fail( function(d, textStatus, error) {
+        console.error("getJSON failed, status: " + textStatus + ", error: "+error)
+    });
 }
 
 function quatCalc(angle){
@@ -63,7 +64,12 @@ function updater(event){
 }
 
 function init(){
-  setExhbits();
+  console.log("loading location lists...");
+  setExhbitsDict();
+  setTourls();
+  setExhbitsls();
+  console.log("lists loaded.");
+
   workspace = Blockly.inject('blocklyDiv',
     {toolbox: document.getElementById('toolbox'),
      grid:
@@ -149,17 +155,22 @@ gazeWork.addEventListener('error', function(event){console.error("error: ", even
 
 function personSense(range){
   console.log("waiting for person...");
-  var preempt = false
-  setTimeout((function(){ preempt = true }, 60*1000); //times out the waiting after a minute.
+  var preempt
+  setTimeout(function(){ preempt = true }, 5*1000); //times out the waiting after a minute.
   rwcListenergetnearestDist(null, true).then(function(myTopic){
     myTopic.subscribe(function(msg){
       var dist;
       dist = msg.min_distance;
       console.log(dist);
-      if((dist < range && dist >0) OR preempt){
-        console.log("found person");
+      if((dist < range && dist >0) || preempt){
+        console.log("found person: " + !preempt);
         myTopic.unsubscribe();
-        return preempt;
+        if(commandQueue.length>0){
+          Picker();
+        }
+        else{
+          console.log("Done waiting, no further instructions");
+        }
       }
     });
   });
@@ -170,46 +181,17 @@ function targetAngle(position){
 }
 
 function Demo(){
-  rwcActionGoToNode("WayPoint5").on("result", function(status){
-    console.log(status);
-    personSense(1);
-    rwcActionGazeAtNearestPerson(10);
-    rwcActionSay("Hello! Welcome to the tour, follow me around the fablab").on("result", function(status){
-      rwcActionGoToNode("WayPoint7").on("result", function(status){
-        gazeWork.postMessage("speaking");
-        pivWork.postMessage("speaking");
-        rwcActionSay("this is baxter the robot").on("result", function(status){
-          talking = false;
-          rwcActionGoToNode("WayPoint1").on("result", function(status){
-            gazeWork.postMessage("speaking");
-            pivWork.postMessage("speaking");
-            rwcActionSay("this some water").on("result", function(status){
-              talking = false;
-              rwcActionGoToNode("WayPoint5").on("result", function(status){
-                gazeWork.postMessage("speaking");
-                pivWork.postMessage("speaking");
-                rwcActionSay("hope you've enjoyed your tour").on("result", function(status){
-                  talking = false;
-                  rwcActionGoToNode("WayPoint1");
-                });
-              });
-            });
-          });
-        });
-      });
-    });
-  });
+  commandQueue.push([])
 }
 
 function Picker(){ // stack of commands from blocks
   console.log(commandQueue);
   if (commandQueue.length > 0) {
     var current = commandQueue.shift();
-    console.log(current[0] + " " + current[1]);
+    console.log(current);
     switch(current[0]){
 			case "waitPer":
-          personSense(current[1]);
-          Picker();
+        personSense(current[1]);
 				break;
       case 'goTo':
         var node = dynDictExhibits[current[1]];
@@ -290,6 +272,6 @@ function Picker(){ // stack of commands from blocks
     }
   }
   else{
-    alert("Plan finished!");
+    console.log("Plan finished!");
   }
 }
