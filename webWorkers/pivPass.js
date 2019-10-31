@@ -23,12 +23,13 @@ async function gazingClock(){
 }
 
 async function talkingClock(){
+  await sleep(pInterval*1000);
   if(!talking){
     return;
   }
   self.postMessage(pivotSwitch);
   pivotSwitch *= -1;
   pInterval = 7;
-  await sleep(pInterval*1000);
+
   talkingClock();
 }
