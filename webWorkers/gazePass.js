@@ -1,5 +1,5 @@
 var talking;
-var away
+var away = false;
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -22,9 +22,9 @@ async function gazingClock(){
   if(!talking){
     return;
   }
-  self.postMessage(pivotSwitch);
-  pivotSwitch *= -1;
-  pInterval = 3;
-  await sleep(pInterval*1000);
+  self.postMessage(away);
+  away = !away;
+  gInterval = 3;
+  await sleep(gInterval*1000);
   gazingClock();
 }
