@@ -118,12 +118,12 @@ pivWork.addEventListener('message', function(event){
   var ang = 45;
   if(!talking){
     pivWork.postMessage("stopSpeaking");
-    console.log("final position at" + startPos)
+    console.log("final position at" + startPos);
     rwcActionSetPoseMap(startPos.x, startPos.y, startPos.z, startPos.q);
   }
   else{
     quatCalc(ang*event.data);
-    rwcActionSetPoseRelative(0, 0, 0, qtn)
+    rwcActionSetPoseRelative(0, 0, 0, qtn);
   }
 
 
