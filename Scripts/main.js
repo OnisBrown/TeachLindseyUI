@@ -6,6 +6,9 @@ var pivWork = new Worker('../webWorkers/pivPass.js');
 var gazeWork = new Worker('../webWorkers/gazePass.js');
 //var botStream = new Worker('../webWorkers/ChatSocket.js');
 var talking;
+var away;
+
+
 
 var startPos = {
   x: 0,
@@ -39,6 +42,10 @@ function setExhbitsDict(){
   }).fail( function(d, textStatus, error) {
         console.error("getJSON failed, status: " + textStatus + ", error: "+error)
     });
+}
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 function quatCalc(angle){
@@ -120,38 +127,78 @@ function executeCode() { // executes code made by blocks
   }
 }
 
-pivWork.addEventListener('message', function(event){
+async function pivAsync(){
   var ang = 45;
-  if(!talking){
-    pivWork.postMessage("stopSpeaking");
+  pInterval = 7;
+  if(talking){
+    await sleep(pInterval*1000);
+    ang*= -1;
+    quatCalc(ang);
+    rwcActionSetPoseRelative(0, 0, 0, qtn).on("result", function(){
+      pivAsync();
+    });
+  }
+  else{
     console.log("final position at" + startPos);
     rwcActionSetPoseMap(startPos.x, startPos.y, startPos.z, startPos.q);
   }
-  else{
-    quatCalc(ang*event.data);
-    rwcActionSetPoseRelative(0, 0, 0, qtn);
+}
+
+async function gazeAsync(){
+  gInterval = 3;
+  await sleep(gInterval*1000);
+  if(talking){
+    console.log("looking away" + away);
+    if (away){
+      rwcActionGazeAtNearestPerson(4).on("result", function(){
+        // away = !away;
+        // gazeAsync();
+      });
+      away = !away;
+      gazeAsync();
+    }
+    else{
+      rwcActionGazeAtPosition(0,0,0,3).on("result", function(){
+        // away = !away;
+        // gazeAsync();
+      });
+      away = !away;
+      gazeAsync();
+    }
   }
+}
 
+// pivWork.addEventListener('message', function(event){
+//   var ang = 45;
+//   if(!talking){
+//     pivWork.postMessage("stopSpeaking");
+//     if(event.data == 0)
+//       {
+//         console.log("final position at" + startPos);
+//         rwcActionSetPoseMap(startPos.x, startPos.y, startPos.z, startPos.q);
+//       }
+//   }
+//   else{
+//     quatCalc(ang*event.data);
+//     rwcActionSetPoseRelative(0, 0, 0, qtn);
+//   }
+// });
 
-});
+// pivWork.addEventListener('error', function(event){console.error("error: ", event);});
 
-pivWork.addEventListener('error', function(event){console.error("error: ", event);});
+// gazeWork.addEventListener('message', function(event){
+//   var ang = 45;
+//   if(!talking){
+//     gazeWork.postMessage("stopSpeaking");
+//     rwcActionGazeAtNearestPerson(3);
+//   }
+//   else{
+//     quatCalc(ang*event.data);
+//     rwcActionGazeAtPosition([3,10,2,2]);
+//   }
+// });
 
-gazeWork.addEventListener('message', function(event){
-  var ang = 45;
-  if(!talking){
-    gazeWork.postMessage("stopSpeaking");
-    rwcActionGazeAtNearestPerson(3);
-  }
-  else{
-    quatCalc(ang*event.data);
-    rwcActionGazeAtPosition([3,10,2,2]);
-  }
-
-
-});
-
-gazeWork.addEventListener('error', function(event){console.error("error: ", event);});
+// gazeWork.addEventListener('error', function(event){console.error("error: ", event);});
 
 function personSense(range){
   console.log("waiting for person...");
@@ -184,6 +231,19 @@ function Demo(){
   commandQueue.push([])
 }
 
+function speechPrep(bools){
+  talking = true;
+  if(bools[0]){
+    away = false;
+    gazeAsync();
+  }
+  if(bools[1]){
+    setStartPos();
+    pivAsync();
+    //pivWork.postMessage("speaking");
+  }
+}
+
 function Picker(){ // stack of commands from blocks
   console.log(commandQueue);
   if (commandQueue.length > 0) {
@@ -206,13 +266,7 @@ function Picker(){ // stack of commands from blocks
         var node = dynDictExhibits[current[1]];
         rwcActionGoToNode(node).on("result", function(status){
           console.log(status);
-          if(current[2][0]){
-            gazeWork.postMessage("speaking");
-          }
-          if(current[2][1]){
-            setStartPos();
-            pivWork.postMessage("speaking");
-          }
+          speechPrep(current[2]);
           rwcActionDescribeExhibit(current[1]).on("result", function(){talking = false;Picker();});
         });
 
@@ -223,25 +277,11 @@ function Picker(){ // stack of commands from blocks
         rwcActionSetPoseRelative(current[1][0], current[1][1], current[1][2], qtn).on("result", function(status){console.log(status); Picker();});
         break;
       case 'speech':
-        talking = true;
-
-        if(current[2][0]){
-          gazeWork.postMessage("speaking");
-        }
-        if(current[2][1]){
-          setStartPos();
-          pivWork.postMessage("speaking");
-        }
+        speechPrep(current[2]);
         rwcActionSay(current[1]).on("result", function(status){talking = false; Picker();});
         break;
       case 'desc':
-        if(current[2][0]){
-          gazeWork.postMessage("speaking");
-        }
-        if(current[2][1]){
-          setStartPos();
-          pivWork.postMessage("speaking");
-        }
+        speechPrep(current[2]);
         rwcActionDescribeExhibit(current[1]).on("result", function(){talking = false; Picker();});
         break;
       case 'startTour':
