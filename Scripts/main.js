@@ -7,8 +7,12 @@ var gazeWork = new Worker('../webWorkers/gazePass.js');
 //var botStream = new Worker('../webWorkers/ChatSocket.js');
 var talking;
 var away;
+var gazeTargets = {
+  people:[],
+  objects:[]
+};
 
-
+function
 
 var startPos = {
   x: 0,
@@ -203,7 +207,7 @@ function personSense(range){
   console.log("waiting for person...");
   var preempt
   setTimeout(function(){ preempt = true }, 5*1000); //times out the waiting after a minute.
-  rwcListenergetnearestDist(null, true).then(function(myTopic){
+  rwcListenerGetNearestDist(null, true).then(function(myTopic){
     myTopic.subscribe(function(msg){
       var dist;
       dist = msg.min_distance;
@@ -227,7 +231,7 @@ function targetAngle(position){
 }
 
 function Demo(){
-  commandQueue.push([])
+  commandQueue.push(['gotToNode',])
 }
 
 function speechPrep(bools){
