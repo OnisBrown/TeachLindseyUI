@@ -2,6 +2,7 @@ var workspace;
 var xml_txt;
 var commandQueue = new Array();
 var commandQueueL2 = new Array();
+window.botpressWebChat.init({ host: 'http://localhost:3000', botId: 'chatty_lindsey' })
 var pivWork = new Worker('../webWorkers/pivPass.js');
 var gazeWork = new Worker('../webWorkers/gazePass.js');
 //var botStream = new Worker('../webWorkers/ChatSocket.js');
