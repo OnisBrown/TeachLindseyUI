@@ -260,8 +260,22 @@ function speechPrep(bools){
   if(bools[1]){
     setStartPos();
     pivAsync();
-    //pivWork.postMessage("speaking");
   }
+}
+
+function saveCode(){
+  var xml = Blockly.Xml.workspaceToDom(workspace);
+  var xml_readable = Blockly.Xml.domToPrettyText(xml);
+  var xml_text = Blockly.Xml.domToText(xml);
+  localStorage.setItem(document.getElementById("scriptName").value, xml_text);
+  localStorage.setItem(document.getElementById("scriptName").value + "_R", xml_readable)
+}
+
+function loadCode(){
+  //Blockly.Workspace.clear();
+  var name = document.getElementById("scriptName").value;
+  var xml = Blockly.Xml.textToDom(localStorage.getItem(name));
+  Blockly.Xml.domToWorkspace(xml, workspace);
 }
 
 function Picker(){ // stack of commands from blocks
