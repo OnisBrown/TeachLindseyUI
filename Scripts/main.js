@@ -130,26 +130,41 @@ function executeCode() { // executes code made by blocks
   }
 }
 
-async function pivAsync(){
-  var ang = 45;
+async function pivAsync(ang = 0, right = true){
+  if (ang == 0){
+    if (right){
+      ang = 30;
+    }
+    else{
+      ang = -30;
+    }
+  }
   pInterval = 7;
+  await sleep(pInterval*1000);
   if(talking){
-    await sleep(pInterval*1000);
     ang*= -1;
     quatCalc(ang);
+    console.log(pivAway);
+    pivAway = !pivAway
     rwcActionSetPoseRelative(0, 0, 0, qtn).on("result", function(){
-      pivAsync();
+      pivAsync(ang);
     });
   }
   else{
-    console.log("final position at" + startPos);
-    rwcActionSetPoseMap(startPos.x, startPos.y, startPos.z, startPos.q);
+    console.log(pivAway);
+    console.log("final position at" + startPos.x + startPos.y + startPos.z + startPos.q);
+    if (pivAway){
+      ang*= -1;
+      quatCalc(ang);
+      rwcActionSetPoseRelative(0, 0, 0, qtn);
+    }
+    pivAway = false;
   }
 }
 
 async function gazeAsync(){
-  gInterval = 3;
-  await sleep(gInterval*1000);
+  gInterval = 4;
+
   if(talking){
     console.log("looking away" + away);
     if (away){
@@ -158,6 +173,7 @@ async function gazeAsync(){
         // gazeAsync();
       });
       away = !away;
+      await sleep(gInterval*1000);
       gazeAsync();
     }
     else{
@@ -166,6 +182,7 @@ async function gazeAsync(){
         // gazeAsync();
       });
       away = !away;
+      await sleep(gInterval*1000);
       gazeAsync();
     }
   }
