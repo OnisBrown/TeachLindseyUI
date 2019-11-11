@@ -289,19 +289,24 @@ function Picker(){ // stack of commands from blocks
 				break;
       case 'goTo':
         var node = dynDictExhibits[current[1]];
+        rwcActionGoToNode(node).on("result", function(status){console.log(status);});
         rwcActionGoToNode(node).on("result", function(status){console.log(status); Picker();});
         break;
       case 'goToNode':
         var node = "WayPoint" + current[1];
         console.log(node);
+        rwcActionGoToNode(node).on("result", function(status){console.log(status);});
         rwcActionGoToNode(node).on("result", function(status){console.log(status); Picker();});
         break;
       case 'goToDesc':
         var node = dynDictExhibits[current[1]];
         rwcActionGoToNode(node).on("result", function(status){
           console.log(status);
+        });
+        rwcActionGoToNode(node).on("result", function(status){
+          console.log(status);
           speechPrep(current[2]);
-          rwcActionDescribeExhibit(current[1]).on("result", function(){talking = false;Picker();});
+          rwcActionDescribeExhibit(current[1]).on("result", function(){talking = false; Picker();});
         });
 
         break;
@@ -329,8 +334,9 @@ function Picker(){ // stack of commands from blocks
           rwcActionSay(current[1]).on("result", function(status){
             console.log("speaking");
             rwcActionStartDialogue();
+            diaTimer = setTimeout(function(){console.log("couldn't here anything")})
             rwcListenerGetDialogue().then(function(script){
-              console.log("listened");
+              clearTimeout(diaTimer);
               rwcActionSay(script).on("result", function(status){
                 Picker();
               });
