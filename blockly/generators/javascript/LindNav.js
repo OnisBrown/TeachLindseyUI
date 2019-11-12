@@ -26,7 +26,7 @@ Blockly.JavaScript['move'] = function(block) {
   var vector = new Array(0, 0, 0, 0);
   vector[0] = block.getFieldValue('x');
   vector[1] = block.getFieldValue('y');
-  vector[2] = block.getFieldValue('z');
+  //vector[2] = block.getFieldValue('z');
   vector[3] = block.getFieldValue('D');
   var code = "moveCode(["+ vector[0] + ", " + vector[1] + ", " + vector[2] + ", "+ vector[3] + "]);\n"; //Only passes the first value if written normally
   return code;

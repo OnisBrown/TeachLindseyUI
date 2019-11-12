@@ -99,7 +99,7 @@ Blockly.Blocks['goToDescribe'] = {
 };
 
 moveJSON = {
-  "message0": 'move x: %1 y: %2 z: %3 metres and turn %4 \xB0',
+  "message0": 'move forward: %1 y: %2 metres and turn %3 \xB0',
   "args0": [
     {
       "type": "field_number",
@@ -110,12 +110,6 @@ moveJSON = {
     {
       "type": "field_number",
       "name": "y",
-      "min": -10,
-      "max": 10
-    },
-    {
-      "type": "field_number",
-      "name": "z",
       "min": -10,
       "max": 10
     },
