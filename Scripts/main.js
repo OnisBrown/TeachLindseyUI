@@ -2,7 +2,7 @@ var workspace;
 var xml_txt;
 var commandQueue = new Array();
 var commandQueueL2 = new Array();
-window.botpressWebChat.init({ host: 'http://10.5.42.157:3000', botId: 'chatty_lindsey' });
+window.botpressWebChat.init({ host: 'http://10.5.42.157:3000', botId: 'chatty_lindsey', hideWidget: true});
 // sendButtton = document.getElementById('btn-send');
 // sendButtton.click();
 userId = 'Guest';
@@ -151,9 +151,12 @@ async function pivAsync(ang = 0, right = true){
     quatCalc(ang);
     console.log(pivAway);
     pivAway = !pivAway
-    rwcActionSetPoseRelative(0, 0, 0, qtn).on("result", function(){
-      pivAsync(ang);
-    });
+    // rwcActionSetPoseRelative(0, 0, 0, qtn).on("result", function(){
+    //   pivAsync(ang);
+    // });
+    rwcActionSetPoseRelative(0, 0, 0, qtn);
+    await sleep(500);
+    setTimeout(function(){pivAsync(ang);}, )
   }
   else{
     console.log(pivAway);
@@ -178,7 +181,7 @@ async function gazeAsync(){
         // gazeAsync();
       });
       away = !away;
-      await sleep(gInterval*1000);
+      await sleep((gInterval+3)*1000);
       gazeAsync();
     }
     else{
@@ -187,7 +190,7 @@ async function gazeAsync(){
         // gazeAsync();
       });
       away = !away;
-      await sleep(gInterval*1000);
+      await sleep((gInterval+3)*1000);
       gazeAsync();
     }
   }
@@ -234,7 +237,7 @@ function stopActions(){
 function personSense(range){
   console.log("waiting for person...");
   var preempt
-  setTimeout(function(){ preempt = true }, 5*1000); //times out the waiting after a minute.
+  setTimeout(function(){ preempt = true }, 20*1000); //times out the waiting after a minute.
   rwcListenerGetNearestDist(null, true).then(function(myTopic){
     myTopic.subscribe(function(msg){
       var dist;
@@ -328,7 +331,19 @@ function Picker(){ // stack of commands from blocks
         break;
       case 'desc':
         speechPrep(current[2]);
-        rwcActionDescribeExhibit(current[1]).on("result", function(){talking = false; Picker();});
+        $.getJSON("fablab.json", function(json){
+          exhibitorsJSON = json;
+          exhibitsRaw = exhibitorsJSON.exhibitors;
+          for(i =0; i < exhibitsRaw.length; i++){
+            console.log(exhibitsRaw[i].description);
+
+            if(exhibitsRaw[i].key == current[1]){
+              rwcActionSay(exhibitsRaw[i].description).on("result", function(status){talking = false; Picker();});
+              return;
+            }
+          }
+        });
+        //rwcActionDescribeExhibit(current[1]).on("result", function(){talking = false; Picker();}).then();
         break;
       case 'startTour':
         rwcActionStartTour(current[1]).on("result", function(){ Picker();});
@@ -356,7 +371,9 @@ function Picker(){ // stack of commands from blocks
         rwcActionGazeAtPosition(current[1][0], current[1][1], current[1][2], current[1][3]).on("result", function(status){console.log(status); Picker();});
         break;
       case 'gazeAtPerson':
-        rwcActionGazeAtNearestPerson(current[1]).on("result", function(status){console.log(status); Picker();});
+        rwcActionGazeAtNearestPerson(current[1]+5).on("result", function(status){console.log(status); Picker();});
+        console.log((current[1]+5)*1000);
+        setTimeout(function(){Picker();},(current[1]+5)*1000);
         break;
     }
   }
