@@ -2,13 +2,17 @@ var workspace;
 var xml_txt;
 var commandQueue = new Array();
 var commandQueueL2 = new Array();
-window.botpressWebChat.init({ host: 'http://10.5.42.157:3000', botId: 'chatty_lindsey' })
+window.botpressWebChat.init({ host: 'http://10.5.42.157:3000', botId: 'chatty_lindsey' });
+// sendButtton = document.getElementById('btn-send');
+// sendButtton.click();
+userId = 'Guest';
 var pivWork = new Worker('../webWorkers/pivPass.js');
 var gazeWork = new Worker('../webWorkers/gazePass.js');
 //var botStream = new Worker('../webWorkers/ChatSocket.js');
 var talking;
 var away;
 var pivAway;
+
 var gazeTargets = {
   people:[],
   objects:[]
