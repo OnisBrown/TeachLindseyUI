@@ -120,6 +120,7 @@ function setStartPos(){
 }
 
 function executeCode() { // executes code made by blocks
+  commandQueue = [];
   window.LoopTrap = 100;
   Blockly.JavaScript.INFINITE_LOOP_TRAP = 'if(--window.LoopTrap == 0) throw "Infinite loop.";\n';
   var code = Blockly.JavaScript.workspaceToCode(workspace);
@@ -224,6 +225,12 @@ async function gazeAsync(){
 
 // gazeWork.addEventListener('error', function(event){console.error("error: ", event);});
 
+function stopActions(){
+  commandQueue = [];
+  rwcActionSetPoseRelative(0,0,0);
+  cancelCurrentAction();
+}
+
 function personSense(range){
   console.log("waiting for person...");
   var preempt
@@ -271,6 +278,7 @@ function saveCode(){
   var xml = Blockly.Xml.workspaceToDom(workspace);
   var xml_readable = Blockly.Xml.domToPrettyText(xml);
   var xml_text = Blockly.Xml.domToText(xml);
+  $.post( "Backend.php", xml_txt);
   localStorage.setItem(document.getElementById("scriptName").value, xml_text);
   localStorage.setItem(document.getElementById("scriptName").value + "_R", xml_readable)
 }
@@ -293,20 +301,15 @@ function Picker(){ // stack of commands from blocks
 				break;
       case 'goTo':
         var node = dynDictExhibits[current[1]];
-        rwcActionGoToNode(node).on("result", function(status){console.log(status);});
         rwcActionGoToNode(node).on("result", function(status){console.log(status); Picker();});
         break;
       case 'goToNode':
         var node = "WayPoint" + current[1];
         console.log(node);
-        rwcActionGoToNode(node).on("result", function(status){console.log(status);});
         rwcActionGoToNode(node).on("result", function(status){console.log(status); Picker();});
         break;
       case 'goToDesc':
         var node = dynDictExhibits[current[1]];
-        rwcActionGoToNode(node).on("result", function(status){
-          console.log(status);
-        });
         rwcActionGoToNode(node).on("result", function(status){
           console.log(status);
           speechPrep(current[2]);
@@ -334,26 +337,27 @@ function Picker(){ // stack of commands from blocks
         //rwcActionSay(current[1]);
         rwcActionYesNoModal(current[1]).on("result", function(status){console.log(status); Picker();});
         break;
-        case 'askO':
-          rwcActionSay(current[1]).on("result", function(status){
-            console.log("speaking");
-            rwcActionStartDialogue();
-            diaTimer = setTimeout(function(){console.log("couldn't here anything")})
-            rwcListenerGetDialogue().then(function(script){
-              clearTimeout(diaTimer);
-              rwcActionSay(script).on("result", function(status){
-                Picker();
-              });
-            });
-          });
+      case 'askO':
+        rwcActionSay(current[1]).on("result", function(status){
+          console.log("speaking");
+          rwcActionStartDialogue();
 
-          break;
-        case 'gazeAtPosition':
-          rwcActionGazeAtPosition(current[1][0], current[1][1], current[1][2], current[1][3]).on("result", function(status){console.log(status); Picker();});
-          break;
-        case 'gazeAtPerson':
-          rwcActionGazeAtNearestPerson(current[1]).on("result", function(status){console.log(status); Picker();});
-          break;
+          //diaTimer = setTimeout(function(){console.log("couldn't here anything"); Picker();}, 5000)
+          rwcListenerGetDialogue().then(function(script){
+            //clearTimeout(diaTimer);
+              window.botpressWebChat.post(`/api/v1/bots/chatty_lindsey/converse/${userId}/secured?include=nlu,state,suggestions,decision`, { script })
+              Picker();
+
+          });
+        });
+
+        break;
+      case 'gazeAtPosition':
+        rwcActionGazeAtPosition(current[1][0], current[1][1], current[1][2], current[1][3]).on("result", function(status){console.log(status); Picker();});
+        break;
+      case 'gazeAtPerson':
+        rwcActionGazeAtNearestPerson(current[1]).on("result", function(status){console.log(status); Picker();});
+        break;
     }
   }
   else{
