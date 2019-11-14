@@ -331,19 +331,7 @@ function Picker(){ // stack of commands from blocks
         break;
       case 'desc':
         speechPrep(current[2]);
-        $.getJSON("fablab.json", function(json){
-          exhibitorsJSON = json;
-          exhibitsRaw = exhibitorsJSON.exhibitors;
-          for(i =0; i < exhibitsRaw.length; i++){
-            console.log(exhibitsRaw[i].description);
-
-            if(exhibitsRaw[i].key == current[1]){
-              rwcActionSay(exhibitsRaw[i].description).on("result", function(status){talking = false; Picker();});
-              return;
-            }
-          }
-        });
-        //rwcActionDescribeExhibit(current[1]).on("result", function(){talking = false; Picker();}).then();
+        rwcActionDescribeExhibit(current[1]).on("result", function(){talking = false; Picker();});
         break;
       case 'startTour':
         rwcActionStartTour(current[1]).on("result", function(){ Picker();});
@@ -360,7 +348,9 @@ function Picker(){ // stack of commands from blocks
           //diaTimer = setTimeout(function(){console.log("couldn't here anything"); Picker();}, 5000)
           rwcListenerGetDialogue().then(function(script){
             //clearTimeout(diaTimer);
-              window.botpressWebChat.post(`/api/v1/bots/chatty_lindsey/converse/${userId}/secured?include=nlu,state,suggestions,decision`, { script })
+              $post(`https://10.5.42.157:3000/api/v1/bots/chatty_lindsey/converse/${userId}/secured?include=nlu,state,suggestions,decision`, { script })function(bpResponse) {
+                console.log( "message recieved:" + JSON.stringify(bpResponse));
+              });
               Picker();
 
           });
