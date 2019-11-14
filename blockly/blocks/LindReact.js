@@ -24,6 +24,6 @@ function askOCode(prompt)
 }
 
 Blockly.JavaScript['start'] = function(block){
-  var code = `//Start here \n`;
+  var code = '';
   return code;
 }
