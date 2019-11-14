@@ -82,7 +82,13 @@ function init(){
   console.log("lists loaded.");
   console.log("Connecting to botpress")
   try{
-    window.botpressWebChat.init({ host: 'http://10.5.42.157:3000', botId: 'chatty_lindsey', hideWidget: true});
+    window.botpressWebChat.init({
+       host: 'http://10.5.42.157:3000',
+       botId: 'chatty_lindsey',
+       hideWidget: false,
+       exposeStore: true,
+       overrideDomain: '127.0.0.1'
+     });
   }
   catch (e){
     console.log(e);
@@ -104,7 +110,7 @@ function init(){
   //workspace.addTopBlock('start');
   var xml = '<xml><block type="start" deletable="false" movable="false"></block></xml>';
   Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), workspace);
-  //workspace.addChangeListener(Blockly.Events.disableOrphans);
+  workspace.addChangeListener(Blockly.Events.disableOrphans);
   workspace.addChangeListener(updater);
   Blockly.JavaScript.addReservedWords('code'); //make code a reserved word
 
@@ -320,14 +326,22 @@ function Picker(){ // stack of commands from blocks
         break;
       case 'askO':
         var response;
+
         rwcActionSay(current[1]).on("result", function(status){
           console.log("speaking");
           rwcActionStartDialogue();
-
-          //diaTimer = setTimeout(function(){console.log("couldn't here anything"); Picker();}, 5000)
+          var bpMsg = {
+            "type": "text",
+            "text": "unset"
+          }
+          $.post(`https://10.5.42.157:3000/api/v1/bots/chatty_lindsey/converse/${userId}/secured?include=nlu,state,suggestions,decision`, bpMsg,
+              function(bpResponse) {
+                console.log( "message recieved:" + JSON.stringify(bpResponse));
+              });
+          //diaTimer =
           rwcListenerGetDialogue().then(function(script){
-            //clearTimeout(diaTimer);
-              $post(`https://10.5.42.157:3000/api/v1/bots/chatty_lindsey/converse/${userId}/secured?include=nlu,state,suggestions,decision`, {script},
+            bpMsg.type = script;
+            $.post(`https://10.5.42.157:3000/api/v1/bots/chatty_lindsey/converse/${userId}/secured?include=nlu,state,suggestions,decision`, bpMsg,
                 function(bpResponse) {
                   console.log( "message recieved:" + JSON.stringify(bpResponse));
                 });

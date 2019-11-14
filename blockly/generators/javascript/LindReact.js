@@ -44,8 +44,8 @@ Blockly.Blocks['askOQuestion'] = {
 var startJSON ={
   "message0": 'Attatch Blocks here',
   "nextStatement": null,
-  "previousStatement": null,
   "Hat": true,
+  "colour": "#4C7D4C", 
   "tooltip": "start here"
 }
 
