@@ -2,10 +2,7 @@ var workspace;
 var xml_txt;
 var commandQueue = new Array();
 var commandQueueL2 = new Array();
-window.botpressWebChat.init({ host: 'http://10.5.42.157:3000', botId: 'chatty_lindsey', hideWidget: true});
-// sendButtton = document.getElementById('btn-send');
-// sendButtton.click();
-userId = 'Guest';
+var userId = 'Guest';
 var pivWork = new Worker('../webWorkers/pivPass.js');
 var gazeWork = new Worker('../webWorkers/gazePass.js');
 //var botStream = new Worker('../webWorkers/ChatSocket.js');
@@ -83,7 +80,16 @@ function init(){
   setTourls();
   setExhbitsls();
   console.log("lists loaded.");
-
+  console.log("Connecting to botpress")
+  try{
+    window.botpressWebChat.init({ host: 'http://10.5.42.157:3000', botId: 'chatty_lindsey', hideWidget: true});
+  }
+  catch (e){
+    console.log(e);
+  }
+  finally{
+    console.log("hopefully botpress loaded...");
+  }
   workspace = Blockly.inject('blocklyDiv',
     {toolbox: document.getElementById('toolbox'),
      grid:
@@ -95,6 +101,9 @@ function init(){
         },
     theme: Blockly.Theme('highcontrast', 'highcontrast')
   });
+  var xml = '<xml><block type="factory_base" deletable="false" movable="false"></block></xml>';
+  Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), workspace);
+  workspace.addChangeListener(Blockly.Events.disableOrphans);
   workspace.addChangeListener(updater);
   Blockly.JavaScript.addReservedWords('code'); //make code a reserved word
 
@@ -195,38 +204,6 @@ async function gazeAsync(){
     }
   }
 }
-
-// pivWork.addEventListener('message', function(event){
-//   var ang = 45;
-//   if(!talking){
-//     pivWork.postMessage("stopSpeaking");
-//     if(event.data == 0)
-//       {
-//         console.log("final position at" + startPos);
-//         rwcActionSetPoseMap(startPos.x, startPos.y, startPos.z, startPos.q);
-//       }
-//   }
-//   else{
-//     quatCalc(ang*event.data);
-//     rwcActionSetPoseRelative(0, 0, 0, qtn);
-//   }
-// });
-
-// pivWork.addEventListener('error', function(event){console.error("error: ", event);});
-
-// gazeWork.addEventListener('message', function(event){
-//   var ang = 45;
-//   if(!talking){
-//     gazeWork.postMessage("stopSpeaking");
-//     rwcActionGazeAtNearestPerson(3);
-//   }
-//   else{
-//     quatCalc(ang*event.data);
-//     rwcActionGazeAtPosition([3,10,2,2]);
-//   }
-// });
-
-// gazeWork.addEventListener('error', function(event){console.error("error: ", event);});
 
 function stopActions(){
   commandQueue = [];
@@ -341,6 +318,7 @@ function Picker(){ // stack of commands from blocks
         rwcActionYesNoModal(current[1]).on("result", function(status){console.log(status); Picker();});
         break;
       case 'askO':
+        var response;
         rwcActionSay(current[1]).on("result", function(status){
           console.log("speaking");
           rwcActionStartDialogue();
@@ -348,9 +326,10 @@ function Picker(){ // stack of commands from blocks
           //diaTimer = setTimeout(function(){console.log("couldn't here anything"); Picker();}, 5000)
           rwcListenerGetDialogue().then(function(script){
             //clearTimeout(diaTimer);
-              $post(`https://10.5.42.157:3000/api/v1/bots/chatty_lindsey/converse/${userId}/secured?include=nlu,state,suggestions,decision`, { script })function(bpResponse) {
-                console.log( "message recieved:" + JSON.stringify(bpResponse));
-              });
+              $post(`https://10.5.42.157:3000/api/v1/bots/chatty_lindsey/converse/${userId}/secured?include=nlu,state,suggestions,decision`, {script},
+                function(bpResponse) {
+                  console.log( "message recieved:" + JSON.stringify(bpResponse));
+                });
               Picker();
 
           });
