@@ -1,15 +1,11 @@
 var workspace;
 var xml_txt;
 var commandQueue = new Array();
-<<<<<<< HEAD
 var commandQueuePrev = new Array();
 //window.botpressWebChat.init({ host: 'http://10.5.42.157:3000', botId: 'chatty_lindsey', hideWidget: true});
 // sendButtton = document.getElementById('btn-send');
 // sendButtton.click();
 var musJSON = "exhibitors_definition.json";
-=======
-var commandQueueL2 = new Array();
->>>>>>> bfe405d0dfb6843b347362c72aaf6b5a5910df02
 var userId = 'Guest';
 var pivWork = new Worker('../webWorkers/pivPass.js');
 var gazeWork = new Worker('../webWorkers/gazePass.js');
@@ -379,18 +375,11 @@ function Picker(){ // stack of commands from blocks
               });
           //diaTimer =
           rwcListenerGetDialogue().then(function(script){
-<<<<<<< HEAD
-            //clearTimeout(diaTimer);
-              jQuerypost(`https://10.5.42.157:3000/api/v1/bots/chatty_lindsey/converse/jQuery{userId}/secured?include=nlu,state,suggestions,decision`, { script },function(bpResponse) {
-                console.log( "message recieved:" + JSON.stringify(bpResponse));
-              });
-=======
             bpMsg.type = script;
             $.post(`https://10.5.42.157:3000/api/v1/bots/chatty_lindsey/converse/${userId}/secured?include=nlu,state,suggestions,decision`, bpMsg,
                 function(bpResponse) {
                   console.log( "message recieved:" + JSON.stringify(bpResponse));
                 });
->>>>>>> bfe405d0dfb6843b347362c72aaf6b5a5910df02
               Picker();
 
           });
@@ -401,11 +390,7 @@ function Picker(){ // stack of commands from blocks
         rwcActionGazeAtPosition(current[1][0], current[1][1], current[1][2], current[1][3]).on("result", function(status){console.log(status); Picker();});
         break;
       case 'gazeAtPerson':
-<<<<<<< HEAD
-        rwcActionGazeAtNearestPerson(current[1]+5).on("result", function(status){console.log(status); console.log("gaze result!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"); Picker();});
-=======
         rwcActionGazeAtNearestPerson(current[1]+3).on("result", function(status){console.log(status); Picker();});
->>>>>>> bfe405d0dfb6843b347362c72aaf6b5a5910df02
         console.log((current[1]+5)*1000);
         //setTimeout(function(){Picker();},(current[1]+5)*1000);
         break;
