@@ -42,10 +42,10 @@ Blockly.Blocks['askOQuestion'] = {
 };
 
 var startJSON ={
-  "message0": 'Attatch Blocks here',
+  "message0": 'Attach Blocks here',
   "nextStatement": null,
   "Hat": true,
-  "colour": "#4C7D4C", 
+  "colour": "#4C7D4C",
   "tooltip": "start here"
 }
 

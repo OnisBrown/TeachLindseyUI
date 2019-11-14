@@ -146,20 +146,6 @@ exhibitLsJSON = {
   "tooltip": "Pick an exhibit from the drop down menu"
 };
 
-function setExhbitsls(){
-  jQuery.getJSON("exhibitors_definition.json", function(json){
-    console.log(json.exhibitors);
-    var exhibitorsJSON = json;
-    exhibitsRaw = exhibitorsJSON.exhibitors;
-    for(i =0; i < exhibitsRaw.length; i++){
-      exhibitLsJSON.args0[0].options.push([exhibitsRaw[i].title, exhibitsRaw[i].key]);
-    }
-    console.log(exhibitLsJSON.args0[0]);
-  }).fail( function(d, textStatus, error) {
-        console.error("getJSON failed, status: " + textStatus + ", error: "+error);
-    });
-}
-
 Blockly.Blocks['exhibitLs'] = {
   init: function() {
     this.jsonInit(exhibitLsJSON);
@@ -181,18 +167,7 @@ startTourJSON = {
   "tooltip": "Pick a tour from one of the pre-established ones"
 };
 
-function setTourls(){
-  jQuery.getJSON("exhibitors_definition.json", function(json){
-    console.log(json.exhibitors);
-    var exhibitorsJSON = json;
-    exhibitsRaw = exhibitorsJSON.tours;
-    for(i =0; i < exhibitsRaw.length; i++){
-      startTourJSON.args0[0].options.push([exhibitsRaw[i].name,exhibitsRaw[i].key]);
-    }
-  }).fail( function(d, textStatus, error) {
-        console.error("getJSON failed, status: " + textStatus + ", error: "+error);
-    });
-}
+
 
 Blockly.Blocks['startTour'] = {
   init: function() {

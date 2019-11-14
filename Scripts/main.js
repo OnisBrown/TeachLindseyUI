@@ -41,18 +41,29 @@ var qtn = { //struct for quaternion
 console.log(qtn);
 
 // create a dictionary of exhibit keys and their matching waypoints
-var dynDictExhibits = {};
+var mainMusJSON = {};
 function setExhbitsDict(){
-  var exhibitsRaw;
   $.getJSON(musJSON, function(json){
-    exhibitorsJSON = json;
-    exhibitsRaw = exhibitorsJSON.exhibitors;
-    for(i =0; i < exhibitsRaw.length; i++){
-      dynDictExhibits[exhibitsRaw[i].key] = exhibitsRaw[i].waypoint;
-    }
+    mainMusJSON = json;
+    console.log(mainMusJSON);
+    setTourls();
+    setExhbitsls();
   }).fail( function(d, textStatus, error) {
         console.error("getJSON failed, status: " + textStatus + ", error: "+error)
     });
+}
+
+function setExhbitsls(){
+  for(i =0; i < mainMusJSON.exhibitors.length; i++){
+    exhibitLsJSON.args0[0].options.push([mainMusJSON.exhibitors[i].title, mainMusJSON.exhibitors[i].key]);
+  }
+  console.log(exhibitLsJSON.args0[0]);
+}
+
+function setTourls(){
+  for(i =0; i < mainMusJSON.tours.length; i++){
+    startTourJSON.args0[0].options.push([mainMusJSON.tours[i].name,mainMusJSON.tours[i].key]);
+  }
 }
 
 function sleep(ms) {
@@ -83,8 +94,7 @@ function updater(event){
 function init(){
   console.log("loading location lists...");
   setExhbitsDict();
-  setTourls();
-  setExhbitsls();
+
   console.log("lists loaded.");
   console.log("Connecting to botpress")
   try{
@@ -155,24 +165,6 @@ function executeCode() { // executes code made by blocks
   finally{
     Picker();
   }
-}
-
-function altDescribe(key){
-  var description;
-  $.getJSON(musJSON, function(json){
-    exhibitorsJSON = json;
-    exhibitsRaw = exhibitorsJSON.exhibitors;
-    for(i =0; i < exhibitsRaw.length; i++){
-      if(exhibitsRaw[i].key == key){
-        description = exhibitsRaw[i].description;
-        console.log(description);
-        break;
-      }
-    }
-  }).fail( function(d, textStatus, error) {
-        console.error("getJSON failed, status: " + textStatus + ", error: "+error)
-    });
-  return description;
 }
 
 async function pivAsync(ang = 0, right = true){
@@ -330,7 +322,7 @@ function Picker(){ // stack of commands from blocks
         var node = dynDictExhibits[current[1]];
         rwcActionGoToNode(node).on("result", function(status){
           console.log(status);
-          rwcActionGoToAndDescribeExhibit(current[1]).on("result", function(){talking = false; setTimeout(function(){Picker();},1000)};});
+          rwcActionGoToAndDescribeExhibit(current[1]).on("result", function(){talking = false; setTimeout(function(){Picker();},1000)});
         });
 
         // rwcActionGoToNode(node).on("result", function(status){
@@ -343,15 +335,15 @@ function Picker(){ // stack of commands from blocks
       case 'move':
         quatCalc(current[1][3]);
         console.log(qtn);
-        rwcActionSetPoseRelative(current[1][0], current[1][1], current[1][2], qtn).on("result", function(status){console.log("description ended" + status); Picker();});
+        rwcActionSetPoseRelative(current[1][0], current[1][1], current[1][2], qtn).on("result", function(status){console.log(status); Picker();});
         break;
       case 'speech':
         speechPrep(current[2]);
-        rwcActionSay(current[1]).on("result", function(status){talking = false; setTimeout(function(){Picker();},1000)};);
+        rwcActionSay(current[1]).on("result", function(status){talking = false; setTimeout(function(){Picker();},1000)});
         break;
       case 'desc':
         speechPrep(current[2]);
-        rwcActionDescribeExhibit(current[1]).on("result", function(){talking = false; setTimeout(function(){Picker();},1000)};);
+        rwcActionDescribeExhibit(current[1]).on("result", function(){talking = false; setTimeout(function(){Picker();},1000)});
         break;
       case 'startTour':
         rwcActionStartTour(current[1]).on("result", function(){ Picker();});

@@ -6,6 +6,57 @@
 		<style>
 			body { margin: 0; }
 			canvas { width: 100%; height: 100% }
+			#headerDiv{
+				height: 2%;
+				width: 100%;
+				position: fixed;
+				top: 0px;
+				clear: right;
+			}
+			#codeDiv{
+				height: 30%;
+				width: 20%;
+				position: absolute;
+				top: 4%;
+				float: right;
+				border-color: black;
+				margin-left: 70%;
+				text-align: center;
+				background-color: red;
+				overflow: scroll;
+				opacity: 0.5;
+			}
+			#speech{
+				height: 30%;
+				width: 20%;
+				position: absolute;
+				top: 34%;
+				float: right;
+				border-color: black;
+				margin-left: 70%;
+				text-align: center;
+				background-color: blue;
+				opacity: 0.5;
+			}
+			#currentAction{
+				height: 30%;
+				width: 20%;
+				position: absolute;
+				top: 64%;
+				float: right;
+				border-color: black;
+				margin-left: 70%;
+				text-align: center;
+				opacity: 0.5;
+				background-color: yellow;
+			}
+			#blocklyDiv{
+				height: 90%;
+				width: 70%;
+				position: absolute;
+				top: 4%;
+				float: left;
+			}
 		</style>
 	</head>
 	<body onload="init()" style="height: 100vh; width:100vw; position: fixed;">
@@ -37,16 +88,17 @@
 
 
 
-		<div id="headerDiv" style="height: 2%; width: 100%; position: fixed; top: 0px; clear: right;">
+		<div id="headerDiv" style="">
 			<h1 style="float:left; width: top: 0px; left: 0px; font-size: 10pt;"> TeachLindsey </h1>
 			<input type="text" id="scriptName" value="first" style="height: 100%; width: 10%; float:left; top: 0px; left: 0px;"></input>
 		</div>
 
 		<!-- toolbox and workspace div -->
-		<div id="blocklyDiv" style="height: 90%; width: 70%; position: absolute; top: 4%; float: left;"></div>
+		<div id="blocklyDiv"></div>
 		<!-- code display div -->
-		<div id="codeDiv" style="height: 90%; width: 20%; position: absolute; top: 4%; float: right; border-color: black; margin-left: 70%; text-align: center; "></div>
-
+		<div id="codeDiv"></div>
+		<div id="speech"></div>
+		<div id="currentAction"></div>
 		<!-- button for launching script -->
 		<!-- <button onclick="saveCode()" style="bottom: 0"> save code </button> -->
 		<button onclick="executeCode()" style="position:absolute; bottom: 1%; right: 5%;"> run code </button>
