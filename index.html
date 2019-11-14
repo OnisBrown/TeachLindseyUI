@@ -10,7 +10,7 @@
 	</head>
 	<body onload="init()" style="height: 100vh; width:100vw; position: fixed;">
 
-		<script src="http://10.5.42.157:3000/assets/modules/channel-web/inject.js"></script>
+		<!-- <script src="http://10.5.42.157:3000/assets/modules/channel-web/inject.js"></script> -->
 		<!-- Blockly dependancies -->
 		<script src="blockly/blockly_compressed.js"></script>
 		<script src="blockly/javascript_compressed.js"></script>
@@ -23,6 +23,7 @@
 		crossorigin="anonymous"></script>
 		<script src="roswebcomponents/scripts/jquery.spin.js"></script>
 		<script src="roswebcomponents/scripts/jsQR.js"></script>
+		<script>$.noConflict();</script>
 		<script src="roswebcomponents/scripts/mobile-detect.min.js"></script>
 		<script src="roswebcomponents/scripts/eventemitter2.js"></script>
 		<script src="roswebcomponents/scripts/roslib.min.js"></script>
@@ -70,7 +71,7 @@
 			<!--  -->
 			<category name="Navigation & Movement" categorystyle="list_category">
 				<block type="move"></block>
-				<!--<block type="gazePos"></block>-->
+				<block type="gazePos"></block>
 				<block type="gazePer"></block>
 				<!--<block type="goToNode"></block>-->
 				<block type="goTo"></block>
@@ -81,7 +82,7 @@
 
 			<category name="Speech" categorystyle="text_category">
 				<block type="giveSpeech"></block>
-				<block type="script"></block>
+				<!-- <block type="script"></block> -->
 				<block type="describe"></block>
 			</category>
 

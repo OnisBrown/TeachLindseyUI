@@ -147,7 +147,7 @@ exhibitLsJSON = {
 };
 
 function setExhbitsls(){
-  $.getJSON("fablab.json", function(json){
+  jQuery.getJSON("exhibitors_definition.json", function(json){
     console.log(json.exhibitors);
     var exhibitorsJSON = json;
     exhibitsRaw = exhibitorsJSON.exhibitors;
@@ -182,7 +182,7 @@ startTourJSON = {
 };
 
 function setTourls(){
-  $.getJSON("fablab.json", function(json){
+  jQuery.getJSON("exhibitors_definition.json", function(json){
     console.log(json.exhibitors);
     var exhibitorsJSON = json;
     exhibitsRaw = exhibitorsJSON.tours;

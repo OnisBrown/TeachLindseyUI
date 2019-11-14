@@ -1,11 +1,12 @@
 var workspace;
 var xml_txt;
 var commandQueue = new Array();
-var commandQueueL2 = new Array();
-window.botpressWebChat.init({ host: 'http://10.5.42.157:3000', botId: 'chatty_lindsey', hideWidget: true});
+var commandQueuePrev = new Array();
+//window.botpressWebChat.init({ host: 'http://10.5.42.157:3000', botId: 'chatty_lindsey', hideWidget: true});
 // sendButtton = document.getElementById('btn-send');
 // sendButtton.click();
-userId = 'Guest';
+var musJSON = "exhibitors_definition.json";
+var userId = 'Guest';
 var pivWork = new Worker('../webWorkers/pivPass.js');
 var gazeWork = new Worker('../webWorkers/gazePass.js');
 //var botStream = new Worker('../webWorkers/ChatSocket.js');
@@ -37,11 +38,13 @@ var qtn = { //struct for quaternion
   w:1
 };
 
+console.log(qtn);
+
 // create a dictionary of exhibit keys and their matching waypoints
 var dynDictExhibits = {};
 function setExhbitsDict(){
   var exhibitsRaw;
-  $.getJSON("fablab.json", function(json){
+  jQuery.getJSON(musJSON, function(json){
     exhibitorsJSON = json;
     exhibitsRaw = exhibitorsJSON.exhibitors;
     for(i =0; i < exhibitsRaw.length; i++){
@@ -135,6 +138,24 @@ function executeCode() { // executes code made by blocks
   }
 }
 
+function altDescribe(key){
+  var description;
+  jQuery.getJSON(musJSON, function(json){
+    exhibitorsJSON = json;
+    exhibitsRaw = exhibitorsJSON.exhibitors;
+    for(i =0; i < exhibitsRaw.length; i++){
+      if(exhibitsRaw[i].key == key){
+        description = exhibitsRaw[i].description;
+        console.log(description);
+        break;
+      }
+    }
+  }).fail( function(d, textStatus, error) {
+        console.error("getJSON failed, status: " + textStatus + ", error: "+error)
+    });
+  return description;
+}
+
 async function pivAsync(ang = 0, right = true){
   if (ang == 0){
     if (right){
@@ -179,18 +200,20 @@ async function gazeAsync(){
       rwcActionGazeAtNearestPerson(4).on("result", function(){
         // away = !away;
         // gazeAsync();
+        console.log("gaze result");
       });
       away = !away;
-      await sleep((gInterval+3)*1000);
+      await sleep((gInterval+5)*1000);
       gazeAsync();
     }
     else{
       rwcActionGazeAtPosition(0,0,0,3).on("result", function(){
         // away = !away;
         // gazeAsync();
+        console.log("gaze result");
       });
       away = !away;
-      await sleep((gInterval+3)*1000);
+      await sleep((gInterval+5)*1000);
       gazeAsync();
     }
   }
@@ -281,7 +304,7 @@ function saveCode(){
   var xml = Blockly.Xml.workspaceToDom(workspace);
   var xml_readable = Blockly.Xml.domToPrettyText(xml);
   var xml_text = Blockly.Xml.domToText(xml);
-  $.post( "Backend.php", xml_txt);
+  jQuery.post( "Backend.php", xml_txt);
   localStorage.setItem(document.getElementById("scriptName").value, xml_text);
   localStorage.setItem(document.getElementById("scriptName").value + "_R", xml_readable)
 }
@@ -293,10 +316,15 @@ function loadCode(){
   Blockly.Xml.domToWorkspace(xml, workspace);
 }
 
+function loop(){
+  console.log("nout");
+}
+
 function Picker(){ // stack of commands from blocks
   console.log(commandQueue);
   if (commandQueue.length > 0) {
     var current = commandQueue.shift();
+    commandQueuePrev.push(current);
     console.log(current);
     switch(current[0]){
 			case "waitPer":
@@ -313,17 +341,21 @@ function Picker(){ // stack of commands from blocks
         break;
       case 'goToDesc':
         var node = dynDictExhibits[current[1]];
-        rwcActionGoToNode(node).on("result", function(status){
-          console.log(status);
-          speechPrep(current[2]);
-          rwcActionDescribeExhibit(current[1]).on("result", function(){talking = false; Picker();});
+        rwcActionGoToNode(node).on("result", function(status){console.log(status);
+          rwcActionGoToAndDescribeExhibit(current[1]).on("result", function(){talking = false; Picker();});
         });
+
+        // rwcActionGoToNode(node).on("result", function(status){
+        //   console.log(status);
+        //   speechPrep(current[2]);
+        //   rwcActionSay(altDescribe(current[1])).on("result", function(){talking = false; Picker();});
+        // });
 
         break;
       case 'move':
         quatCalc(current[1][3]);
         console.log(qtn);
-        rwcActionSetPoseRelative(current[1][0], current[1][1], current[1][2], qtn).on("result", function(status){console.log(status); Picker();});
+        rwcActionSetPoseRelative(current[1][0], current[1][1], current[1][2], qtn).on("result", function(status){console.log("description ended" + status); Picker();});
         break;
       case 'speech':
         speechPrep(current[2]);
@@ -331,19 +363,7 @@ function Picker(){ // stack of commands from blocks
         break;
       case 'desc':
         speechPrep(current[2]);
-        $.getJSON("fablab.json", function(json){
-          exhibitorsJSON = json;
-          exhibitsRaw = exhibitorsJSON.exhibitors;
-          for(i =0; i < exhibitsRaw.length; i++){
-            console.log(exhibitsRaw[i].description);
-
-            if(exhibitsRaw[i].key == current[1]){
-              rwcActionSay(exhibitsRaw[i].description).on("result", function(status){talking = false; Picker();});
-              return;
-            }
-          }
-        });
-        //rwcActionDescribeExhibit(current[1]).on("result", function(){talking = false; Picker();}).then();
+        rwcActionDescribeExhibit(current[1]).on("result", function(){talking = false; Picker();});
         break;
       case 'startTour':
         rwcActionStartTour(current[1]).on("result", function(){ Picker();});
@@ -360,7 +380,9 @@ function Picker(){ // stack of commands from blocks
           //diaTimer = setTimeout(function(){console.log("couldn't here anything"); Picker();}, 5000)
           rwcListenerGetDialogue().then(function(script){
             //clearTimeout(diaTimer);
-              window.botpressWebChat.post(`/api/v1/bots/chatty_lindsey/converse/${userId}/secured?include=nlu,state,suggestions,decision`, { script })
+              jQuerypost(`https://10.5.42.157:3000/api/v1/bots/chatty_lindsey/converse/jQuery{userId}/secured?include=nlu,state,suggestions,decision`, { script },function(bpResponse) {
+                console.log( "message recieved:" + JSON.stringify(bpResponse));
+              });
               Picker();
 
           });
@@ -371,9 +393,9 @@ function Picker(){ // stack of commands from blocks
         rwcActionGazeAtPosition(current[1][0], current[1][1], current[1][2], current[1][3]).on("result", function(status){console.log(status); Picker();});
         break;
       case 'gazeAtPerson':
-        rwcActionGazeAtNearestPerson(current[1]+5).on("result", function(status){console.log(status); Picker();});
+        rwcActionGazeAtNearestPerson(current[1]+5).on("result", function(status){console.log(status); console.log("gaze result!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"); Picker();});
         console.log((current[1]+5)*1000);
-        setTimeout(function(){Picker();},(current[1]+5)*1000);
+        //setTimeout(function(){Picker();},(current[1]+5)*1000);
         break;
     }
   }
