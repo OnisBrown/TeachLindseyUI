@@ -44,7 +44,7 @@ console.log(qtn);
 var dynDictExhibits = {};
 function setExhbitsDict(){
   var exhibitsRaw;
-  jQuery.getJSON(musJSON, function(json){
+  $.getJSON(musJSON, function(json){
     exhibitorsJSON = json;
     exhibitsRaw = exhibitorsJSON.exhibitors;
     for(i =0; i < exhibitsRaw.length; i++){
@@ -91,7 +91,7 @@ function init(){
     window.botpressWebChat.init({
        host: 'http://10.5.42.157:3000',
        botId: 'chatty_lindsey',
-       hideWidget: false,
+       hideWidget: true,
        exposeStore: true,
        overrideDomain: '127.0.0.1'
      });
@@ -159,7 +159,7 @@ function executeCode() { // executes code made by blocks
 
 function altDescribe(key){
   var description;
-  jQuery.getJSON(musJSON, function(json){
+  $.getJSON(musJSON, function(json){
     exhibitorsJSON = json;
     exhibitsRaw = exhibitorsJSON.exhibitors;
     for(i =0; i < exhibitsRaw.length; i++){
@@ -291,7 +291,7 @@ function saveCode(){
   var xml = Blockly.Xml.workspaceToDom(workspace);
   var xml_readable = Blockly.Xml.domToPrettyText(xml);
   var xml_text = Blockly.Xml.domToText(xml);
-  jQuery.post( "Backend.php", xml_txt);
+  $.post( "Backend.php", xml_txt);
   localStorage.setItem(document.getElementById("scriptName").value, xml_text);
   localStorage.setItem(document.getElementById("scriptName").value + "_R", xml_readable)
 }
@@ -328,8 +328,9 @@ function Picker(){ // stack of commands from blocks
         break;
       case 'goToDesc':
         var node = dynDictExhibits[current[1]];
-        rwcActionGoToNode(node).on("result", function(status){console.log(status);
-          rwcActionGoToAndDescribeExhibit(current[1]).on("result", function(){talking = false; Picker();});
+        rwcActionGoToNode(node).on("result", function(status){
+          console.log(status);
+          rwcActionGoToAndDescribeExhibit(current[1]).on("result", function(){talking = false; setTimeout(function(){Picker();},1000)};});
         });
 
         // rwcActionGoToNode(node).on("result", function(status){
@@ -346,11 +347,11 @@ function Picker(){ // stack of commands from blocks
         break;
       case 'speech':
         speechPrep(current[2]);
-        rwcActionSay(current[1]).on("result", function(status){talking = false; Picker();});
+        rwcActionSay(current[1]).on("result", function(status){talking = false; setTimeout(function(){Picker();},1000)};);
         break;
       case 'desc':
         speechPrep(current[2]);
-        rwcActionDescribeExhibit(current[1]).on("result", function(){talking = false; Picker();});
+        rwcActionDescribeExhibit(current[1]).on("result", function(){talking = false; setTimeout(function(){Picker();},1000)};);
         break;
       case 'startTour':
         rwcActionStartTour(current[1]).on("result", function(){ Picker();});
@@ -392,7 +393,7 @@ function Picker(){ // stack of commands from blocks
       case 'gazeAtPerson':
         rwcActionGazeAtNearestPerson(current[1]+3).on("result", function(status){console.log(status); Picker();});
         console.log((current[1]+5)*1000);
-        //setTimeout(function(){Picker();},(current[1]+5)*1000);
+        setTimeout(function(){Picker();},(current[1]+5)*1000);
         break;
     }
   }
