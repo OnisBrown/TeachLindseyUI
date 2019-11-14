@@ -40,3 +40,17 @@ Blockly.Blocks['askOQuestion'] = {
     this.jsonInit(askOQuestionJSON);
   }
 };
+
+var startJSON ={
+  "message0": 'Attatch Blocks here',
+  "nextStatement": null,
+  "previousStatement": null,
+  "Hat": true,
+  "tooltip": "start here"
+}
+
+Blockly.Blocks['start'] = {
+  init: function(){
+    this.jsonInit(startJSON);
+  }
+}

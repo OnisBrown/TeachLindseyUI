@@ -101,9 +101,10 @@ function init(){
         },
     theme: Blockly.Theme('highcontrast', 'highcontrast')
   });
-  var xml = '<xml><block type="factory_base" deletable="false" movable="false"></block></xml>';
+  //workspace.addTopBlock('start');
+  var xml = '<xml><block type="start" deletable="false" movable="false"></block></xml>';
   Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), workspace);
-  workspace.addChangeListener(Blockly.Events.disableOrphans);
+  //workspace.addChangeListener(Blockly.Events.disableOrphans);
   workspace.addChangeListener(updater);
   Blockly.JavaScript.addReservedWords('code'); //make code a reserved word
 
@@ -153,7 +154,7 @@ async function pivAsync(ang = 0, right = true){
       ang = -30;
     }
   }
-  pInterval = 7;
+  pInterval = 4;
   await sleep(pInterval*1000);
   if(talking){
     ang*= -1;
@@ -185,7 +186,7 @@ async function gazeAsync(){
   if(talking){
     console.log("looking away" + away);
     if (away){
-      rwcActionGazeAtNearestPerson(4).on("result", function(){
+      rwcActionGazeAtNearestPerson(gInterval+3).on("result", function(){
         // away = !away;
         // gazeAsync();
       });
@@ -194,7 +195,7 @@ async function gazeAsync(){
       gazeAsync();
     }
     else{
-      rwcActionGazeAtPosition(0,0,0,3).on("result", function(){
+      rwcActionGazeAtPosition(0,0,0,gInterval+5).on("result", function(){
         // away = !away;
         // gazeAsync();
       });
@@ -340,7 +341,7 @@ function Picker(){ // stack of commands from blocks
         rwcActionGazeAtPosition(current[1][0], current[1][1], current[1][2], current[1][3]).on("result", function(status){console.log(status); Picker();});
         break;
       case 'gazeAtPerson':
-        rwcActionGazeAtNearestPerson(current[1]+5).on("result", function(status){console.log(status); Picker();});
+        rwcActionGazeAtNearestPerson(current[1]+3).on("result", function(status){console.log(status); Picker();});
         console.log((current[1]+5)*1000);
         setTimeout(function(){Picker();},(current[1]+5)*1000);
         break;

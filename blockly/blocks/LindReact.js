@@ -22,3 +22,8 @@ function askOCode(prompt)
 {
 	commandQueue.push(["askO", prompt]);
 }
+
+Blockly.JavaScript['start'] = function(block){
+  var code = `//Start here \n`;
+  return code;
+}
