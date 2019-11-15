@@ -99,7 +99,7 @@ Blockly.Blocks['goToDescribe'] = {
 };
 
 moveJSON = {
-  "message0": 'move forward: %1 y: %2 metres and turn %3 \xB0',
+  "message0": 'move forward: %1 right: %2 metres and turn %3 \xB0',
   "args0": [
     {
       "type": "field_number",
@@ -123,7 +123,7 @@ moveJSON = {
   "nextStatement": null,
   "previousStatement": null,
   "style":"logic_blocks",
-  "tooltip": "move Lindsey x, y, z metres +- 10 metre per move"
+  "tooltip": "move Lindsey forward, right metres +- 10 metre per move block. \n to go left or backwards use "
 };
 
 Blockly.Blocks['move'] = {
