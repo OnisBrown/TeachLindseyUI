@@ -13,6 +13,9 @@ var gazeWork = new Worker('../webWorkers/gazePass.js');
 var talking;
 var away;
 var pivAway;
+var curExhibitCoord;
+
+var dynDictExhibits ={};
 
 var gazeTargets = {
   people:[],
@@ -48,6 +51,9 @@ function setExhbitsDict(){
     console.log(mainMusJSON);
     setTourls();
     setExhbitsls();
+    for(i =0; i < mainMusJSON.exhibitors.length; i++){
+      dynDictExhibits[mainMusJSON.exhibitors[i].key] = [mainMusJSON.exhibitors[i].waypoint, mainMusJSON.exhibitors[i].metric_map_position];
+    }
   }).fail( function(d, textStatus, error) {
         console.error("getJSON failed, status: " + textStatus + ", error: "+error)
     });
@@ -192,7 +198,6 @@ async function pivAsync(ang = 0, right = true){
   }
   else{
     console.log(pivAway);
-    console.log("final position at" + startPos.x + startPos.y + startPos.z + startPos.q);
     if (pivAway){
       ang*= -1;
       quatCalc(ang);
@@ -219,8 +224,6 @@ async function gazeAsync(){
     }
     else{
       rwcActionGazeAtPosition(0,0,0,gInterval+5).on("result", function(){
-        // away = !away;
-        // gazeAsync();
         console.log("gaze result");
       });
       away = !away;
@@ -231,9 +234,10 @@ async function gazeAsync(){
 }
 
 function stopActions(){
+  cancelCurrentAction();
   commandQueue = [];
   rwcActionSetPoseRelative(0,0,0);
-  cancelCurrentAction();
+  talking = false;
 }
 
 function personSense(range){
@@ -267,7 +271,7 @@ function Demo(){
   commandQueue.push(['gotToNode',])
 }
 
-function speechPrep(bools){
+function speechPrep(bools, exhibit){
   talking = true;
   if(bools[0]){
     away = false;
@@ -277,6 +281,10 @@ function speechPrep(bools){
     setStartPos();
     pivAsync();
   }
+}
+
+function displayAction(curAct){
+  document.getElementById("currentAction").innerHTML = curAct;
 }
 
 function saveCode(){
@@ -308,9 +316,12 @@ function Picker(){ // stack of commands from blocks
     switch(current[0]){
 			case "waitPer":
         personSense(current[1]);
+        displayAction("waiting for people");
 				break;
       case 'goTo':
-        var node = dynDictExhibits[current[1]];
+        var node = dynDictExhibits[current[1]][0];
+        console.log(node);
+        displayAction("going to exhibit");
         rwcActionGoToNode(node).on("result", function(status){console.log(status); Picker();});
         break;
       case 'goToNode':
@@ -320,8 +331,10 @@ function Picker(){ // stack of commands from blocks
         break;
       case 'goToDesc':
         var node = dynDictExhibits[current[1]];
+        displayAction("going to exhibit");
         rwcActionGoToNode(node).on("result", function(status){
           console.log(status);
+          displayAction("describing exhibit");
           rwcActionGoToAndDescribeExhibit(current[1]).on("result", function(){talking = false; setTimeout(function(){Picker();},1000)});
         });
 
@@ -335,14 +348,17 @@ function Picker(){ // stack of commands from blocks
       case 'move':
         quatCalc(current[1][3]);
         console.log(qtn);
+        displayAction("moving by ^, >, :"+ current[1]);
         rwcActionSetPoseRelative(current[1][0], current[1][1], current[1][2], qtn).on("result", function(status){console.log(status); Picker();});
         break;
       case 'speech':
-        speechPrep(current[2]);
+        speechPrep(current[2], false);
+        displayAction("speaking");
         rwcActionSay(current[1]).on("result", function(status){talking = false; setTimeout(function(){Picker();},1000)});
         break;
       case 'desc':
-        speechPrep(current[2]);
+        speechPrep(current[2], true);
+        displayAction("describing exhibit");
         rwcActionDescribeExhibit(current[1]).on("result", function(){talking = false; setTimeout(function(){Picker();},1000)});
         break;
       case 'startTour':
@@ -383,6 +399,7 @@ function Picker(){ // stack of commands from blocks
         rwcActionGazeAtPosition(current[1][0], current[1][1], current[1][2], current[1][3]).on("result", function(status){console.log(status); Picker();});
         break;
       case 'gazeAtPerson':
+        displayAction("looking at nearest person for"+ current[1]);
         rwcActionGazeAtNearestPerson(current[1]+3).on("result", function(status){console.log(status); Picker();});
         console.log((current[1]+5)*1000);
         setTimeout(function(){Picker();},(current[1]+5)*1000);
@@ -390,6 +407,7 @@ function Picker(){ // stack of commands from blocks
     }
   }
   else{
+    displayAction("Plan finished!");
     console.log("Plan finished!");
   }
 }
