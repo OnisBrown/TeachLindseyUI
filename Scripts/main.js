@@ -220,7 +220,7 @@ async function gazeAsync(exhibit = false){
       });
       away = !away;
       await sleep((gInterval+5)*1000);
-      gazeAsync();
+      gazeAsync(exhibit);
     }
     else{
       if(exhibit){
@@ -229,7 +229,7 @@ async function gazeAsync(exhibit = false){
         });
         away = !away;
         await sleep((gInterval+5)*1000);
-        gazeAsync();
+        gazeAsync(exhibit);
       }
       else{
         rwcListenerGetNearestPersonPosition(null, false).then(function(coord){
@@ -239,7 +239,7 @@ async function gazeAsync(exhibit = false){
         });
         away = !away;
         await sleep((gInterval+5)*1000);
-        gazeAsync();
+        gazeAsync(exhibit);
       }
     }
   }
@@ -343,6 +343,7 @@ function Picker(){ // stack of commands from blocks
         console.log(curExhibitCoord);
         console.log(node);
         displayAction("going to exhibit");
+        rwcActionGoToNode(node);
         rwcActionGoToNode(node).on("result", function(status){console.log(status); setTimeout(function(){Picker();},1000)});
         break;
       case 'goToNode':
@@ -351,7 +352,7 @@ function Picker(){ // stack of commands from blocks
         rwcActionGoToNode(node).on("result", function(status){console.log(status); setTimeout(function(){Picker();},1000)});
         break;
       case 'goToDesc':
-        var node = dynDictExhibits[current[1]];
+        var node = dynDictExhibits[current[1]][0];
         curExhibitCoord = dynDictExhibits[current[1]][1];
         console.log(curExhibitCoord);
         displayAction("going to exhibit");
@@ -359,7 +360,7 @@ function Picker(){ // stack of commands from blocks
           console.log(status);
           speechPrep(current[2], true);
           displayAction("describing exhibit");
-          rwcActionGoToAndDescribeExhibit(current[1]).on("result", function(){talking = false; setTimeout(function(){Picker();},1000)});
+          rwcActionDescribeExhibit(current[1]).on("result", function(){talking = false; setTimeout(function(){Picker();},1000)});
         });
 
         break;
