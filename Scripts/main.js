@@ -330,11 +330,13 @@ function Picker(){ // stack of commands from blocks
 			case "waitPer":
         if(current[2]){
           Picker();
-          break;
         }
-        personSense(current[1]);
-        displayAction("waiting for people");
-				break;
+        else{
+          personSense(current[1]);
+          displayAction("waiting for people");
+
+        }
+        break;
       case 'goTo':
         var node = dynDictExhibits[current[1]][0];
         curExhibitCoord = dynDictExhibits[current[1]][1];
@@ -418,12 +420,13 @@ function Picker(){ // stack of commands from blocks
       case 'gazeAtPerson':
         if(current[2]){
           Picker();
-          break;
         }
-        displayAction("looking at nearest person for"+ current[1]);
-        rwcActionGazeAtNearestPerson(current[1]+3).on("result", function(status){console.log(status); setTimeout(function(){Picker();},1000)});
-        console.log((current[1]+5)*1000);
-        setTimeout(function(){Picker();},(current[1]+5)*1000);
+        else{
+          displayAction("looking at nearest person for"+ current[1]);
+          rwcActionGazeAtNearestPerson(current[1]+3).on("result", function(status){console.log(status); setTimeout(function(){Picker();},1000)});
+          console.log((current[1]+5)*1000);
+          setTimeout(function(){Picker();},(current[1]+5)*1000);
+        }
         break;
       case 'waitTime':
         setTimeout(function(){Picker();},(current[1]+1)*1000);
