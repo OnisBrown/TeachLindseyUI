@@ -219,6 +219,14 @@ gazePerJSON = {
       "max": 60
     }
   ],
+  "message1": '(is this the simulator? %1)',
+  "args1": [
+    {
+      "type": "field_checkbox",
+      "name":"simulator",
+      "checked": true
+    },
+  ],
   "nextStatement": null,
   "previousStatement": null,
   "style":"logic_blocks",

@@ -23,7 +23,8 @@ giveSpeechJSON = {
     {
       "type": "field_input",
       "name": "script",
-      "check": "String"
+      "check": "String",
+      "TEXT_DEFAULT_HEIGHT": '20px'
     }
   ],
   "message1": 'behaviour toggles: gaze %1 pivoting %2',

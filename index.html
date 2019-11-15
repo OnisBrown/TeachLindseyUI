@@ -62,6 +62,16 @@
 				top: 4%;
 				float: left;
 			}
+
+			#logosDiv{
+				height: 90%;
+				width: 70%;
+				position: absolute;
+				top: 4%;
+				float: left;
+				pointer-events: none;
+				opacity: 0.5;
+			}
 		</style>
 	</head>
 	<body onload="init()" style="height: 100vh; width:100vw; position: fixed;">
@@ -101,8 +111,15 @@
 		</div>
 
 		<!-- toolbox and workspace div -->
-		<div id="logosDiv"></div>
+
+
 		<div id="blocklyDiv"></div>
+		<div id="logosDiv">
+			<img id="lindimp" src="Assets/lindimp.png" style="float:right"></img>
+			<img id="beinghuman" src="Assets/beinghuman.jpg" style="float:right"></img>
+			<img id="ncnr" src="Assets/ncnr-logo-small.png" style="float:right"></img>
+			<img id="collectionMus" src="Assets/collection museum.png" style="float:right"></img>
+		</div>
 		<!-- code display div -->
 		<div id="codeDiv"></div>
 		<div id="speech"></div>
@@ -118,18 +135,19 @@
 
 		<!-- Toolbox definition -->
 		<xml id="toolbox" style="display: none">
-			<category name="Activities" categorystyle="procedure_category">
+			<category name="Reactions" categorystyle="procedure_category">
 				<block type="waitPerson"></block>
+				<block type="gazePer"></block>
+				<!-- <block type="pause"></block> -->
 				<!-- <block type="startTour"></block> -->
 				<!--<block type="askYNQuestion"></block>-->
-				<block type="askOQuestion"></block>
+				<!-- <block type="askOQuestion"></block> -->
 			</category>
 
 			<!--  -->
 			<category name="Navigation & Movement" categorystyle="list_category">
 				<block type="move"></block>
-				<block type="gazePos"></block>
-				<block type="gazePer"></block>
+				<!-- <block type="gazePos"></block> -->
 				<!--<block type="goToNode"></block>-->
 				<block type="goTo"></block>
 				<block type="goToDescribe"></block>

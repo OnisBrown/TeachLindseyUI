@@ -100,7 +100,8 @@ function gazePosCode(vector){
 Blockly.JavaScript['gazePer'] = function(block) {
   var time;
   time = block.getFieldValue('T');
-  var code = "gazePerCode(" + time +");\n";
+  var simBool = block.getFieldValue('simulator').toLowerCase();
+  var code = "gazePerCode(" + time +","+ simBool +");\n";
   return code;
 };
 

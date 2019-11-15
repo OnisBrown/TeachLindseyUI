@@ -13,7 +13,7 @@ var gazeWork = new Worker('../webWorkers/gazePass.js');
 var talking;
 var away;
 var pivAway;
-var curExhibitCoord;
+var curExhibitCoord= [];
 
 var dynDictExhibits ={};
 
@@ -54,6 +54,7 @@ function setExhbitsDict(){
     for(i =0; i < mainMusJSON.exhibitors.length; i++){
       dynDictExhibits[mainMusJSON.exhibitors[i].key] = [mainMusJSON.exhibitors[i].waypoint, mainMusJSON.exhibitors[i].metric_map_position];
     }
+    console.log(dynDictExhibits)
   }).fail( function(d, textStatus, error) {
         console.error("getJSON failed, status: " + textStatus + ", error: "+error)
     });
@@ -182,7 +183,7 @@ async function pivAsync(ang = 0, right = true){
       ang = -30;
     }
   }
-  pInterval = 4;
+  pInterval = 5;
   await sleep(pInterval*1000);
   if(talking){
     ang*= -1;
@@ -207,9 +208,8 @@ async function pivAsync(ang = 0, right = true){
   }
 }
 
-async function gazeAsync(){
+async function gazeAsync(exhibit = false){
   gInterval = 4;
-
   if(talking){
     console.log("looking away" + away);
     if (away){
@@ -223,18 +223,31 @@ async function gazeAsync(){
       gazeAsync();
     }
     else{
-      rwcActionGazeAtPosition(0,0,0,gInterval+5).on("result", function(){
-        console.log("gaze result");
-      });
-      away = !away;
-      await sleep((gInterval+5)*1000);
-      gazeAsync();
+      if(exhibit){
+        rwcActionGazeAtPosition(curExhibitCoord[0],curExhibitCoord[1],curExhibitCoord[2],gInterval+5).on("result", function(){
+          console.log("gaze result");
+        });
+        away = !away;
+        await sleep((gInterval+5)*1000);
+        gazeAsync();
+      }
+      else{
+        rwcListenerGetNearestPersonPosition(null, false).then(function(coord){
+          rwcActionGazeAtPosition((coord[0]+0.5),(coord[1]+0.5),(coord[2]),gInterval+5).on("result", function(){
+            console.log("gaze result");
+          });
+        });
+        away = !away;
+        await sleep((gInterval+5)*1000);
+        gazeAsync();
+      }
     }
   }
 }
 
 function stopActions(){
   cancelCurrentAction();
+  Cancel_active_task();
   commandQueue = [];
   rwcActionSetPoseRelative(0,0,0);
   talking = false;
@@ -275,7 +288,7 @@ function speechPrep(bools, exhibit){
   talking = true;
   if(bools[0]){
     away = false;
-    gazeAsync();
+    gazeAsync(exhibit);
   }
   if(bools[1]){
     setStartPos();
@@ -284,7 +297,7 @@ function speechPrep(bools, exhibit){
 }
 
 function displayAction(curAct){
-  document.getElementById("currentAction").innerHTML = curAct;
+  $("#currentAction").append("\n" + curAct);
 }
 
 function saveCode(){
@@ -315,41 +328,44 @@ function Picker(){ // stack of commands from blocks
     console.log(current);
     switch(current[0]){
 			case "waitPer":
+        if(current[2]){
+          Picker();
+          break;
+        }
         personSense(current[1]);
         displayAction("waiting for people");
 				break;
       case 'goTo':
         var node = dynDictExhibits[current[1]][0];
+        curExhibitCoord = dynDictExhibits[current[1]][1];
+        console.log(curExhibitCoord);
         console.log(node);
         displayAction("going to exhibit");
-        rwcActionGoToNode(node).on("result", function(status){console.log(status); Picker();});
+        rwcActionGoToNode(node).on("result", function(status){console.log(status); setTimeout(function(){Picker();},1000)});
         break;
       case 'goToNode':
         var node = "WayPoint" + current[1];
         console.log(node);
-        rwcActionGoToNode(node).on("result", function(status){console.log(status); Picker();});
+        rwcActionGoToNode(node).on("result", function(status){console.log(status); setTimeout(function(){Picker();},1000)});
         break;
       case 'goToDesc':
         var node = dynDictExhibits[current[1]];
+        curExhibitCoord = dynDictExhibits[current[1]][1];
+        console.log(curExhibitCoord);
         displayAction("going to exhibit");
         rwcActionGoToNode(node).on("result", function(status){
           console.log(status);
+          speechPrep(current[2], true);
           displayAction("describing exhibit");
           rwcActionGoToAndDescribeExhibit(current[1]).on("result", function(){talking = false; setTimeout(function(){Picker();},1000)});
         });
-
-        // rwcActionGoToNode(node).on("result", function(status){
-        //   console.log(status);
-        //   speechPrep(current[2]);
-        //   rwcActionSay(altDescribe(current[1])).on("result", function(){talking = false; Picker();});
-        // });
 
         break;
       case 'move':
         quatCalc(current[1][3]);
         console.log(qtn);
         displayAction("moving by ^, >, :"+ current[1]);
-        rwcActionSetPoseRelative(current[1][0], current[1][1], current[1][2], qtn).on("result", function(status){console.log(status); Picker();});
+        rwcActionSetPoseRelative(current[1][0], current[1][1], current[1][2], qtn).on("result", function(status){console.log(status); setTimeout(function(){Picker();},1000)});
         break;
       case 'speech':
         speechPrep(current[2], false);
@@ -358,6 +374,8 @@ function Picker(){ // stack of commands from blocks
         break;
       case 'desc':
         speechPrep(current[2], true);
+        curExhibitCoord = dynDictExhibits[current[1]][1];
+        console.log(curExhibitCoord);
         displayAction("describing exhibit");
         rwcActionDescribeExhibit(current[1]).on("result", function(){talking = false; setTimeout(function(){Picker();},1000)});
         break;
@@ -390,19 +408,25 @@ function Picker(){ // stack of commands from blocks
                   console.log( "message recieved:" + JSON.stringify(bpResponse));
                 });
               Picker();
-
           });
         });
 
         break;
       case 'gazeAtPosition':
-        rwcActionGazeAtPosition(current[1][0], current[1][1], current[1][2], current[1][3]).on("result", function(status){console.log(status); Picker();});
+        rwcActionGazeAtPosition(current[1][0], current[1][1], current[1][2], current[1][3]).on("result", function(status){console.log(status); setTimeout(function(){Picker();},1000)});
         break;
       case 'gazeAtPerson':
+        if(current[2]){
+          Picker();
+          break;
+        }
         displayAction("looking at nearest person for"+ current[1]);
-        rwcActionGazeAtNearestPerson(current[1]+3).on("result", function(status){console.log(status); Picker();});
+        rwcActionGazeAtNearestPerson(current[1]+3).on("result", function(status){console.log(status); setTimeout(function(){Picker();},1000)});
         console.log((current[1]+5)*1000);
         setTimeout(function(){Picker();},(current[1]+5)*1000);
+        break;
+      case 'waitTime':
+        setTimeout(function(){Picker();},(current[1]+1)*1000);
         break;
     }
   }
