@@ -1,3 +1,3 @@
 <?php
-echo $_POST[''];
+ header("Access-Control-Allow-Origin: *");
 ?>
