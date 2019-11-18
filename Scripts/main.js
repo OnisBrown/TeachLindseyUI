@@ -299,6 +299,7 @@ function speechPrep(bools, exhibit){
 
 function displayAction(curAct){
   $("#currentAction").append("\n" + curAct);
+
 }
 
 function saveCode(){
