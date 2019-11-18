@@ -18,7 +18,7 @@ var waitPersonJSON ={
   ],
   "nextStatement": null,
   "previousStatement": null,
-  "style":"procedure_blocks",
+  "colour": "#FF7E47",
   "tooltip": "waits for a person to get within distance before "
 };
 
@@ -40,7 +40,7 @@ var waitTimeJSON ={
   ],
   "nextStatement": null,
   "previousStatement": null,
-  "style":"procedure_blocks",
+  "colour": "#FF7E47",
   "tooltip": "waits for an amount of seconds"
 };
 

@@ -15,7 +15,7 @@ var forXJSON ={
   }],
   "nextStatement": null,
   "previousStatement": null,
-  "style":"procedure_blocks",
+  "colour": "#00008b",
   "tooltip": "waits for an amount of seconds"
 };
 
