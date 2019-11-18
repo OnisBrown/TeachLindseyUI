@@ -360,7 +360,7 @@ function Picker(){ // stack of commands from blocks
           console.log(status);
           speechPrep(current[2], true);
           displayAction("describing exhibit");
-          rwcActionDescribeExhibit(current[1]).on("result", function(){talking = false; setTimeout(function(){Picker();},1000)});
+          rwcActionDescribeExhibit(current[1]).on("result", function(){talking = false; setTimeout(function(){Picker();},2000)});
         });
 
         break;
@@ -373,14 +373,14 @@ function Picker(){ // stack of commands from blocks
       case 'speech':
         speechPrep(current[2], false);
         displayAction("speaking");
-        rwcActionSay(current[1]).on("result", function(status){talking = false; setTimeout(function(){Picker();},1000)});
+        rwcActionSay(current[1]).on("result", function(status){talking = false; setTimeout(function(){Picker();},2000)});
         break;
       case 'desc':
         speechPrep(current[2], true);
         curExhibitCoord = dynDictExhibits[current[1]][1];
         console.log(curExhibitCoord);
         displayAction("describing exhibit");
-        rwcActionDescribeExhibit(current[1]).on("result", function(){talking = false; setTimeout(function(){Picker();},1000)});
+        rwcActionDescribeExhibit(current[1]).on("result", function(){talking = false; setTimeout(function(){Picker();},2000)});
         break;
       case 'startTour':
         rwcActionStartTour(current[1]).on("result", function(){ Picker();});
