@@ -93,7 +93,7 @@ function quatCalc(angle){
 
 function updater(event){
   var code = Blockly.JavaScript.workspaceToCode(workspace);
-  document.getElementById('codeDiv').innerHTML = code;
+  document.getElementById('code').innerHTML = code;
   var xml = Blockly.Xml.workspaceToDom(workspace);
   xml_txt = Blockly.Xml.domToPrettyText(xml);
 }
@@ -160,6 +160,7 @@ function setStartPos(){
 
 function executeCode() { // executes code made by blocks
   commandQueue = [];
+  $("#currentAction").slideDown();
   window.LoopTrap = 100;
   Blockly.JavaScript.INFINITE_LOOP_TRAP = 'if(--window.LoopTrap == 0) throw "Infinite loop.";\n';
   var code = Blockly.JavaScript.workspaceToCode(workspace);
@@ -343,7 +344,6 @@ function Picker(){ // stack of commands from blocks
         console.log(curExhibitCoord);
         console.log(node);
         displayAction("going to exhibit");
-        rwcActionGoToNode(node);
         rwcActionGoToNode(node).on("result", function(status){console.log(status); setTimeout(function(){Picker();},1000)});
         break;
       case 'goToNode':
@@ -423,7 +423,7 @@ function Picker(){ // stack of commands from blocks
           Picker();
         }
         else{
-          displayAction("looking at nearest person for"+ current[1]);
+          displayAction("looking at nearest person for"+ current[1] + "seconds");
           rwcActionGazeAtNearestPerson(current[1]+3).on("result", function(status){console.log(status); setTimeout(function(){Picker();},1000)});
           console.log((current[1]+5)*1000);
           setTimeout(function(){Picker();},(current[1]+5)*1000);
