@@ -14,7 +14,6 @@ var talking;
 var away;
 var pivAway;
 var curExhibitCoord= [];
-var perAction = false;
 var dynDictExhibits ={};
 
 var gazeTargets = {
@@ -41,14 +40,11 @@ var qtn = { //struct for quaternion
   w:1
 };
 
-console.log(qtn);
-
 // create a dictionary of exhibit keys and their matching waypoints
 var mainMusJSON = {};
 function setExhbitsDict(){
   $.getJSON(musJSON, function(json){
     mainMusJSON = json;
-    console.log(mainMusJSON);
     setTourls();
     setExhbitsls();
     for(i =0; i < mainMusJSON.exhibitors.length; i++){
@@ -64,7 +60,6 @@ function setExhbitsls(){
   for(i =0; i < mainMusJSON.exhibitors.length; i++){
     exhibitLsJSON.args0[0].options.push([mainMusJSON.exhibitors[i].title, mainMusJSON.exhibitors[i].key]);
   }
-  console.log(exhibitLsJSON.args0[0]);
 }
 
 function setTourls(){
@@ -176,7 +171,6 @@ function executeCode() { // executes code made by blocks
 }
 
 async function pivAsync(ang = 0, right = true){
-  console.log("action check: " + perAction);
   if (ang == 0){
     if (right){
       ang = 30;
@@ -199,22 +193,21 @@ async function pivAsync(ang = 0, right = true){
     setTimeout(function(){if(talking){ pivAsync(ang);}}, 500);
   }
   else{
-    // console.log(pivAway);
-    // if (pivAway){
-    //   ang*= -1;
-    //   quatCalc(ang);
-    //   rwcActionSetPoseRelative(0, 0, 0, qtn);
-    // }
-    // pivAway = false;
+    console.log(pivAway);
+    if (pivAway){
+      ang*= -1;
+      quatCalc(ang);
+      rwcActionSetPoseRelative(0, 0, 0, qtn);
+    }
+    pivAway = false;
     return;
   }
 }
 
 async function gazeAsync(exhibit = false){
-  console.log("action check: " + perAction);
   gInterval = 4;
   if(talking){
-    console.log("looking away" + away);
+    console.log("looking away: " + away);
     if (away){
       rwcActionGazeAtNearestPerson(gInterval+3).on("result", function(){
         // away = !away;
@@ -267,7 +260,6 @@ function personSense(range){
     myTopic.subscribe(function(msg){
       var dist;
       dist = msg.min_distance;
-      console.log(dist);
       if((dist < range && dist >0) || preempt){
         console.log("found person: " + !preempt);
         myTopic.unsubscribe();
@@ -328,11 +320,10 @@ function loop(){
 }
 
 function Picker(){ // stack of commands from blocks
-
-  for(i=0; i < commandQueue.length; i++){
-    console.log("**** "+ commandQueue.length)
-    console.log("****** " + commandQueue[i][0]);
-  }
+  // for(i=0; i < commandQueue.length; i++){
+  //   console.log("**** "+ commandQueue.length)
+  //   console.log("****** " + commandQueue[i][0]);
+  // }
   if (commandQueue.length > 0) {
     var current = commandQueue.shift();
     commandQueuePrev.push(current);
@@ -351,30 +342,30 @@ function Picker(){ // stack of commands from blocks
       case 'goTo':
         var node = dynDictExhibits[current[1]][0];
         curExhibitCoord = dynDictExhibits[current[1]][1];
-        console.log(curExhibitCoord);
-        console.log(curExhibitCoord);
-        console.log(node);
+        // console.log(curExhibitCoord);
+        // console.log(curExhibitCoord);
+        // console.log(node);
         displayAction("going to exhibit: " + dynDictExhibits[current[1]][2]);
-        rwcActionGoToNode(node).on("result", function(status){console.log(status); Picker();}); //setTimeout(function(){Picker();},1000)});
+        rwcActionGoToNode(node).on("result", function(status){console.log("goToNode status: " + JSON.stringify(status)); Picker();}); //setTimeout(function(){Picker();},1000)});
         break;
       case 'goToNode':
         var node = "WayPoint" + current[1];
-        console.log(node);
-        rwcActionGoToNode(node).on("result", function(status){console.log(status); setTimeout(function(){Picker();},1000)});
+        // console.log(node);
+        rwcActionGoToNode(node).on("result", function(status){console.log("goToWaypoint status: " + JSON.stringify(status)); setTimeout(function(){Picker();},1000)});
         break;
       case 'goToDesc':
         var node = dynDictExhibits[current[1]][0];
         curExhibitCoord = dynDictExhibits[current[1]][1];
-        console.log(curExhibitCoord);
+        // console.log(curExhibitCoord);
         displayAction("going to exhibit: " + dynDictExhibits[current[1]][2]);
         perAction = true;
         rwcActionGoToNode(node).on("result", function(status){
-          console.log("gotoNodeDescGoTo: " + status);
+          console.log("gotoNodeDescGoTo: " + JSON.stringify(status));
           perAction = false;
           speechPrep(current[2], true);
           displayAction("describing exhibit: " + dynDictExhibits[current[1]][2]);
           perAction = true;
-          rwcActionDescribeExhibit(current[1]).on("result", function(){console.log("gotoNodeDescDesc: " + status); talking = false; perAction = false;  setTimeout(function(){Picker();},2000)});
+          rwcActionDescribeExhibit(current[1]).on("result", function(){console.log("gotoNodeDescDesc: " + JSON.stringify(status)); talking = false; perAction = false;  setTimeout(function(){Picker();},2000)});
         });
 
         break;
@@ -382,12 +373,12 @@ function Picker(){ // stack of commands from blocks
         quatCalc(current[1][3]);
         console.log(qtn);
         displayAction("moving by \u2b06, \u27a1, \u27f3 :"+ current[1]);
-        rwcActionSetPoseRelative(current[1][0], current[1][1], current[1][2], qtn).on("result", function(status){console.log(status); perAction = false; setTimeout(function(){Picker();},1000)});
+        rwcActionSetPoseRelative(current[1][0], current[1][1], current[1][2], qtn).on("result", function(status){console.log("move status: " + JSON.stringify(status)); perAction = false; setTimeout(function(){Picker();},1000)});
         break;
       case 'speech':
         speechPrep(current[2], false);
         displayAction("saying: " + current[1]);
-        rwcActionSay(current[1]).on("result", function(status){talking = false;  setTimeout(function(){Picker();} ,2000)});
+        rwcActionSay(current[1]).on("result", function(status){console.log("speech status: " + JSON.stringify(status)); talking = false;  setTimeout(function(){Picker();} ,2000)});
         break;
       case 'desc':
         speechPrep(current[2], true);
@@ -405,7 +396,6 @@ function Picker(){ // stack of commands from blocks
         break;
       case 'askO':
         var response;
-
         rwcActionSay(current[1]).on("result", function(status){
           console.log("speaking");
           rwcActionStartDialogue();
@@ -430,7 +420,7 @@ function Picker(){ // stack of commands from blocks
 
         break;
       case 'gazeAtPosition':
-        rwcActionGazeAtPosition(current[1][0], current[1][1], current[1][2], current[1][3]).on("result", function(status){console.log(status); setTimeout(function(){Picker();},1000)});
+        rwcActionGazeAtPosition(current[1][0], current[1][1], current[1][2], current[1][3]).on("result", function(status){console.log("gazePos status: " + JSON.stringify(status)); setTimeout(function(){Picker();},1000)});
         break;
       case 'gazeAtPerson':
         if(current[2]){
@@ -438,12 +428,13 @@ function Picker(){ // stack of commands from blocks
         }
         else{
           displayAction("looking at nearest person for "+ current[1] + " seconds");
-          rwcActionGazeAtNearestPerson(current[1]+3).on("result", function(status){console.log(status); setTimeout(function(){Picker();},1000)});
+          rwcActionGazeAtNearestPerson(current[1]+3).on("result", function(status){console.log("gazePer status: " + JSON.stringify(status)); setTimeout(function(){Picker();},1000)});
           console.log((current[1]+5)*1000);
           setTimeout(function(){Picker();},(current[1]+5)*1000);
         }
         break;
       case 'waitTime':
+				console.log("waiting for " + current[1]);
         setTimeout(function(){Picker();},(current[1]+1)*1000);
         break;
     }
