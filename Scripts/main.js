@@ -204,16 +204,17 @@ async function pivAsync(ang = 0, right = true){
 async function gazeAsync(exhibit = false){
   gInterval = 4;
   if(talking){
-    console.log("looking away: " + away);
+    console.log("looking away: " + !away);
     if (away){
       rwcActionGazeAtNearestPerson(gInterval+3).on("result", function(){
         // away = !away;
         // gazeAsync();
         console.log("gaze result");
       });
+      console.log("gazing at person: " + !away);
       away = !away;
       await sleep((gInterval+5)*1000);
-			if(talking){return;}
+			if(!talking){return;}
       gazeAsync(exhibit);
     }
     else{
@@ -221,9 +222,10 @@ async function gazeAsync(exhibit = false){
         rwcActionGazeAtPosition(curExhibitCoord[0],curExhibitCoord[1],curExhibitCoord[2],gInterval+5).on("result", function(){
           console.log("gaze result");
         });
+        console.log("gazing at person: " + !away);
         away = !away;
 				await sleep((gInterval+5)*1000);
-        if(talking){return;}
+        if(!talking){return;}
         gazeAsync(exhibit);
       }
       else{
@@ -232,9 +234,10 @@ async function gazeAsync(exhibit = false){
             console.log("gaze result");
           });
         });
+        console.log("gazing at person: " + !away);
         away = !away;
         await sleep((gInterval+5)*1000);
-				if(talking){return;}
+				if(!talking){return;}
         gazeAsync(exhibit);
       }
     }
@@ -260,6 +263,7 @@ function personSense(range){
     myTopic.subscribe(function(msg){
       var dist;
       dist = msg.min_distance;
+      console.log(dist);
       if((dist < range && dist >0) || preempt){
         console.log("found person: " + !preempt);
         myTopic.unsubscribe();
