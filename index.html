@@ -2,45 +2,174 @@
 <html>
 	<meta charset="UTF-8">
 	<head>
-		<title>Testing</title>
+		<title>TeachLindsey</title>
 		<style>
 			body { margin: 0; }
 			canvas { width: 100%; height: 100% }
+			#headerDiv{
+				height: 2%;
+				width: 100%;
+				position: fixed;
+				top: 0px;
+				clear: right;
+			}
+
+			#codeDiv{
+				border-radius: 5px;
+				height: 30%;
+				width: 30%;
+				position: absolute;
+				top: 4%;
+				float: right;
+				border-color: black;
+				margin-left: 70%;
+				text-align: center;
+				background-color: #696969;
+				overflow: auto;
+				opacity: 0.7;
+			}
+			#speech{
+				height: 30%;
+				border-radius: 5px;
+				width: 30%;
+				position: absolute;
+				top: 34%;
+				float: right;
+				border-color: black;
+				margin-left: 70%;
+				text-align: center;
+				background-color: #87CEEB;
+				opacity: 0.7;
+			}
+			#currentDiv{
+				height: 30%;
+				border-radius: 5px;
+				width: 30%;
+				position: absolute;
+				top: 64%;
+				float: right;
+				border-color: black;
+				border-: black;
+				margin-left: 70%;
+				text-align: center;
+				opacity: 0.7;
+				background-color: #ffff6e;
+				overflow: auto;
+			}
+			#blocklyDiv{
+				height: 90%;
+				width: 70%;
+				position: absolute;
+				top: 4%;
+				float: left;
+			}
+
+			#logosDiv{
+				height: 90%;
+				width: 70%;
+				position: absolute;
+				top: 4%;
+				float: left;
+				pointer-events: none;
+				opacity: 0.5;
+			}
+			#collectionMus{
+				background-color: #563C55;
+			}
 		</style>
 	</head>
-	<body>
+	<body onload="init()" style="height: 100vh; width:100vw; position: fixed;">
+		<?php
+		 header("Access-Control-Allow-Origin: *");
+		?>
+		<!-- <script src="http://10.5.42.157:3000/assets/modules/channel-web/inject.js"></script> -->
+		<!-- Blockly dependancies -->
 		<script src="blockly/blockly_compressed.js"></script>
+		<script src="blockly/javascript_compressed.js"></script>
 		<script src="blockly/blocks_compressed.js"></script>
 		<script src="blockly/msg/js/en.js"></script>
-		<h1> Testing </h1>
-		<div id="blocklyDiv" style="height: 90vh; width: 70vw; position: relative;"></div>
 
+		<!-- roswebcomponents dependancies see repo here https://github.com/laurencejbelliott/roswebcomponents -->
+		<script src="jqueryMin.js"></script>
+		<script src="roswebcomponents/scripts/jquery.spin.js"></script>
+		<script src="roswebcomponents/scripts/jsQR.js"></script>
+		<script src="roswebcomponents/scripts/mobile-detect.min.js"></script>
+		<script src="roswebcomponents/scripts/eventemitter2.js"></script>
+		<script src="roswebcomponents/scripts/roslib.min.js"></script>
+		<script src="roswebcomponents/scripts/rwc.js"></script>
+
+		<!-- Custom Blocks and Scripts -->
+		<script  src="blockly\generators\javascript\LindNav.js"></script>
+		<script  src="blockly\generators\javascript\LindSpeech.js"></script>
+		<script  src="blockly\generators\javascript\LindReact.js"></script>
+		<script  src="blockly/generators/javascript/LindLoop.js"></script>
+		<script  src="blockly\blocks\LindNav.js"></script>
+		<script  src="blockly\blocks\LindSpeech.js"></script>
+		<script  src="blockly\blocks\LindReact.js"></script>
+		<script  src="blockly/blocks/LindLoops.js"></script>
+		<script  src="Scripts/main.js"></script>
+
+
+
+		<div id="headerDiv" style="">
+			<h1 style="float:left; width: top: 0px; left: 0px; font-size: 10pt;"> TeachLindsey </h1>
+			<input type="text" id="scriptName" value="first" style="height: 100%; width: 10%; float:left; top: 0px; left: 0px;"></input>
+		</div>
+
+		<!-- toolbox and workspace div -->
+
+
+		<div id="blocklyDiv"></div>
+		<div id="logosDiv">
+			<img id="lindimp" src="Assets/lindimp.png" style="float:right"></img>
+			<img id="beinghuman" src="Assets/beinghuman.jpg" style="float:right"></img>
+			<img id="ncnr" src="Assets/ncnr-logo-small.png" style="float:right"></img>
+			<img id="collectionMus" src="Assets/collection museum.png" style="float:right"></img>
+		</div>
+		<!-- code display div -->
+		<div id="codeDiv"><pre id=code></pre></div>
+		<div id="speech"></div>
+		<div id="currentDiv"><pre id=currentAction></pre></div>
+		<!-- button for launching script -->
+		<!-- <button onclick="saveCode()" style="bottom: 0"> save code </button> -->
+		<button onclick="executeCode()" style="position:absolute; bottom: 1%; right: 5%;"> run code </button>
+		<button onclick="stopActions()" style="position:absolute; bottom: 1%; right: 20%;"> stop actions </button>
+
+		<!--<button onclick="Demo()" style="bottom: 0"> demo behaviours </button>-->
+		<button onclick="saveCode()" style="position:absolute;  bottom: 1%; left: 10%;"> save code </button>
+		<button onclick="loadCode()" style="position:absolute;  bottom: 1%; left: 1%"> load code </button>
+
+		<!-- Toolbox definition -->
 		<xml id="toolbox" style="display: none">
-			<category name="Control">
-			  <block type="controls_if"></block>
-			  <block type="controls_repeat_ext"></block>
+			<category name="Reactions">
+				<block type="waitPerson"></block>
+				<block type="gazePer"></block>
+				<block type="pause"></block>
+				<!-- <block type="startTour"></block> -->
+				<!--<block type="askYNQuestion"></block>-->
+				<!-- <block type="askOQuestion"></block> -->
 			</category>
 
-			<category name="logical operators">
-				<block type="logic_compare"></block>
+			<!--  -->
+			<category name="Navigation & Movement">
+				<block type="move"></block>
+				<!-- <block type="gazePos"></block> -->
+				<!--<block type="goToNode"></block>-->
+				<block type="goTo"></block>
+				<block type="goToDescribe"></block>
+				<!--<block type="goToDescribeWhile"></block>-->
+				<block type="exhibitLs"></block>
 			</category>
 
-			<category name="Maths">
-			  <block type="math_number"></block>
-			  <block type="math_arithmetic"></block>
+			<category name="Speech">
+				<block type="giveSpeech"></block>
+				<!-- <block type="script"></block> -->
+				<block type="describe"></block>
 			</category>
 
-			<category name="strings">
-				<block type="text"></block>
-			  <block type="text_print"></block>
-			</category>
-
+			<!-- <category name="loops">
+				<block type="Lindfor"></block>
+			</category> -->
 		</xml>
 	</body>
-	<script>
-  	var workspace = Blockly.inject('blocklyDiv',
-      {toolbox: document.getElementById('toolbox')});
-	</script>
-
-
 </html>
