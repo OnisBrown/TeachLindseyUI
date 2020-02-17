@@ -202,7 +202,7 @@ function executeCode() { // executes code made by blocks
     //eval(code);
   }
   catch (e){
-    alert(e + "\n" + e.lineNumber);
+    alert(e + "\n" + e.lineNumber + " " + e.fileName);
   }
   finally{
     Picker();
