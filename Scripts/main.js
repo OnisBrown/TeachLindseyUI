@@ -1,7 +1,7 @@
 var workspace;
 var xml_txt;
 var commandQueue = new Array();
-var commandQueuePrev = new Array();
+var whileQueues = new Array();
 var musJSON = "exhibitors_definition.json";
 var userId = 'Guest';
 var talking;
@@ -153,11 +153,55 @@ function executeCode() { // executes code made by blocks
   window.LoopTrap = 100;
   Blockly.JavaScript.INFINITE_LOOP_TRAP = 'if(--window.LoopTrap == 0) throw "Infinite loop.";\n';
   var code = Blockly.JavaScript.workspaceToCode(workspace);
+  var parsedCode = code.match(/^.*((\r\n|\n|\r)|$)/gm);
+  var block = new Array();
+  console.log(parsedCode);
   try{
-    eval(code);
+    parsedCode.forEach(function(line){
+      if(line.includes("for (i = ")){
+        block.push(['for', line]);
+        console.log("start of for");
+      }
+      else if(line.includes("while ()")){
+        var regWhile = /\(([^)]+)\)/;
+        var condition = regExp.exec(line);
+        console.log("condition: " + condition);
+        whileQueues.push(condition,[]);
+        block.push(['while', ]);
+        console.log("start of while");
+      }
+      else if(line.includes("}")){
+        console.log("End of " + block[block.length - 1][0]);
+        if(block[block.length - 1][0]=='for'){
+          var innerFor = block.pop()[1].concat(line);
+          console.log(innerFor);
+          eval(innerFor);
+
+        }
+        else if(block[block.length - 1][0]=='while'){
+          commandQueue.push(['while']);
+        }
+      }
+      else if(block.length==0){
+        eval(line);
+      }
+      else{
+        if(block[block.length - 1][0]=='for'){
+          block[block.length - 1][1] += line;
+          console.log("adding" + line + "to for loop");
+          console.log(block[block.length - 1][1]);
+        }
+        else if(block[block.length - 1][0]=='while'){
+          var temp = line.replace("commandQueue", "whileQueues");
+          eval(line);
+          console.log("adding" + line + "to while loop");
+        }
+      }
+    });
+    //eval(code);
   }
   catch (e){
-    alert(e);
+    alert(e + "\n" + e.lineNumber);
   }
   finally{
     Picker();

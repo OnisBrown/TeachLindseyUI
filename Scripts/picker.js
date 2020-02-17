@@ -3,7 +3,6 @@
 function Picker(){ // stack of commands from blocks
   if (commandQueue.length > 0) {
     var current = commandQueue.shift();
-    commandQueuePrev.push(current);
     console.log(current);
     switch(current[0]){
 			case "waitPer":
