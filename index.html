@@ -65,16 +65,21 @@
 			}
 
 			#logosDiv{
-				height: 90%;
+				height: 100%;
 				width: 70%;
 				position: absolute;
-				top: 4%;
-				float: left;
+				top: 0px;
+				left: 30%;
 				pointer-events: none;
 				opacity: 0.5;
+				z-index: 1;
 			}
 			#collectionMus{
 				background-color: #563C55;
+			}
+			#blocklyLogo{
+				max-width: 20%;
+				max-height:10%;
 			}
 		</style>
 	</head>
@@ -82,7 +87,7 @@
 		<?php
 		 header("Access-Control-Allow-Origin: *");
 		?>
-		<!-- <script src="http://10.5.42.157:3000/assets/modules/channel-web/inject.js"></script> -->
+		<script src="http://localhost:3000/assets/modules/channel-web/inject.js"></script>
 		<!-- Blockly dependancies -->
 		<script src="blockly/blockly_compressed.js"></script>
 		<script src="blockly/javascript_compressed.js"></script>
@@ -122,12 +127,15 @@
 		<!-- toolbox and workspace div -->
 
 
-		<div id="blocklyDiv"></div>
-		<div id="logosDiv">
-			<img id="lindimp" src="Assets/lindimp.png" style="float:right"></img>
-			<img id="beinghuman" src="Assets/beinghuman.jpg" style="float:right"></img>
-			<img id="ncnr" src="Assets/ncnr-logo-small.png" style="float:right"></img>
-			<img id="collectionMus" src="Assets/collection museum.png" style="float:right"></img>
+		<div id="blocklyDiv">
+			<div id="logosDiv">
+				<img id="lindimp" src="Assets/lindimp.png" style="float:right"></img>
+				<img id="beinghuman" src="Assets/beinghuman.jpg" style="float:right"></img>
+				<img id="ncnr" src="Assets/ncnr-logo-small.png" style="float:right"></img>
+				<img id="collectionMus" src="Assets/collection museum.png" style="float:right"></img>
+				<img id="blocklyLogo" src="Assets/blockly.png" style="float:right;"></img>
+			</div>
+
 		</div>
 		<!-- code display div -->
 		<div id="codeDiv"><pre id=code></pre></div>
