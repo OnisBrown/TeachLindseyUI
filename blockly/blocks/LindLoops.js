@@ -1,5 +1,5 @@
 var forXJSON ={
-  "message0": 'do this %1 times',
+  "message0": 'for %1 time(s)',
   "args0": [
     {
       "type": "field_number",

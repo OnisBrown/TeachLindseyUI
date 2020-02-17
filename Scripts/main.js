@@ -160,7 +160,7 @@ function executeCode() { // executes code made by blocks
     parsedCode.forEach(function(line){
       if(line.includes("for (i = ")){
         block.push(['for', line]);
-        console.log("start of for");
+        //console.log("start of for");
       }
       else if(line.includes("while ()")){
         var regWhile = /\(([^)]+)\)/;
@@ -168,12 +168,12 @@ function executeCode() { // executes code made by blocks
         console.log("condition: " + condition);
         whileQueues.push(condition,[]);
         block.push(['while', ]);
-        console.log("start of while");
+        //console.log("start of while");
       }
       else if(line.includes("}")){
-        console.log("End of " + block[block.length - 1][0]);
+      //  console.log("End of " + block[block.length - 1][0]);
         if(block[block.length - 1][0]=='for'){
-          var innerFor = block.pop()[1].concat(line);
+          var innerFor = block.pop()[1].concat(line) + "\n";
           console.log(innerFor);
           eval(innerFor);
 
@@ -183,13 +183,14 @@ function executeCode() { // executes code made by blocks
         }
       }
       else if(block.length==0){
+        eval(innerFor);
         eval(line);
       }
       else{
         if(block[block.length - 1][0]=='for'){
           block[block.length - 1][1] += line;
-          console.log("adding" + line + "to for loop");
-          console.log(block[block.length - 1][1]);
+          //console.log("adding" + line + "to for loop");
+          //console.log(block[block.length - 1][1]);
         }
         else if(block[block.length - 1][0]=='while'){
           var temp = line.replace("commandQueue", "whileQueues");
