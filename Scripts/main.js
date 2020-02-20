@@ -1,7 +1,5 @@
 var workspace;
 var xml_txt;
-var commandQueue = new Array();
-var whileQueues = new Array();
 var musJSON = "exhibitors_definition.json";
 var userId = 'Guest';
 var talking;
@@ -212,7 +210,9 @@ function executeCode() { // executes code made by blocks
     alert(e + "\n" + e.lineNumber + " " + e.fileName);
   }
   finally{
-    Picker();
+    displayAction("Plan finished!");
+    console.log("Plan finished!");
+  }
   }
 }
 
