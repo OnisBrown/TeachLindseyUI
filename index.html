@@ -108,10 +108,12 @@
 		<script  src="blockly\generators\javascript\LindSpeech.js"></script>
 		<script  src="blockly\generators\javascript\LindReact.js"></script>
 		<script  src="blockly/generators/javascript/LindLoops.js"></script>
+		<script  src="blockly/generators/javascript/LindLogic.js"></script>
 		<script  src="blockly\blocks\LindNav.js"></script>
 		<script  src="blockly\blocks\LindSpeech.js"></script>
 		<script  src="blockly\blocks\LindReact.js"></script>
 		<script  src="blockly/blocks/LindLoops.js"></script>
+		<script  src="blockly/blocks/LindLogic.js"></script>
 		<!-- Scripts -->
 		<script  src="Scripts/picker.js"></script>
 		<script  src="Scripts/passives.js"></script>
@@ -158,7 +160,7 @@
 				<block type="pause"></block>
 				<!-- <block type="startTour"></block> -->
 				<!--<block type="askYNQuestion"></block>-->
-				<!-- <block type="askOQuestion"></block> -->
+				<block type="askOQuestion"></block>
 			</category>
 
 			<!--  -->
@@ -180,6 +182,18 @@
 
 			<category name="loops">
 				<block type="lindFor"></block>
+				<block type="lindWhile"></block>
+			</category>
+
+			<category name="values / variables">
+				<block type="number"></block>
+
+			</category>
+
+			<category name="logic">
+				<block type="listCond"></block>
+				<!-- <block type="lindIf"></block> -->
+
 			</category>
 		</xml>
 	</body>

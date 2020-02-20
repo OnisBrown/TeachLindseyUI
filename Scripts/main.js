@@ -95,7 +95,7 @@ function init(){
   console.log("Connecting to botpress")
   try{
     window.botpressWebChat.init({
-       host: 'http://10.5.42.157:3000',
+       host: 'http://localhost:3000',
        botId: 'chatty_lindsey',
        hideWidget: true,
        exposeStore: true,
@@ -155,6 +155,7 @@ function executeCode() { // executes code made by blocks
   var code = Blockly.JavaScript.workspaceToCode(workspace);
   var parsedCode = code.match(/^.*((\r\n|\n|\r)|$)/gm);
   var block = new Array();
+  var wCount = 0;
   console.log(parsedCode);
   try{
     parsedCode.forEach(function(line){
@@ -164,7 +165,7 @@ function executeCode() { // executes code made by blocks
       }
       else if(line.includes("while ()")){
         var regWhile = /\(([^)]+)\)/;
-        var condition = regExp.exec(line);
+        var condition = true; //regExp.exec(line);
         console.log("condition: " + condition);
         whileQueues.push(condition,[]);
         block.push(['while', ]);
@@ -174,11 +175,12 @@ function executeCode() { // executes code made by blocks
       //  console.log("End of " + block[block.length - 1][0]);
         if(block[block.length - 1][0]=='for'){
           var innerFor = block.pop()[1].concat(line) + "\n";
-          console.log(innerFor);
+          //console.log(innerFor);
           eval(innerFor);
 
         }
         else if(block[block.length - 1][0]=='while'){
+          wCount -= 1;
           commandQueue.push(['while']);
         }
       }
@@ -187,15 +189,20 @@ function executeCode() { // executes code made by blocks
         eval(line);
       }
       else{
-        if(block[block.length - 1][0]=='for'){
+        if(wCount == 0){
           block[block.length - 1][1] += line;
-          //console.log("adding" + line + "to for loop");
-          //console.log(block[block.length - 1][1]);
         }
+
         else if(block[block.length - 1][0]=='while'){
-          var temp = line.replace("commandQueue", "whileQueues");
-          eval(line);
-          console.log("adding" + line + "to while loop");
+          var temp = line.replace("commandQueue.push(", "whileQueues[0]");
+          if(block[block.length - 1][0]=='for'){
+
+
+          }
+          else{
+            eval(line);
+            console.log("adding" + line + "to while loop");
+          }
         }
       }
     });

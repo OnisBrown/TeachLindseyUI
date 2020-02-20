@@ -26,11 +26,11 @@ Blockly.Blocks['lindFor'] = {
 };
 
 var whileXJSON ={
-  "message0": 'do this %1 times',
+  "message0": 'while %1 do',
   "args0": [
     {
-      "type": "field_number",
-      "name": "iterations",
+      "type": "input_value",
+      "name": "condition",
       "min": 1,
       "max": 10
     }

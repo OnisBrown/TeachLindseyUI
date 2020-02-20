@@ -1,9 +1,21 @@
 //Queue management functions
 
-function Picker(){ // stack of commands from blocks
-  if (commandQueue.length > 0) {
+function Picker(wLoop = false, index = 0){ // stack of commands from blocks
+  if(wLoop){
+    var curQueue = whileQueues[0][1];
+    console.log(whileQueues);
+    console.log(curQueue);
+    var current = curQueue[index];
+    index+=1;
+  }
+  else{
+    var curQueue = commandQueue;
     var current = commandQueue.shift();
     console.log(current);
+  }
+
+  if (curQueue.length > 0) {
+    index = 0;
     switch(current[0]){
 			case "waitPer":
         if(current[2]){
@@ -72,27 +84,44 @@ function Picker(){ // stack of commands from blocks
         break;
       case 'askO':
         var response;
-        rwcActionSay(current[1]).on("result", function(status){
-          console.log("speaking");
-          rwcActionStartDialogue();
-          var bpMsg = {
+        // rwcActionSay(current[1]).on("result", function(status){
+        //   console.log("speaking");
+        //   rwcActionStartDialogue();
+        //   var bpMsg = {
+        //     "type": "text",
+        //     "text": "unset"
+        //   }
+        //   $.post(`https://localhost:3000/api/v1/bots/chatty_lindsey/converse/${userId}/secured?include=nlu,state,suggestions,decision`, bpMsg,
+        //       function(bpResponse) {
+        //         console.log( "message recieved:" + JSON.stringify(bpResponse));
+        //       });
+        //   //diaTimer =
+        //   rwcListenerGetDialogue().then(function(script){
+        //     bpMsg.type = script;
+        //     $.post(`https://localhost:3000/api/v1/bots/chatty_lindsey/converse/${userId}/secured?include=nlu,state,suggestions,decision`, bpMsg,
+        //         function(bpResponse) {
+        //           console.log( "message recieved:" + JSON.stringify(bpResponse));
+        //         });
+        //       Picker();
+        //   });
+        // });
+        var bpMsg = {
             "type": "text",
-            "text": "unset"
+            "text": "take me to the graves"
           }
-          $.post(`https://10.5.42.157:3000/api/v1/bots/chatty_lindsey/converse/${userId}/secured?include=nlu,state,suggestions,decision`, bpMsg,
+        $.post(`https://localhost:3000/api/v1/bots/chatty_lindsey/converse/${userId}/secured?include=nlu,state,suggestions,decision`, bpMsg,
               function(bpResponse) {
                 console.log( "message recieved:" + JSON.stringify(bpResponse));
               });
           //diaTimer =
           rwcListenerGetDialogue().then(function(script){
             bpMsg.type = script;
-            $.post(`https://10.5.42.157:3000/api/v1/bots/chatty_lindsey/converse/${userId}/secured?include=nlu,state,suggestions,decision`, bpMsg,
+            $.post(`https://localhost:3000/api/v1/bots/chatty_lindsey/converse/${userId}/secured?include=nlu,state,suggestions,decision`, bpMsg,
                 function(bpResponse) {
                   console.log( "message recieved:" + JSON.stringify(bpResponse));
                 });
               Picker();
           });
-        });
 
         break;
       case 'gazeAtPosition':
@@ -112,6 +141,14 @@ function Picker(){ // stack of commands from blocks
       case 'waitTime':
 				console.log("waiting for " + current[1]);
         setTimeout(function(){Picker();},(current[1]+1)*1000);
+        break;
+      case 'while':
+        Picker(true, 0);
+        break;
+      case 'whileEnd':
+        if(condition){
+          whileQueues.pop();
+        }
         break;
     }
   }

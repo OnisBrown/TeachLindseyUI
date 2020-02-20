@@ -9,7 +9,7 @@ Blockly.JavaScript['lindFor'] = function(block) {
 
 Blockly.JavaScript['lindWhile'] = function(block) {
   //GoTo a location
-  var condition = block.getFieldValue('condition');
+  var condition = Blockly.JavaScript.valueToCode(block,'exhibit', Blockly.JavaScript.ORDER_ATOMIC)
   var forDo = Blockly.JavaScript.statementToCode(block, 'DO');
   innerCode = "\t" + forDo.replace("\n", "\n \t");
   var code = `while (${condition}){\n ${innerCode}}\n`;
