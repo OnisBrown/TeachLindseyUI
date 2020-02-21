@@ -138,14 +138,9 @@ function executeCode() { // executes code made by blocks
        }
       }
     }
-    console.log("(async () =>" + block.join("") + ")()");
-    // for(let chunk of block){
-
-      let s = "(async () => { " + block.join("") + " })()"
-      console.log(s);
-      eval(s);
-      //blocking here
-    // };
+    let s = "(async () => { " + block.join("") + " })()"
+    console.log(s);
+    eval(s);
   }
   catch (e){
     alert(e + "\n" + e.lineNumber + " " + e.fileName);
