@@ -56,7 +56,7 @@ function quatCalc(angle){
 }
 
 function updater(event){
-  var code = Blockly.JavaScript.workspaceToCode(workspace);
+  var code = Blockly.JavaScript.workspaceToCode(workspace).replace(/await/g,"");
   document.getElementById('code').innerHTML = code;
   var xml = Blockly.Xml.workspaceToDom(workspace);
   xml_txt = Blockly.Xml.domToPrettyText(xml);
@@ -185,7 +185,7 @@ function saveCode(){
 }
 
 function loadCode(){
-  //Blockly.Workspace.clear();
+  workspace.clear();
   var name = document.getElementById("scriptName").value;
   var xml = Blockly.Xml.textToDom(localStorage.getItem(name));
   Blockly.Xml.domToWorkspace(xml, workspace);

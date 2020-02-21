@@ -2,13 +2,13 @@
 Blockly.JavaScript['goTo'] = function(block) {
   //GoTo a location
   var choice = Blockly.JavaScript.valueToCode(block,'exhibit', Blockly.JavaScript.ORDER_ATOMIC) || "failing to get location number";
-  var code = "goToCode(" + choice + ");\n";
+  var code = "await goToCode(" + choice + ");\n";
   return code;
 };
 
 async function goToCode(choice){
   let result = await Picker(['goTo', choice]);
-  console.log("This is the ", result);
+  console.log(result);
 }
 
 Blockly.JavaScript['goToNode'] = function(block) {
