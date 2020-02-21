@@ -115,60 +115,37 @@ function executeCode() { // executes code made by blocks
   window.LoopTrap = 100;
   Blockly.JavaScript.INFINITE_LOOP_TRAP = 'if(--window.LoopTrap == 0) throw "Infinite loop.";\n';
   var code = Blockly.JavaScript.workspaceToCode(workspace);
-  var parsedCode = code.match(/^.*((\r\n|\n|\r)|$)/gm);
+  var parsedCode = code.match(/^.*((\r\n|\n|\r)|$)/gm); //seperates entire code into
   var block = new Array();
-  var wCount = 0;
+  var lCount = 0;
   console.log(parsedCode);
   try{
-    parsedCode.forEach(function(line){
-      if(line.includes("for (i = ")){
-        block.push(['for', line]);
-        //console.log("start of for");
-      }
-      else if(line.includes("while ()")){
-        var regWhile = /\(([^)]+)\)/;
-        var condition = true; //regExp.exec(line);
-        console.log("condition: " + condition);
-        whileQueues.push(condition,[]);
-        block.push(['while', ]);
-        //console.log("start of while");
+    for(let line of parsedCode){
+      if(line.includes("for (i =")|| line.includes("while(")){
+        lCount +=1;
+        block[block.length-1] += line;
       }
       else if(line.includes("}")){
-      //  console.log("End of " + block[block.length - 1][0]);
-        if(block[block.length - 1][0]=='for'){
-          var innerFor = block.pop()[1].concat(line) + "\n";
-          //console.log(innerFor);
-          eval(innerFor);
-
-        }
-        else if(block[block.length - 1][0]=='while'){
-          wCount -= 1;
-          commandQueue.push(['while']);
-        }
+        lCount -=1;
+        block[block.length-1] += line + "\n";
       }
-      else if(block.length==0){
-        eval(innerFor);
-        eval(line);
+      else if(lCount>0){
+        block[block.length-1] +=line;
       }
       else{
-        if(wCount == 0){
-          block[block.length - 1][1] += line;
-        }
-
-        else if(block[block.length - 1][0]=='while'){
-          var temp = line.replace("commandQueue.push(", "whileQueues[0]");
-          if(block[block.length - 1][0]=='for'){
-
-
-          }
-          else{
-            eval(line);
-            console.log("adding" + line + "to while loop");
-          }
-        }
+        if (line) {
+          block.push(line);
+       }
       }
-    });
-    //eval(code);
+    }
+    console.log("(async () =>" + block.join("") + ")()");
+    // for(let chunk of block){
+
+      let s = "(async () => { " + block.join("") + " })()"
+      console.log(s);
+      eval(s);
+      //blocking here
+    // };
   }
   catch (e){
     alert(e + "\n" + e.lineNumber + " " + e.fileName);
@@ -176,7 +153,6 @@ function executeCode() { // executes code made by blocks
   finally{
     displayAction("Plan finished!");
     console.log("Plan finished!");
-  }
   }
 }
 

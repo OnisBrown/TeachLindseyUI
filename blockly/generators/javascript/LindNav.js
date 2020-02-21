@@ -6,8 +6,9 @@ Blockly.JavaScript['goTo'] = function(block) {
   return code;
 };
 
-function goToCode(choice){
-  commandQueue.push(['goTo', choice]);
+async function goToCode(choice){
+  let result = await Picker(['goTo', choice]);
+  console.log("This is the ", result);
 }
 
 Blockly.JavaScript['goToNode'] = function(block) {
@@ -18,7 +19,9 @@ Blockly.JavaScript['goToNode'] = function(block) {
 };
 
 function goToNodeCode(choice){
-  commandQueue.push(['goToNode', choice]);
+  // let result = await Picker(['goToNode', choice]);
+  //
+  // console.log("This is the ", result);
 }
 
 Blockly.JavaScript['move'] = function(block) {
@@ -33,7 +36,7 @@ Blockly.JavaScript['move'] = function(block) {
 };
 
 function moveCode(vector){
-	commandQueue.push(['move', vector]);
+	Picker(['move', vector]);
 }
 
 Blockly.JavaScript['exhibitLs'] = function(block) {
@@ -51,7 +54,7 @@ Blockly.JavaScript['goToDescribe'] = function(block){ // go to and describe an e
 };
 
 function goToDescCode(choice, behaviours1, behaviours2){
-  commandQueue.push(['goToDesc', choice, [behaviours1,behaviours2]]);
+  Picker(['goToDesc', choice, [behaviours1,behaviours2]]);
 }
 
 Blockly.JavaScript['goToDescribeWhile'] = function(block){ // go to and describe an exhibit
@@ -81,7 +84,7 @@ Blockly.JavaScript['startTour'] = function(block) {
 };
 
 function startTourCode(choice){
-  commandQueue.push(['startTour', choice]);
+  Picker(['startTour', choice]);
 }
 
 Blockly.JavaScript['gazePos'] = function(block) {
@@ -95,7 +98,7 @@ Blockly.JavaScript['gazePos'] = function(block) {
 };
 
 function gazePosCode(vector){
-	commandQueue.push(['gazeAtPosition', vector]);
+	Picker(['gazeAtPosition', vector]);
 }
 
 Blockly.JavaScript['gazePer'] = function(block) {
@@ -107,5 +110,5 @@ Blockly.JavaScript['gazePer'] = function(block) {
 };
 
 function gazePerCode(time){
-	commandQueue.push(['gazeAtPerson', time]);
+	Picker(['gazeAtPerson', time]);
 }

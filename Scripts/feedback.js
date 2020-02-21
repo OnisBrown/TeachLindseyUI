@@ -22,27 +22,27 @@ var qtn = { //struct for quaternion
   w:1
 };
 
-function personSense(range, ){
-  console.log("waiting for person...");
-  var preempt
-  setTimeout(function(){ preempt = true }, 20*1000); //times out the waiting after a minute.
-  rwcListenerGetNearestDist(null, true).then(function(myTopic){
-    myTopic.subscribe(function(msg){
-      var dist;
-      dist = msg.min_distance;
-      console.log(dist);
-      if((dist < range && dist >0) || preempt){
-        console.log("found person: " + !preempt);
-        myTopic.unsubscribe();
-        if(commandQueue.length>0){
-          Picker();
+function personSense(range, sub = true){
+  if (sub){
+    console.log("waiting for person...");
+    var preempt
+    setTimeout(function(){ preempt = true }, 20*1000); //times out the waiting after a minute.
+    rwcListenerGetNearestDist(null, true).then(function(myTopic){
+      myTopic.subscribe(function(msg){
+        var dist;
+        dist = msg.min_distance;
+        console.log(dist);
+        if((dist < range && dist >0) || preempt){
+          console.log("found person: " + !preempt);
+          myTopic.unsubscribe();
+          runBlock();
         }
-        else{
-          console.log("Done waiting, no further instructions");
-        }
-      }
+      });
     });
-  });
+  }
+  else{
+    rwcListenerGetNearestDist().then(function(dist){return dist});
+  }
 }
 
 function setStartPos(){
