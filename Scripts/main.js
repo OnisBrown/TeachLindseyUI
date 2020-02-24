@@ -138,16 +138,19 @@ function executeCode() { // executes code made by blocks
        }
       }
     }
+    block.push(`displayAction("Plan finished!");`);
+    block.push(`console.log("Plan finished!");`);
     let s = "(async () => { " + block.join("") + " })()"
     console.log(s);
     eval(s);
+
+
   }
   catch (e){
     alert(e + "\n" + e.lineNumber + " " + e.fileName);
   }
   finally{
-    displayAction("Plan finished!");
-    console.log("Plan finished!");
+
   }
 }
 
