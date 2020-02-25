@@ -11,8 +11,9 @@ Blockly.JavaScript['giveSpeech'] = function(block) {
   return code;
 };
 
-function giveSpeechCode(paragraph, behaviours1, behaviours2){
+async function giveSpeechCode(paragraph, behaviours1, behaviours2){
   let result = await Picker(['speech', paragraph, [behaviours1,behaviours2]]);
+  console.log(result);
 }
 
 Blockly.JavaScript['describe'] = function(block){ // describe an exhibit
@@ -22,8 +23,9 @@ Blockly.JavaScript['describe'] = function(block){ // describe an exhibit
   return code;
 };
 
-function descCode(choice, behaviours1, behaviours2){
+async function descCode(choice, behaviours1, behaviours2){
   let result = await Picker(['desc', choice, [behaviours1,behaviours2]]);
+  console.log(result);
 }
 
 Blockly.JavaScript['askYNQuestion'] = function(block) {
@@ -32,6 +34,7 @@ Blockly.JavaScript['askYNQuestion'] = function(block) {
   return code;
 };
 
-function askYNQuestionCode(question){
+async function askYNQuestionCode(question){
 	let result = await Picker(['YNQ&A', question]);
+  console.log(result);
 }

@@ -7,9 +7,10 @@ Blockly.JavaScript['waitPerson'] = function(block) {
 };
 
 
-function waitPersonCode(dist, simBool)
+async function waitPersonCode(dist, simBool)
 {
 	let result = await Picker(["waitPer", dist, simBool]);
+  console.log(result);
 }
 
 Blockly.JavaScript['pause'] = function(block) {
@@ -19,9 +20,10 @@ Blockly.JavaScript['pause'] = function(block) {
   return code;
 };
 
-function waitTimeCode(pause)
+async function waitTimeCode(pause)
 {
 	let result = await Picker(["waitTime", pause]);
+  console.log(result);
 }
 
 Blockly.JavaScript['askOQuestion'] = function(block) {
@@ -31,9 +33,10 @@ Blockly.JavaScript['askOQuestion'] = function(block) {
   return code;
 };
 
-function askOCode(prompt)
+async function askOCode(prompt)
 {
 	let result = await Picker(["askO", prompt]);
+  console.log(result);
 }
 
 Blockly.JavaScript['start'] = function(block){
