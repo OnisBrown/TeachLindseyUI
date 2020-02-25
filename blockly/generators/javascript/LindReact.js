@@ -2,7 +2,7 @@ Blockly.JavaScript['waitPerson'] = function(block) {
   //GoTo a location
   var dist = block.getFieldValue('distance');
   var simBool = block.getFieldValue('simulator').toLowerCase();
-  var code = "waitPersonCode(" + dist + ","+ simBool +");\n";
+  var code = "await waitPersonCode(" + dist + ","+ simBool +");\n";
   return code;
 };
 
@@ -16,7 +16,7 @@ async function waitPersonCode(dist, simBool)
 Blockly.JavaScript['pause'] = function(block) {
   //GoTo a location
   var seconds = block.getFieldValue('time');
-  var code = "waitTimeCode(" + seconds +");\n";
+  var code = "await waitTimeCode(" + seconds +");\n";
   return code;
 };
 
@@ -29,7 +29,7 @@ async function waitTimeCode(pause)
 Blockly.JavaScript['askOQuestion'] = function(block) {
   //GoTo a location
   var prompt = block.getFieldValue('prompt');
-  var code = `askOCode("${prompt}");\n`;
+  var code = `await askOCode("${prompt}");\n`;
   return code;
 };
 

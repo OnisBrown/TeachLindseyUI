@@ -7,7 +7,7 @@ Blockly.JavaScript['script'] = function(block) {
 Blockly.JavaScript['giveSpeech'] = function(block) {
   var paragraph = block.getFieldValue('script');
   var behaviours = [block.getFieldValue('gaze').toLowerCase(), block.getFieldValue('pivot').toLowerCase()];
-  var code = `giveSpeechCode("${paragraph}", ${behaviours[0]}, ${behaviours[1]});\n`;
+  var code = `await giveSpeechCode("${paragraph}", ${behaviours[0]}, ${behaviours[1]});\n`;
   return code;
 };
 
@@ -19,7 +19,7 @@ async function giveSpeechCode(paragraph, behaviours1, behaviours2){
 Blockly.JavaScript['describe'] = function(block){ // describe an exhibit
   var choice = Blockly.JavaScript.valueToCode(block,'exhibit', Blockly.JavaScript.ORDER_ATOMIC) || "failing to get exhibit name";
   var behaviours = [block.getFieldValue('gaze').toLowerCase(), block.getFieldValue('pivot').toLowerCase()];
-  var code = `descCode("${choice}", ${behaviours[0]}, ${behaviours[1]});\n`;
+  var code = `await descCode("${choice}", ${behaviours[0]}, ${behaviours[1]});\n`;
   return code;
 };
 
@@ -30,7 +30,7 @@ async function descCode(choice, behaviours1, behaviours2){
 
 Blockly.JavaScript['askYNQuestion'] = function(block) {
   var question = block.getFieldValue('question') || "failed to parse speech";
-  var code = `askYNQuestionCode("${question}");\n`;
+  var code = `await askYNQuestionCode("${question}");\n`;
   return code;
 };
 
