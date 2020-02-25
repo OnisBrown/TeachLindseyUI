@@ -6,9 +6,8 @@ function Picker(current){ // stack of commands from blocks
             resolve("this is simulation");
           }
           else{
-            personSense(current[1]);
-            displayAction("waiting for people");
-
+			displayAction("waiting for people");
+            resolve(personSense(current[1]));
           }
           break;
         case 'goTo':

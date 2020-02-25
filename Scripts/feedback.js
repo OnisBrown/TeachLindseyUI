@@ -33,9 +33,8 @@ function personSense(range, sub = true){
         dist = msg.min_distance;
         console.log(dist);
         if((dist < range && dist >0) || preempt){
-          console.log("found person: " + !preempt);
           myTopic.unsubscribe();
-          runBlock();
+          return "found person: " + !preempt;
         }
       });
     });
