@@ -36,6 +36,7 @@ Blockly.JavaScript['move'] = function(block) {
 
 async function moveCode(vector){
 	let result = await Picker(['move', vector]);
+  console.log(result);
 }
 
 Blockly.JavaScript['exhibitLs'] = function(block) {
@@ -54,6 +55,7 @@ Blockly.JavaScript['goToDescribe'] = function(block){ // go to and describe an e
 
 async function goToDescCode(choice, behaviours1, behaviours2){
   let result = await Picker(['goToDesc', choice, [behaviours1,behaviours2]]);
+  console.log(result);
 }
 
 Blockly.JavaScript['goToDescribeWhile'] = function(block){ // go to and describe an exhibit
@@ -84,6 +86,7 @@ Blockly.JavaScript['startTour'] = function(block) {
 
 async function startTourCode(choice){
   let result = await Picker(['startTour', choice]);
+  console.log(result);
 }
 
 Blockly.JavaScript['gazePos'] = function(block) {
@@ -111,4 +114,5 @@ Blockly.JavaScript['gazePer'] = function(block) {
 
 async function gazePerCode(time){
 	let result = await Picker(['gazeAtPerson', time]);
+  console.log(result);
 }
