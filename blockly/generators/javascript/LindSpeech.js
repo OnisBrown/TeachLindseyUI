@@ -12,7 +12,7 @@ Blockly.JavaScript['giveSpeech'] = function(block) {
 };
 
 function giveSpeechCode(paragraph, behaviours1, behaviours2){
-  commandQueue.push(['speech', paragraph, [behaviours1,behaviours2]]);
+  let result = await Picker(['speech', paragraph, [behaviours1,behaviours2]]);
 }
 
 Blockly.JavaScript['describe'] = function(block){ // describe an exhibit
@@ -23,7 +23,7 @@ Blockly.JavaScript['describe'] = function(block){ // describe an exhibit
 };
 
 function descCode(choice, behaviours1, behaviours2){
-  commandQueue.push(['desc', choice, [behaviours1,behaviours2]]);
+  let result = await Picker(['desc', choice, [behaviours1,behaviours2]]);
 }
 
 Blockly.JavaScript['askYNQuestion'] = function(block) {
@@ -33,5 +33,5 @@ Blockly.JavaScript['askYNQuestion'] = function(block) {
 };
 
 function askYNQuestionCode(question){
-  commandQueue.push(['YNQ&A', question]);
+	let result = await Picker(['YNQ&A', question]);
 }

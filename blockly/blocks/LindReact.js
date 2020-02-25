@@ -9,7 +9,7 @@ Blockly.JavaScript['waitPerson'] = function(block) {
 
 function waitPersonCode(dist, simBool)
 {
-	commandQueue.push(["waitPer", dist, simBool]);
+	let result = await Picker(["waitPer", dist, simBool]);
 }
 
 Blockly.JavaScript['pause'] = function(block) {
@@ -21,7 +21,7 @@ Blockly.JavaScript['pause'] = function(block) {
 
 function waitTimeCode(pause)
 {
-	commandQueue.push(["waitTime", pause]);
+	let result = await Picker(["waitTime", pause]);
 }
 
 Blockly.JavaScript['askOQuestion'] = function(block) {
@@ -33,7 +33,7 @@ Blockly.JavaScript['askOQuestion'] = function(block) {
 
 function askOCode(prompt)
 {
-	commandQueue.push(["askO", prompt]);
+	let result = await Picker(["askO", prompt]);
 }
 
 Blockly.JavaScript['start'] = function(block){
