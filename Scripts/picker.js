@@ -40,12 +40,12 @@ function Picker(current){ // stack of commands from blocks
             displayAction("describing exhibit: " + dynDictExhibits[current[1]][2]);
             perAction = true;
             rwcActionDescribeExhibit(current[1]).on("result", ()=>{
-				talking = false; 
-				perAction = false;  
+				talking = false;
+				perAction = false;
 				setTimeout(function(){
 					resolve("gotoNodeDescDesc: " + JSON.stringify(status));
 				},2000)
-					
+
 			});
           });
           break;
@@ -54,15 +54,15 @@ function Picker(current){ // stack of commands from blocks
           console.log(qtn);
           displayAction("moving by \u2b06, \u27a1, \u27f3 :"+ current[1]);
           rwcActionSetPoseRelative(current[1][0], current[1][1], current[1][2], qtn).on("result", (status)=>{
-			  console.log("move status: " + JSON.stringify(status));
-			  perAction = false; 
+			  resolve("move status: " + JSON.stringify(status));
+			  perAction = false;
 			});
           break;
         case 'speech':
           speechPrep(current[2], false);
           displayAction("saying: " + current[1]);
           rwcActionSay(current[1]).on("result", (status)=>{
-			  talking = false;  
+			  talking = false;
 			  setTimeout(function(){resolve("speech status: " + JSON.stringify(status));} ,2000)
 			});
           break;
@@ -72,7 +72,7 @@ function Picker(current){ // stack of commands from blocks
           console.log(curExhibitCoord);
           displayAction("describing exhibit: " + dynDictExhibits[current[1]][2]);
           rwcActionDescribeExhibit(current[1]).on("result", ()=>{
-			  talking = false; 
+			  talking = false;
 			  setTimeout(function(){resolve("exhibit descrbed")},2000)
 			});
           break;
