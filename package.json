@@ -2,8 +2,8 @@
   "name": "TeachLindseyUI",
   "version": "1.0.0",
   "description": "interface for controlling the lindsey robot",
-  "main": "index.js",
+  "main": "server.js",
   "repository": "https://github.com/OnisBrown/TeachLindseyUI.git",
-  "author": "OnisBrown <onis.Brown@hotmail.co.uk>",
+  "author": "Onis Brown <onis.Brown@hotmail.co.uk>",
   "license": "MIT"
 }
