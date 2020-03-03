@@ -83,52 +83,49 @@ function Picker(current){ // stack of commands from blocks
           break;
         case 'YNQ&A':
           //rwcActionSay(current[1]);
-          rwcActionYesNoModal(current[1]).on("result", function(status){console.log(status);});
+          rwcActionYesNoModal(current[1]).on("result", function(status){resolve(status);});
           break;
         case 'askO':
           var response;
-          // rwcActionSay(current[1]).on("result", function(status){
-          //   console.log("speaking");
-          //   rwcActionStartDialogue();
-          //   var bpMsg = {
-          //     "type": "text",
-          //     "text": "unset"
-          //   }
-          //   $.post(`https://localhost:3000/api/v1/bots/chatty_lindsey/converse/${userId}/secured?include=nlu,state,suggestions,decision`, bpMsg,
-          //       function(bpResponse) {
-          //         console.log( "message recieved:" + JSON.stringify(bpResponse));
-          //       });
-          //   //diaTimer =
-          //   rwcListenerGetDialogue().then(function(script){
-          //     bpMsg.type = script;
-          //     $.post(`https://localhost:3000/api/v1/bots/chatty_lindsey/converse/${userId}/secured?include=nlu,state,suggestions,decision`, bpMsg,
-          //         function(bpResponse) {
-          //           console.log( "message recieved:" + JSON.stringify(bpResponse));
-          //         });
-          //       ;
-          //   });
-          // });
-          var bpMsg = {
-              "type": "text",
-              "text": "take me to the graves"
+          var bpResponse;
+          var xhr = new XMLHttpRequest;
+          displayAction("waiting for request ");
+          xhr.onreadystatechange = () => {
+            if(xhr.readyState === XMLHttpRequest.DONE) {
+              var status = xhr.status;
+              if (status === 0 || (200 >= status && status < 400)) {
+                // The request has been completed successfully
+                bpResponse= xhr.responseXML;
+                console.log("request to botpress succeded")
+                resolve(bpResponse);
+              } else{
+                console.log("not yet");
+              }
             }
-          $.post(`https://localhost:3000/api/v1/bots/chatty_lindsey/converse/${userId}/secured?include=nlu,state,suggestions,decision`, bpMsg,
-                function(bpResponse) {
-                  console.log( "message recieved:" + JSON.stringify(bpResponse));
-                });
-            //diaTimer =
+          }
+          xhr.open("POST", `https://10.5.42.157:3000/api/v1/bots/chatty_lindsey/converse/${userId}/secured?include=nlu,state,suggestions,decision`, true);
+          xhr.setRequestHeader("crossDomain", "true");
+          rwcActionSay(current[1]).on("result", function(status){
+            console.log("speaking");
+            rwcActionStartDialogue();
+            var bpMsg = {
+              "type": "text",
+              "text": "unset"
+            }
+            // $.post(`https://localhost:3000/api/v1/bots/chatty_lindsey/converse/${userId}/secured?include=nlu,state,suggestions,decision`, bpMsg,
+            //     function(bpResponse) {
+            //       console.log( "message recieved:" + JSON.stringify(bpResponse));
+            //     });
+            // //diaTimer =
             rwcListenerGetDialogue().then(function(script){
-              bpMsg.type = script;
-              $.post(`https://localhost:3000/api/v1/bots/chatty_lindsey/converse/${userId}/secured?include=nlu,state,suggestions,decision`, bpMsg,
-                  function(bpResponse) {
-                    console.log( "message recieved:" + JSON.stringify(bpResponse));
-                  });
+              bpMsg.text = script;
+              xhr.send(JSON.stringify(bpMsg));
             });
-
+          });
           break;
         case 'gazeAtPosition':
           rwcActionGazeAtPosition(current[1][0], current[1][1], current[1][2], current[1][3]).on("result", (status)=>{
-			  resolve("gazePos status: " + JSON.stringify(status)); 
+			  resolve("gazePos status: " + JSON.stringify(status));
 			});
           break;
         case 'gazeAtPerson':

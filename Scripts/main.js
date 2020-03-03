@@ -70,11 +70,11 @@ function init(){
   console.log("Connecting to botpress")
   try{
     window.botpressWebChat.init({
-       host: 'http://localhost:3000',
+       host: 'http://10.5.42.157:3000',
        botId: 'chatty_lindsey',
        hideWidget: true,
        exposeStore: true,
-       overrideDomain: '127.0.0.1'
+       overrideDomain: '10.5.42.157:86'
      });
   }
   catch (e){
