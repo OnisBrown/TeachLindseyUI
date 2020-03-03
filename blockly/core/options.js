@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2016 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2016 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,15 +23,18 @@
 
 goog.provide('Blockly.Options');
 
-goog.require('Blockly.Xml');
+goog.require('Blockly.Theme');
 goog.require('Blockly.Themes.Classic');
+goog.require('Blockly.user.keyMap');
+goog.require('Blockly.utils.userAgent');
+goog.require('Blockly.Xml');
 
 
 /**
  * Parse the user-specified options, using reasonable defaults where behaviour
  * is unspecified.
- * @param {!Object} options Dictionary of options.  Specification:
- *   https://developers.google.com/blockly/guides/get-started/web#configuration
+ * @param {!Blockly.BlocklyOptions} options Dictionary of options.
+ *     Specification: https://developers.google.com/blockly/guides/get-started/web#configuration
  * @constructor
  */
 Blockly.Options = function(options) {
@@ -48,7 +48,8 @@ Blockly.Options = function(options) {
     var hasDisable = false;
     var hasSounds = false;
   } else {
-    var languageTree = Blockly.Options.parseToolboxTree(options['toolbox']);
+    var languageTree =
+        Blockly.Options.parseToolboxTree(options['toolbox'] || null);
     var hasCategories = Boolean(languageTree &&
         languageTree.getElementsByTagName('category').length);
     var hasTrashcan = options['trashcan'];
@@ -86,11 +87,7 @@ Blockly.Options = function(options) {
     horizontalLayout = false;
   }
   var toolboxAtStart = options['toolboxPosition'];
-  if (toolboxAtStart === 'end') {
-    toolboxAtStart = false;
-  } else {
-    toolboxAtStart = true;
-  }
+  toolboxAtStart = toolboxAtStart !== 'end';
 
   if (horizontalLayout) {
     var toolboxPosition = toolboxAtStart ?
@@ -116,7 +113,9 @@ Blockly.Options = function(options) {
   } else {
     var oneBasedIndex = !!options['oneBasedIndex'];
   }
-  var theme = options['theme'] || Blockly.Themes.Classic;
+  var keyMap = options['keyMap'] || Blockly.user.keyMap.createDefaultKeyMap();
+
+  var renderer = options['renderer'] || 'geras';
 
   this.RTL = rtl;
   this.oneBasedIndex = oneBasedIndex;
@@ -140,31 +139,51 @@ Blockly.Options = function(options) {
   this.gridOptions = Blockly.Options.parseGridOptions_(options);
   this.zoomOptions = Blockly.Options.parseZoomOptions_(options);
   this.toolboxPosition = toolboxPosition;
-  this.theme = theme;
+  this.theme = Blockly.Options.parseThemeOptions_(options);
+  this.keyMap = keyMap;
+  this.renderer = renderer;
+
+  /**
+   * The SVG element for the grid pattern.
+   * Created during injection.
+   * @type {!SVGElement}
+   */
+  this.gridPattern = undefined;
+
+  /**
+   * The parent of the current workspace, or null if there is no parent
+   * workspace.
+   * @type {Blockly.Workspace}
+   */
+  this.parentWorkspace = options['parentWorkspace'];
 };
 
 /**
- * The parent of the current workspace, or null if there is no parent workspace.
- * @type {Blockly.Workspace}
+ * Blockly options.
+ * This interface is further described in `typings/blockly-interfaces.d.ts`.
+ * @interface
  */
-Blockly.Options.prototype.parentWorkspace = null;
+Blockly.BlocklyOptions = function() {};
 
 /**
  * If set, sets the translation of the workspace to match the scrollbars.
+ * @param {!Object} xyRatio Contains an x and/or y property which is a float
+ *     between 0 and 1 specifying the degree of scrolling.
+ * @return {void}
  */
-Blockly.Options.prototype.setMetrics = null;
+Blockly.Options.prototype.setMetrics;
 
 /**
  * Return an object with the metrics required to size the workspace.
- * @return {Object} Contains size and position metrics, or null.
+ * @return {!Object} Contains size and position metrics.
  */
-Blockly.Options.prototype.getMetrics = null;
+Blockly.Options.prototype.getMetrics;
 
 /**
  * Parse the user-specified move options, using reasonable defaults where
  *    behaviour is unspecified.
  * @param {!Object} options Dictionary of options.
- * @param {!boolean} hasCategories Whether the workspace has categories or not.
+ * @param {boolean} hasCategories Whether the workspace has categories or not.
  * @return {!Object} A dictionary of normalized options.
  * @private
  */
@@ -217,22 +236,27 @@ Blockly.Options.parseZoomOptions_ = function(options) {
   if (zoom['startScale'] === undefined) {
     zoomOptions.startScale = 1;
   } else {
-    zoomOptions.startScale = parseFloat(zoom['startScale']);
+    zoomOptions.startScale = Number(zoom['startScale']);
   }
   if (zoom['maxScale'] === undefined) {
     zoomOptions.maxScale = 3;
   } else {
-    zoomOptions.maxScale = parseFloat(zoom['maxScale']);
+    zoomOptions.maxScale = Number(zoom['maxScale']);
   }
   if (zoom['minScale'] === undefined) {
     zoomOptions.minScale = 0.3;
   } else {
-    zoomOptions.minScale = parseFloat(zoom['minScale']);
+    zoomOptions.minScale = Number(zoom['minScale']);
   }
   if (zoom['scaleSpeed'] === undefined) {
     zoomOptions.scaleSpeed = 1.2;
   } else {
-    zoomOptions.scaleSpeed = parseFloat(zoom['scaleSpeed']);
+    zoomOptions.scaleSpeed = Number(zoom['scaleSpeed']);
+  }
+  if (zoom['pinch'] === undefined) {
+    zoomOptions.pinch = zoomOptions.wheel || zoomOptions.controls;
+  } else {
+    zoomOptions.pinch = !!zoom['pinch'];
   }
   return zoomOptions;
 };
@@ -248,11 +272,28 @@ Blockly.Options.parseZoomOptions_ = function(options) {
 Blockly.Options.parseGridOptions_ = function(options) {
   var grid = options['grid'] || {};
   var gridOptions = {};
-  gridOptions.spacing = parseFloat(grid['spacing']) || 0;
+  gridOptions.spacing = Number(grid['spacing']) || 0;
   gridOptions.colour = grid['colour'] || '#888';
-  gridOptions.length = parseFloat(grid['length']) || 1;
+  gridOptions.length =
+      (grid['length'] === undefined) ? 1 : Number(grid['length']);
   gridOptions.snap = gridOptions.spacing > 0 && !!grid['snap'];
   return gridOptions;
+};
+
+/**
+ * Parse the user-specified theme options, using the classic theme as a default.
+ *   https://developers.google.com/blockly/guides/configure/web/themes
+ * @param {!Object} options Dictionary of options.
+ * @return {!Blockly.Theme} A Blockly Theme.
+ * @private
+ */
+Blockly.Options.parseThemeOptions_ = function(options) {
+  var theme = options['theme'] || Blockly.Themes.Classic;
+  if (theme instanceof Blockly.Theme) {
+    return /** @type {!Blockly.Theme} */ (theme);
+  }
+  return new Blockly.Theme('builtin',
+      theme['blockStyles'], theme['categoryStyles'], theme['componentStyles']);
 };
 
 /**
@@ -263,11 +304,11 @@ Blockly.Options.parseGridOptions_ = function(options) {
 Blockly.Options.parseToolboxTree = function(tree) {
   if (tree) {
     if (typeof tree != 'string') {
-      if (typeof XSLTProcessor == 'undefined' && tree.outerHTML) {
+      if (Blockly.utils.userAgent.IE && tree.outerHTML) {
         // In this case the tree will not have been properly built by the
         // browser. The HTML will be contained in the element, but it will
         // not have the proper DOM structure since the browser doesn't support
-        // XSLTProcessor (XML -> HTML). This is the case in IE 9+.
+        // XSLTProcessor (XML -> HTML).
         tree = tree.outerHTML;
       } else if (!(tree instanceof Element)) {
         tree = null;
@@ -275,6 +316,9 @@ Blockly.Options.parseToolboxTree = function(tree) {
     }
     if (typeof tree == 'string') {
       tree = Blockly.Xml.textToDom(tree);
+      if (tree.nodeName.toLowerCase() != 'xml') {
+        throw TypeError('Toolbox should be an <xml> document.');
+      }
     }
   } else {
     tree = null;

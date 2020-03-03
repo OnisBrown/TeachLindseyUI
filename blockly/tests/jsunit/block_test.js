@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2018 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2018 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,9 +19,6 @@
  * @fileoverview Tests for Blockly.Block
  * @author fenichel@google.com (Rachel Fenichel)
  */
-
-goog.require('goog.testing');
-goog.require('goog.testing.MockControl');
 
 'use strict';
 
@@ -58,13 +52,15 @@ function undefineTestBlocks() {
 
 function blockTest_setUp() {
   defineTestBlocks();
-  mockControl_ = new goog.testing.MockControl();
   workspace = new Blockly.Workspace();
 }
 
 function blockTest_tearDown() {
   undefineTestBlocks();
   workspace.dispose();
+  if (mockControl_) {
+    mockControl_.restore();
+  }
 }
 
 function assertUnpluggedNoheal(blocks) {
@@ -86,6 +82,17 @@ function assertUnpluggedHealed(blocks) {
   assertNull(blocks.B.getParent());
 }
 
+function assertUnpluggedHealFailed(blocks) {
+  // A has nothing connected to it.
+  assertEquals(0, blocks.A.getChildren().length);
+  // B has nothing connected to it.
+  assertEquals(0, blocks.B.getChildren().length);
+  // B is the top of its stack.
+  assertNull(blocks.B.getParent());
+  // C is the top of its stack.
+  assertNull(blocks.C.getParent());
+}
+
 function setUpRowBlocks() {
   var blockA = workspace.newBlock('row_block');
   var blockB = workspace.newBlock('row_block');
@@ -100,7 +107,7 @@ function setUpRowBlocks() {
     A: blockA,
     B: blockB,
     C: blockC
-  }
+  };
 }
 
 function setUpStackBlocks() {
@@ -117,7 +124,7 @@ function setUpStackBlocks() {
     A: blockA,
     B: blockB,
     C: blockC
-  }
+  };
 }
 
 
@@ -155,20 +162,7 @@ function test_block_stack_unplug_heal_bad_checks() {
     // The types don't work.
     blocks.B.unplug(true);
 
-    // Stack blocks unplug before checking whether the types match.
-    // TODO (#1994): Check types before unplugging.
-    // A has nothing connected to it.
-    assertEquals(0, blocks.A.getChildren().length);
-    // B has nothing connected to it.
-    assertEquals(0, blocks.B.getChildren().length);
-    // C has nothing connected to it.
-    assertEquals(0, blocks.C.getChildren().length);
-    // A is the top of its stack.
-    assertNull(blocks.A.getParent());
-    // B is the top of its stack.
-    assertNull(blocks.B.getParent());
-    // C is the top of its stack.
-    assertNull(blocks.C.getParent());
+    assertUnpluggedHealFailed(blocks);
   } finally {
     blockTest_tearDown();
   }
@@ -208,7 +202,7 @@ function test_block_row_unplug_heal_bad_checks() {
 
     // Each block has only one input, but the types don't work.
     blocks.B.unplug(true);
-    assertUnpluggedNoheal(blocks);
+    assertUnpluggedHealFailed(blocks);
   } finally {
     blockTest_tearDown();
   }
@@ -219,7 +213,7 @@ function test_block_row_unplug_multi_inputs_parent() {
   try {
     var blocks = setUpRowBlocks();
     // Add extra input to parent
-    blocks.A.appendValueInput("INPUT").setCheck(null);
+    blocks.A.appendValueInput('INPUT').setCheck(null);
 
     // Parent block has multiple inputs.
     blocks.B.unplug(true);
@@ -234,7 +228,7 @@ function test_block_row_unplug_multi_inputs_middle() {
   try {
     var blocks = setUpRowBlocks();
     // Add extra input to middle block
-    blocks.B.appendValueInput("INPUT").setCheck(null);
+    blocks.B.appendValueInput('INPUT').setCheck(null);
 
     // Middle block has multiple inputs.
     blocks.B.unplug(true);
@@ -249,52 +243,12 @@ function test_block_row_unplug_multi_inputs_child() {
   try {
     var blocks = setUpRowBlocks();
     // Add extra input to child block
-    blocks.C.appendValueInput("INPUT").setCheck(null);
+    blocks.C.appendValueInput('INPUT').setCheck(null);
 
     // Child block input count doesn't matter.
     blocks.B.unplug(true);
     assertUnpluggedHealed(blocks);
   } finally {
-    blockTest_tearDown();
-  }
-}
-
-function test_set_style() {
-  blockTest_setUp();
-  var styleStub = {
-    getBlockStyle: function() {
-      return{
-        "colourPrimary": "#FFFFFF",
-        "colourSecondary":"#AABBCC",
-        "colourTertiary":"#DDEEFF"
-      }
-    }
-  };
-  setUpMockMethod(mockControl_, Blockly, 'getTheme', null, [styleStub]);
-  var blockA = workspace.newBlock('row_block');
-  blockA.setStyle('styleOne');
-
-  assertEquals(blockA.colour_, '#FFFFFF');
-  assertEquals(blockA.colourSecondary_, '#AABBCC');
-  assertEquals(blockA.colourTertiary_, '#DDEEFF');
-
-  blockTest_tearDown();
-}
-
-function test_set_style_throw_exception() {
-  blockTest_setUp();
-  var styleStub = {
-    getBlockStyle: function() {
-      return null;
-    }
-  };
-  setUpMockMethod(mockControl_, Blockly, 'getTheme', null, [styleStub]);
-  var blockA = workspace.newBlock('row_block');
-  try {
-    blockA.setStyle('styleOne');
-  }catch(error) {
-    assertEquals(error.message, "Invalid style name: styleOne");
-  }finally {
     blockTest_tearDown();
   }
 }

@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Language
- *
- * Copyright 2012 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2012 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +31,7 @@ Blockly.Python.addReservedWords('math,random,Number');
 
 Blockly.Python['math_number'] = function(block) {
   // Numeric value.
-  var code = parseFloat(block.getFieldValue('NUM'));
+  var code = Number(block.getFieldValue('NUM'));
   var order;
   if (code == Infinity) {
     code = 'float("inf")';
@@ -79,7 +76,7 @@ Blockly.Python['math_single'] = function(block) {
   var arg;
   if (operator == 'NEG') {
     // Negation is a special case given its different operator precedence.
-    var code = Blockly.Python.valueToCode(block, 'NUM',
+    code = Blockly.Python.valueToCode(block, 'NUM',
         Blockly.Python.ORDER_UNARY_SIGN) || '0';
     return ['-' + code, Blockly.Python.ORDER_UNARY_SIGN];
   }
@@ -241,7 +238,7 @@ Blockly.Python['math_change'] = function(block) {
   var argument0 = Blockly.Python.valueToCode(block, 'DELTA',
       Blockly.Python.ORDER_ADDITIVE) || '0';
   var varName = Blockly.Python.variableDB_.getName(block.getFieldValue('VAR'),
-      Blockly.Variables.NAME_TYPE);
+      Blockly.VARIABLE_CATEGORY_NAME);
   return varName + ' = (' + varName + ' if isinstance(' + varName +
       ', Number) else 0) + ' + argument0 + '\n';
 };
