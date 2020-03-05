@@ -4,9 +4,12 @@ server = express();
 server.set('port', process.env.PORT || 4000);
 
 //server routes
-
+server.use('/Scripts', express.static(__dirname + '/Scripts'));
+server.use('/blockly', express.static(__dirname + '/blockly'));
+server.use('/roswebcomponents', express.static(__dirname + '/roswebcomponents'));
+server.use('/', express.static(__dirname + '/public'));
 server.get('/', (request,response)=>{
-   response.send('Home page');
+  response.sendFile(__dirname + '/index.html'); //send index.html to client when landing on default page
 });
 
 server.use((request,response)=>{
