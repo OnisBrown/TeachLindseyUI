@@ -5,5 +5,8 @@
   "main": "server.js",
   "repository": "https://github.com/OnisBrown/TeachLindseyUI.git",
   "author": "Onis Brown <onis.Brown@hotmail.co.uk>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }

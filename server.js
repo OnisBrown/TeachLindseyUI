@@ -5,14 +5,14 @@ makeServer = function (request,response){
    let path = url.parse(request.url).pathname;
    console.log(path);
    if(path === '/'){
-      response.writeHead(200,{'Content-Type':'text/plain'});
-      response.write('Hello world');
+      response.writeHead(200,{'Content-Type':'text/html'});
+      response.write(index.html);
    }
    else if(path === '/about'){
      response.writeHead(200,{'Content-Type':'text/plain'});
      response.write('About page');
    }
-   else if(path === '/blog'){
+   else if(path === '/'){
      response.writeHead(200,{'Content-Type':'text/plain'});
      response.write('Blog page');
    }
@@ -21,7 +21,7 @@ makeServer = function (request,response){
      response.write('Error page');
    }
    response.end();
- },
+ }
 
 server = http.createServer(makeServer);
 
