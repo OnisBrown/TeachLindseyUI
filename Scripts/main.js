@@ -3,6 +3,7 @@ var xml_txt;
 var musJSON = "exhibitors_definition.json";
 var userId = 'Guest';
 var talking;
+var stopBut = false;
 var busy;
 var away;
 var pivAway;
@@ -140,6 +141,7 @@ function executeCode() { // executes code made by blocks
     }
     block.push(`displayAction("Plan finished!");`);
     block.push(`console.log("Plan finished!");`);
+    block.push(`stopBut = false;`);
     let s = "(async () => { " + block.join("") + " })()"
     console.log(s);
     eval(s);
@@ -157,8 +159,9 @@ function executeCode() { // executes code made by blocks
 function stopActions(){
   cancelCurrentAction();
   Cancel_active_task();
-  commandQueue = [];
+
   rwcActionSetPoseRelative(0,0,0);
+  stopBut = true
   talking = false;
 }
 

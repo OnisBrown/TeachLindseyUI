@@ -1,5 +1,8 @@
 function Picker(current){ // stack of commands from blocks
     return new Promise( resolve => {
+      if(stopBut){
+        resolve("actions cancelled");
+      }
       switch(current[0]){
     		case "waitPer":
           if(current[2]){
@@ -97,24 +100,27 @@ function Picker(current){ // stack of commands from blocks
                 // The request has been completed successfully
                 bpResponse= xhr.response;
                 console.log("request to botpress succeded")
-                resolve(bpResponse.test);
+                resolve(bpResponse.text);
               } else{
                 console.log("not yet");
               }
             }
           }
+          var bpMsg = {"type": "text", "text": "unset"}
           //xhr.open("POST", `https://10.5.42.157:3000/api/v1/bots/chatty_lindsey/converse/${userId}/secured?include=nlu,state,suggestions,decision`, true);
           xhr.open("POST", `/STT`);
+          xhr.setRequestHeader("Content-Type", "application/json")
           xhr.responseType = "json";
-          xhr.send(JSON.stringify("yolo"));
+          console.log(" json: " + JSON.stringify(bpMsg));
+          xhr.send(JSON.stringify(bpMsg));
           rwcActionSay(current[1]).on("result", function(status){
             console.log("speaking");
             rwcActionStartDialogue();
             displayAction("listening");
-            var bpMsg = {
-              "type": "text",
-              "text": "unset"
-            }
+            // var bpMsg = {
+            //   "type": "text",
+            //   "text": "unset"
+            // }
             // $.post(`https://localhost:3000/api/v1/bots/chatty_lindsey/converse/${userId}/secured?include=nlu,state,suggestions,decision`, bpMsg,
             //     function(bpResponse) {
             //       console.log( "message recieved:" + JSON.stringify(bpResponse));

@@ -1,11 +1,12 @@
 const express = require('express'),
-  cors = require('cors')
+  cors = require('cors'),
 
 server = express();
 server.set('port', process.env.PORT || 4000);
 
 //server routes
 server.use(cors());
+server.use(express.json())
 server.use('/Scripts', express.static(__dirname + '/Scripts'));
 server.use('/blockly', express.static(__dirname + '/blockly'));
 server.use('/roswebcomponents', express.static(__dirname + '/roswebcomponents'));
@@ -16,8 +17,8 @@ server.get('/', (request,response)=>{
 });
 
 server.post('/STT',(request, response)=>{
-  console.log("request made to STT");
-  response.json({test:'succeeded'});
+  console.log(request.body);
+  response.json(request.body);
 });
 
 server.use((request,response)=>{
