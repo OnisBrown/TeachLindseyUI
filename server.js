@@ -7,6 +7,7 @@ server.set('port', process.env.PORT || 4000);
 server.use('/Scripts', express.static(__dirname + '/Scripts'));
 server.use('/blockly', express.static(__dirname + '/blockly'));
 server.use('/roswebcomponents', express.static(__dirname + '/roswebcomponents'));
+server.use('/Assets', express.static(__dirname + '/Assets'));
 server.use('/', express.static(__dirname + '/public'));
 server.get('/', (request,response)=>{
   response.sendFile(__dirname + '/index.html'); //send index.html to client when landing on default page
