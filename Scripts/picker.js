@@ -89,25 +89,28 @@ function Picker(current){ // stack of commands from blocks
           var response;
           var bpResponse;
           var xhr = new XMLHttpRequest;
-          displayAction("waiting for request ");
+          displayAction(`giving prompt (${current[1]})`);
           xhr.onreadystatechange = () => {
             if(xhr.readyState === XMLHttpRequest.DONE) {
               var status = xhr.status;
               if (status === 0 || (200 >= status && status < 400)) {
                 // The request has been completed successfully
-                bpResponse= xhr.responseXML;
+                bpResponse= xhr.response;
                 console.log("request to botpress succeded")
-                resolve(bpResponse);
+                resolve(bpResponse.test);
               } else{
                 console.log("not yet");
               }
             }
           }
-          xhr.open("POST", `https://10.5.42.157:3000/api/v1/bots/chatty_lindsey/converse/${userId}/secured?include=nlu,state,suggestions,decision`, true);
-          xhr.setRequestHeader("crossDomain", "true");
+          //xhr.open("POST", `https://10.5.42.157:3000/api/v1/bots/chatty_lindsey/converse/${userId}/secured?include=nlu,state,suggestions,decision`, true);
+          xhr.open("POST", `/STT`);
+          xhr.responseType = "json";
+          xhr.send(JSON.stringify("yolo"));
           rwcActionSay(current[1]).on("result", function(status){
             console.log("speaking");
             rwcActionStartDialogue();
+            displayAction("listening");
             var bpMsg = {
               "type": "text",
               "text": "unset"
@@ -119,6 +122,8 @@ function Picker(current){ // stack of commands from blocks
             // //diaTimer =
             rwcListenerGetDialogue().then(function(script){
               bpMsg.text = script;
+              console.log("sending message to chat bot");
+              displayAction("finding response");
               xhr.send(JSON.stringify(bpMsg));
             });
           });
