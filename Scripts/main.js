@@ -68,22 +68,7 @@ function init(){
   setExhbitsDict();
 
   console.log("lists loaded.");
-  console.log("Connecting to botpress")
-  try{
-    window.botpressWebChat.init({
-       host: 'http://10.5.42.157:3000',
-       botId: 'chatty_lindsey',
-       hideWidget: true,
-       exposeStore: true,
-       overrideDomain: '10.5.42.157:86'
-     });
-  }
-  catch (e){
-    console.log(e);
-  }
-  finally{
-    console.log("hopefully botpress loaded...");
-  }
+  console.log("Connecting to botpress");
   workspace = Blockly.inject('blocklyDiv',
     {toolbox: document.getElementById('toolbox'),
      grid:

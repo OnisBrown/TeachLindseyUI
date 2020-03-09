@@ -1,5 +1,6 @@
 const express = require('express'),
   cors = require('cors'),
+  axios = require('axios')
 
 server = express();
 server.set('port', process.env.PORT || 4000);
@@ -18,7 +19,15 @@ server.get('/', (request,response)=>{
 
 server.post('/STT',(request, response)=>{
   console.log(request.body);
-  response.json(request.body);
+  var userId = "guest";
+  var address = `http://10.5.42.157:3000/api/v1/bots/chatty_lindsey/converse/${userId}/secured?include=nlu,state,suggestions,decision`
+  var msg = request.body;
+  axios.post(address, msg).then((bpRes)=>{
+    console.log(`${bpRes.statusCode}`);
+    response.json(bpRes);
+  }).catch((error)=>{
+    console.error(error);
+  });
 });
 
 server.use((request,response)=>{
@@ -26,6 +35,8 @@ server.use((request,response)=>{
    response.status(505);
    response.send('Error page');
 });
+
+
 
 server.listen(4000,()=>{
   console.log('Express server created at port 4000');

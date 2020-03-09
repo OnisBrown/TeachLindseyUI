@@ -99,40 +99,40 @@ function Picker(current){ // stack of commands from blocks
               if (status === 0 || (200 >= status && status < 400)) {
                 // The request has been completed successfully
                 bpResponse= xhr.response;
-                console.log("request to botpress succeded")
+                console.log("response recieved")
                 resolve(bpResponse.text);
               } else{
                 console.log("not yet");
               }
             }
           }
-          var bpMsg = {"type": "text", "text": "unset"}
-          //xhr.open("POST", `https://10.5.42.157:3000/api/v1/bots/chatty_lindsey/converse/${userId}/secured?include=nlu,state,suggestions,decision`, true);
+          var bpMsg = {"type": "text", "text": "take me to the graves"}
+
           xhr.open("POST", `/STT`);
           xhr.setRequestHeader("Content-Type", "application/json")
           xhr.responseType = "json";
           console.log(" json: " + JSON.stringify(bpMsg));
           xhr.send(JSON.stringify(bpMsg));
-          rwcActionSay(current[1]).on("result", function(status){
-            console.log("speaking");
-            rwcActionStartDialogue();
-            displayAction("listening");
-            // var bpMsg = {
-            //   "type": "text",
-            //   "text": "unset"
-            // }
-            // $.post(`https://localhost:3000/api/v1/bots/chatty_lindsey/converse/${userId}/secured?include=nlu,state,suggestions,decision`, bpMsg,
-            //     function(bpResponse) {
-            //       console.log( "message recieved:" + JSON.stringify(bpResponse));
-            //     });
-            // //diaTimer =
-            rwcListenerGetDialogue().then(function(script){
-              bpMsg.text = script;
-              console.log("sending message to chat bot");
-              displayAction("finding response");
-              xhr.send(JSON.stringify(bpMsg));
-            });
-          });
+          // rwcActionSay(current[1]).on("result", function(status){
+          //   console.log("speaking");
+          //   rwcActionStartDialogue();
+          //   displayAction("listening");
+          //   // var bpMsg = {
+          //   //   "type": "text",
+          //   //   "text": "unset"
+          //   // }
+          //   // $.post(`https://localhost:3000/api/v1/bots/chatty_lindsey/converse/${userId}/secured?include=nlu,state,suggestions,decision`, bpMsg,
+          //   //     function(bpResponse) {
+          //   //       console.log( "message recieved:" + JSON.stringify(bpResponse));
+          //   //     });
+          //   // //diaTimer =
+          //   rwcListenerGetDialogue().then(function(script){
+          //     bpMsg.text = script;
+          //     console.log("sending message to chat bot");
+          //     displayAction("finding response");
+          //     xhr.send(JSON.stringify(bpMsg));
+          //   });
+          // });
           break;
         case 'gazeAtPosition':
           rwcActionGazeAtPosition(current[1][0], current[1][1], current[1][2], current[1][3]).on("result", (status)=>{
