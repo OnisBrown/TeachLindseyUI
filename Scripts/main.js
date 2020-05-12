@@ -144,10 +144,10 @@ function executeCode() { // executes code made by blocks
 function stopActions(){
   cancelCurrentAction();
   Cancel_active_task();
-
   rwcActionSetPoseRelative(0,0,0);
   stopBut = true
   talking = false;
+  $("#currentAction").empty();
 }
 
 function speechPrep(bools, exhibit){

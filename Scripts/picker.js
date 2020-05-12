@@ -155,14 +155,6 @@ function Picker(current){ // stack of commands from blocks
     			console.log("waiting for " + current[1]);
           setTimeout(function(){},(current[1]+1)*1000);
           break;
-      //   case 'while':
-      //     Picker(true, 0);
-      //     break;
-      //   case 'whileEnd':
-      //     if(condition){
-      //       whileQueues.pop();
-      //     }
-      //     break;
 
     }
   });

@@ -17,7 +17,7 @@ server.get('/', (request,response)=>{
   response.sendFile(__dirname + '/index.html'); //send index.html to client when landing on default page
 });
 server.get('/sim', (request,response)=>{
-  response.sendFile(__dirname + '/sim.html'); //send index.html to client when landing on default page
+  response.sendFile(__dirname + '/sim.html'); //send sim.html to client when landing on default page
 });
 
 server.post('/STT',(request, response)=>{
@@ -38,8 +38,6 @@ server.use((request,response)=>{
    response.status(505);
    response.send('Error page');
 });
-
-
 
 server.listen(4000,()=>{
   console.log('Express server created at port 4000');
