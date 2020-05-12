@@ -23,11 +23,13 @@ server.get('/sim', (request,response)=>{
 server.post('/STT',(request, response)=>{
   console.log(request.body);
   var userId = "guest";
-  var address = `http://10.5.42.157:3000/api/v1/bots/chatty_lindsey/converse/${userId}/secured?include=nlu,state,suggestions,decision`
+  var address = `http://127.0.0.1:3000/api/v1/bots/chatty_lindsey/converse/${userId}?include=nlu,state,suggestions,decision`
   var msg = request.body;
   axios.post(address, msg).then((bpRes)=>{
-    console.log(`${bpRes.statusCode}`);
-    response.json(bpRes);
+    let temp = bpRes;
+    //console.log(`response is: ${temp.data.nlu}`);
+    //console.log(temp);
+    response.json(temp.data.nlu);
   }).catch((error)=>{
     console.error(error);
   });

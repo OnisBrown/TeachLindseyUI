@@ -20,7 +20,7 @@ function setExhbitsDict(){
     for(i =0; i < mainMusJSON.exhibitors.length; i++){
       dynDictExhibits[mainMusJSON.exhibitors[i].key] = [mainMusJSON.exhibitors[i].waypoint, mainMusJSON.exhibitors[i].metric_map_position, mainMusJSON.exhibitors[i].title];
     }
-    console.log(dynDictExhibits)
+    console.log(dynDictExhibits);
   }).fail( function(d, textStatus, error) {
         console.error("getJSON failed, status: " + textStatus + ", error: "+error)
     });

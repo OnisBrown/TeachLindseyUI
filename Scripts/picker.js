@@ -93,46 +93,43 @@ function Picker(current){ // stack of commands from blocks
           var bpResponse;
           var xhr = new XMLHttpRequest;
           displayAction(`giving prompt (${current[1]})`);
+          console.log(current[1]);
           xhr.onreadystatechange = () => {
             if(xhr.readyState === XMLHttpRequest.DONE) {
               var status = xhr.status;
               if (status === 0 || (200 >= status && status < 400)) {
                 // The request has been completed successfully
                 bpResponse= xhr.response;
-                console.log("response recieved")
-                resolve(bpResponse.text);
+                console.log("response recieved");
+                goal = "unfound";
+                for(var i in dynDictExhibits){
+                  if(dynDictExhibits[i][2] == bpResponse.entities[0].data.value){
+                    goal = dynDictExhibits[i][0];
+                    console.log(goal);
+                  }
+                }
+                console.log(JSON.stringify(bpResponse));
+                if(bpResponse.intents[0].name == "goto"){
+                  console.log(JSON.stringify(bpResponse.intents[0]) + "going to: " + JSON.stringify(bpResponse.entities[0].data.value))
+                  Picker(['goToNode', goal]);
+                }
+                else if(bpResponse.intents[0].name == "describe") {
+                  Picker(['desc', goal, [true,false]]);
+                }
               } else{
                 console.log("not yet");
               }
             }
           }
-          var bpMsg = {"type": "text", "text": "take me to the graves"}
-
+          var bpMsg = {"type": "text", "text": ""};
+          if(current[2]){
+            bpMsg.text = prompt(current[1]);
+          }
           xhr.open("POST", `/STT`);
           xhr.setRequestHeader("Content-Type", "application/json")
           xhr.responseType = "json";
-          console.log(" json: " + JSON.stringify(bpMsg));
+          console.log("json: " + JSON.stringify(bpMsg));
           xhr.send(JSON.stringify(bpMsg));
-          // rwcActionSay(current[1]).on("result", function(status){
-          //   console.log("speaking");
-          //   rwcActionStartDialogue();
-          //   displayAction("listening");
-          //   // var bpMsg = {
-          //   //   "type": "text",
-          //   //   "text": "unset"
-          //   // }
-          //   // $.post(`https://localhost:3000/api/v1/bots/chatty_lindsey/converse/${userId}/secured?include=nlu,state,suggestions,decision`, bpMsg,
-          //   //     function(bpResponse) {
-          //   //       console.log( "message recieved:" + JSON.stringify(bpResponse));
-          //   //     });
-          //   // //diaTimer =
-          //   rwcListenerGetDialogue().then(function(script){
-          //     bpMsg.text = script;
-          //     console.log("sending message to chat bot");
-          //     displayAction("finding response");
-          //     xhr.send(JSON.stringify(bpMsg));
-          //   });
-          // });
           break;
         case 'gazeAtPosition':
           rwcActionGazeAtPosition(current[1][0], current[1][1], current[1][2], current[1][3]).on("result", (status)=>{
