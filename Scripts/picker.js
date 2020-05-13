@@ -75,9 +75,9 @@ function Picker(current){ // stack of commands from blocks
           console.log(curExhibitCoord);
           displayAction("describing exhibit: " + dynDictExhibits[current[1]][2]);
           rwcActionDescribeExhibit(current[1]).on("result", ()=>{
-			  talking = false;
-			  setTimeout(function(){resolve("exhibit descrbed")},2000)
-			});
+			       talking = false;
+			       setTimeout(function(){resolve("exhibit descrbed")},2000)
+			    });
           break;
         case 'startTour':
           rwcActionStartTour(current[1]).on("result", ()=>{
@@ -122,14 +122,27 @@ function Picker(current){ // stack of commands from blocks
             }
           }
           var bpMsg = {"type": "text", "text": ""};
-          if(current[2]){
-            bpMsg.text = prompt(current[1]);
-          }
-          xhr.open("POST", `/STT`);
-          xhr.setRequestHeader("Content-Type", "application/json")
-          xhr.responseType = "json";
-          console.log("json: " + JSON.stringify(bpMsg));
-          xhr.send(JSON.stringify(bpMsg));
+          rwcActionSay(current[1]).on("result", (status)=>{
+               if(current[2]){
+                 bpMsg.text = prompt(current[1]);
+                 xhr.open("POST", `/STT`);
+                 xhr.setRequestHeader("Content-Type", "application/json")
+                 xhr.responseType = "json";
+                 console.log("json: " + JSON.stringify(bpMsg));
+                 xhr.send(JSON.stringify(bpMsg));
+               }
+               else{
+                 rwcListenerGetDialogue().then(function(script){
+                   bpMsg.text = script;
+                   displayAction("finding response");
+                   xhr.open("POST", `/STT`);
+                   xhr.setRequestHeader("Content-Type", "application/json")
+                   xhr.responseType = "json";
+                   console.log("json: " + JSON.stringify(bpMsg));
+                   xhr.send(JSON.stringify(bpMsg));
+                 )};
+               }
+          });
           break;
         case 'gazeAtPosition':
           rwcActionGazeAtPosition(current[1][0], current[1][1], current[1][2], current[1][3]).on("result", (status)=>{
@@ -152,7 +165,6 @@ function Picker(current){ // stack of commands from blocks
     			console.log("waiting for " + current[1]);
           setTimeout(function(){},(current[1]+1)*1000);
           break;
-
     }
   });
 }
