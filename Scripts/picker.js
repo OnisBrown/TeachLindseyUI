@@ -6,10 +6,11 @@ function Picker(current){ // stack of commands from blocks
       switch(current[0]){
     		case "waitPer":
           if(current[2]){
-            resolve("this is simulation");
+            displayAction("waiting for people");
+            resolve(simPos(current[1]));
           }
           else{
-			displayAction("waiting for people");
+			      displayAction("waiting for people");
             resolve(personSense(current[1]));
           }
           break;
@@ -140,7 +141,7 @@ function Picker(current){ // stack of commands from blocks
                    xhr.responseType = "json";
                    console.log("json: " + JSON.stringify(bpMsg));
                    xhr.send(JSON.stringify(bpMsg));
-                 )};
+                 });
                }
           });
           break;

@@ -18,7 +18,7 @@ function setExhbitsDict(){
     setTourls();
     setExhbitsls();
     for(i =0; i < mainMusJSON.exhibitors.length; i++){
-      dynDictExhibits[mainMusJSON.exhibitors[i].key] = [mainMusJSON.exhibitors[i].waypoint, mainMusJSON.exhibitors[i].metric_map_position, mainMusJSON.exhibitors[i].title];
+      dynDictExhibits[mainMusJSON.exhibitors[i].key] = [mainMusJSON.exhibitors[i].waypoint, mainMusJSON.exhibitors[i].metric_map_position, `${i+1}.${mainMusJSON.exhibitors[i].title}`];
     }
     console.log(dynDictExhibits);
   }).fail( function(d, textStatus, error) {
@@ -28,7 +28,7 @@ function setExhbitsDict(){
 
 function setExhbitsls(){
   for(i =0; i < mainMusJSON.exhibitors.length; i++){
-    exhibitLsJSON.args0[0].options.push([mainMusJSON.exhibitors[i].title, mainMusJSON.exhibitors[i].key]);
+    exhibitLsJSON.args0[0].options.push([`${i+1}.${mainMusJSON.exhibitors[i].title}`, mainMusJSON.exhibitors[i].key]);
   }
 }
 
@@ -83,6 +83,12 @@ function init(){
   //workspace.addTopBlock('start');
   var xml = '<xml><block type="start" deletable="false" movable="false"></block></xml>';
   Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), workspace);
+  workspace.registerButtonCallback("newString", function(button) {
+    newVar('string');
+   });
+  workspace.registerButtonCallback("newNum", function(button) {
+    newVar('int');
+   });
   workspace.addChangeListener(Blockly.Events.disableOrphans);
   workspace.addChangeListener(updater);
   Blockly.JavaScript.addReservedWords('code'); //make code a reserved word
@@ -93,7 +99,17 @@ function init(){
   }
 }
 
+function newVar(type){
+  switch(type){
+    case 'string':
+      Blockly.Variables.createVariableButtonHandler(workspace, null,'string');
+      break;
+    case 'int':
+      Blockly.Variables.createVariableButtonHandler(workspace, null,'int');
+      break;
+  }
 
+}
 
 function executeCode() { // executes code made by blocks
   commandQueue = [];

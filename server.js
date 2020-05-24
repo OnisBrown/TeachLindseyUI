@@ -16,6 +16,9 @@ server.use('/', express.static(__dirname + '/public'));
 server.get('/', (request,response)=>{
   response.sendFile(__dirname + '/index.html'); //send index.html to client when landing on default page
 });
+server.get('/2', (request,response)=>{
+  response.sendFile(__dirname + '/index2.html'); //send index.html to client when landing on default page
+});
 server.get('/sim', (request,response)=>{
   response.sendFile(__dirname + '/sim.html'); //send sim.html to client when landing on default page
 });
