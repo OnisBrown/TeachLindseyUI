@@ -1,38 +1,14 @@
 var workspace;
 var xml_txt;
-var commandQueue = new Array();
-var whileQueues = new Array();
 var musJSON = "exhibitors_definition.json";
 var userId = 'Guest';
 var talking;
+var stopBut = false;
+var busy;
 var away;
 var pivAway;
 var curExhibitCoord= [];
 var dynDictExhibits ={};
-
-var gazeTargets = {
-  people:[],
-  objects:[]
-};
-
-var startPos = {
-  x: 0,
-  y: 0,
-  z: 0,
-  q: {
-    x:0,
-    y:0,
-    z:0,
-    w:1
-    }
-};
-
-var qtn = { //struct for quaternion
-  x:0,
-  y:0,
-  z:0,
-  w:1
-};
 
 // create a dictionary of exhibit keys and their matching waypoints
 var mainMusJSON = {};
@@ -42,9 +18,9 @@ function setExhbitsDict(){
     setTourls();
     setExhbitsls();
     for(i =0; i < mainMusJSON.exhibitors.length; i++){
-      dynDictExhibits[mainMusJSON.exhibitors[i].key] = [mainMusJSON.exhibitors[i].waypoint, mainMusJSON.exhibitors[i].metric_map_position, mainMusJSON.exhibitors[i].title];
+      dynDictExhibits[mainMusJSON.exhibitors[i].key] = [mainMusJSON.exhibitors[i].waypoint, mainMusJSON.exhibitors[i].metric_map_position, `${i+1}.${mainMusJSON.exhibitors[i].title}`];
     }
-    console.log(dynDictExhibits)
+    console.log(dynDictExhibits);
   }).fail( function(d, textStatus, error) {
         console.error("getJSON failed, status: " + textStatus + ", error: "+error)
     });
@@ -52,7 +28,7 @@ function setExhbitsDict(){
 
 function setExhbitsls(){
   for(i =0; i < mainMusJSON.exhibitors.length; i++){
-    exhibitLsJSON.args0[0].options.push([mainMusJSON.exhibitors[i].title, mainMusJSON.exhibitors[i].key]);
+    exhibitLsJSON.args0[0].options.push([`${i+1}.${mainMusJSON.exhibitors[i].title}`, mainMusJSON.exhibitors[i].key]);
   }
 }
 
@@ -81,7 +57,7 @@ function quatCalc(angle){
 }
 
 function updater(event){
-  var code = Blockly.JavaScript.workspaceToCode(workspace);
+  var code = Blockly.JavaScript.workspaceToCode(workspace).replace(/await/g,"");
   document.getElementById('code').innerHTML = code;
   var xml = Blockly.Xml.workspaceToDom(workspace);
   xml_txt = Blockly.Xml.domToPrettyText(xml);
@@ -92,22 +68,7 @@ function init(){
   setExhbitsDict();
 
   console.log("lists loaded.");
-  console.log("Connecting to botpress")
-  try{
-    window.botpressWebChat.init({
-       host: 'http://localhost:3000',
-       botId: 'chatty_lindsey',
-       hideWidget: true,
-       exposeStore: true,
-       overrideDomain: '127.0.0.1'
-     });
-  }
-  catch (e){
-    console.log(e);
-  }
-  finally{
-    console.log("hopefully botpress loaded...");
-  }
+  console.log("Connecting to botpress");
   workspace = Blockly.inject('blocklyDiv',
     {toolbox: document.getElementById('toolbox'),
      grid:
@@ -122,6 +83,12 @@ function init(){
   //workspace.addTopBlock('start');
   var xml = '<xml><block type="start" deletable="false" movable="false"></block></xml>';
   Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), workspace);
+  workspace.registerButtonCallback("newString", function(button) {
+    newVar('string');
+   });
+  workspace.registerButtonCallback("newNum", function(button) {
+    newVar('int');
+   });
   workspace.addChangeListener(Blockly.Events.disableOrphans);
   workspace.addChangeListener(updater);
   Blockly.JavaScript.addReservedWords('code'); //make code a reserved word
@@ -132,19 +99,16 @@ function init(){
   }
 }
 
-function setStartPos(){
-  rwcListenerGetPosition().then(function(pos){
-    startPos.x = pos[0];
-    startPos.y = pos[1];
-    startPos.z = pos[2];
-  });
+function newVar(type){
+  switch(type){
+    case 'string':
+      Blockly.Variables.createVariableButtonHandler(workspace, null,'string');
+      break;
+    case 'int':
+      Blockly.Variables.createVariableButtonHandler(workspace, null,'int');
+      break;
+  }
 
-  var ang = rwcListenerGetOrientation().then(function(ang){
-    startPos.q.x = ang[0];
-    startPos.q.y = ang[1];
-    startPos.q.z = ang[2];
-    startPos.q.w = ang[3];
-  });
 }
 
 function executeCode() { // executes code made by blocks
@@ -153,98 +117,53 @@ function executeCode() { // executes code made by blocks
   window.LoopTrap = 100;
   Blockly.JavaScript.INFINITE_LOOP_TRAP = 'if(--window.LoopTrap == 0) throw "Infinite loop.";\n';
   var code = Blockly.JavaScript.workspaceToCode(workspace);
-  var parsedCode = code.match(/^.*((\r\n|\n|\r)|$)/gm);
+  var parsedCode = code.match(/^.*((\r\n|\n|\r)|$)/gm); //seperates entire code into
   var block = new Array();
-  var wCount = 0;
+  var lCount = 0;
   console.log(parsedCode);
   try{
-    parsedCode.forEach(function(line){
-      if(line.includes("for (i = ")){
-        block.push(['for', line]);
-        //console.log("start of for");
-      }
-      else if(line.includes("while ()")){
-        var regWhile = /\(([^)]+)\)/;
-        var condition = true; //regExp.exec(line);
-        console.log("condition: " + condition);
-        whileQueues.push(condition,[]);
-        block.push(['while', ]);
-        //console.log("start of while");
+    for(let line of parsedCode){
+      if(line.includes("for (i =")|| line.includes("while(")){
+        lCount +=1;
+        block[block.length-1] += line;
       }
       else if(line.includes("}")){
-      //  console.log("End of " + block[block.length - 1][0]);
-        if(block[block.length - 1][0]=='for'){
-          var innerFor = block.pop()[1].concat(line) + "\n";
-          //console.log(innerFor);
-          eval(innerFor);
-
-        }
-        else if(block[block.length - 1][0]=='while'){
-          wCount -= 1;
-          commandQueue.push(['while']);
-        }
+        lCount -=1;
+        block[block.length-1] += line + "\n";
       }
-      else if(block.length==0){
-        eval(innerFor);
-        eval(line);
+      else if(lCount>0){
+        block[block.length-1] +=line;
       }
       else{
-        if(wCount == 0){
-          block[block.length - 1][1] += line;
-        }
-
-        else if(block[block.length - 1][0]=='while'){
-          var temp = line.replace("commandQueue.push(", "whileQueues[0]");
-          if(block[block.length - 1][0]=='for'){
-
-
-          }
-          else{
-            eval(line);
-            console.log("adding" + line + "to while loop");
-          }
-        }
+        if (line) {
+          block.push(line);
+       }
       }
-    });
-    //eval(code);
+    }
+    block.push(`displayAction("Plan finished!");`);
+    block.push(`console.log("Plan finished!");`);
+    block.push(`stopBut = false;`);
+    let s = "(async () => { " + block.join("") + " })()"
+    console.log(s);
+    eval(s);
+
+
   }
   catch (e){
     alert(e + "\n" + e.lineNumber + " " + e.fileName);
   }
   finally{
-    Picker();
+
   }
 }
 
 function stopActions(){
   cancelCurrentAction();
   Cancel_active_task();
-  commandQueue = [];
   rwcActionSetPoseRelative(0,0,0);
+  stopBut = true
   talking = false;
-}
-
-function personSense(range){
-  console.log("waiting for person...");
-  var preempt
-  setTimeout(function(){ preempt = true }, 20*1000); //times out the waiting after a minute.
-  rwcListenerGetNearestDist(null, true).then(function(myTopic){
-    myTopic.subscribe(function(msg){
-      var dist;
-      dist = msg.min_distance;
-      console.log(dist);
-      if((dist < range && dist >0) || preempt){
-        console.log("found person: " + !preempt);
-        myTopic.unsubscribe();
-        if(commandQueue.length>0){
-          Picker();
-        }
-        else{
-          console.log("Done waiting, no further instructions");
-        }
-      }
-    });
-  });
+  $("#currentAction").empty();
 }
 
 function speechPrep(bools, exhibit){
@@ -273,12 +192,8 @@ function saveCode(){
 }
 
 function loadCode(){
-  //Blockly.Workspace.clear();
+  workspace.clear();
   var name = document.getElementById("scriptName").value;
   var xml = Blockly.Xml.textToDom(localStorage.getItem(name));
   Blockly.Xml.domToWorkspace(xml, workspace);
-}
-
-function loop(){
-  console.log("nout");
 }

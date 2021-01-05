@@ -1,3 +1,6 @@
 [submodule "roswebcomponents"]
 	path = roswebcomponents
 	url = https://github.com/OnisBrown/roswebcomponents.git
+[submodule "blockly"]
+	path = blockly
+	url = https://github.com/OnisBrown/blockly.git

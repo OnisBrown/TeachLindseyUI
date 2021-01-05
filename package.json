@@ -1,0 +1,16 @@
+{
+  "name": "TeachLindseyUI",
+  "version": "1.0.0",
+  "description": "interface for controlling the lindsey robot",
+  "main": "server.js",
+  "repository": "https://github.com/OnisBrown/TeachLindseyUI.git",
+  "author": "Onis Brown <onis.Brown@hotmail.co.uk>",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "http": "^0.0.0",
+    "three": "^0.115.0"
+  }
+}
