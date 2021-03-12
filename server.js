@@ -3,7 +3,7 @@ const express = require('express'),
   axios = require('axios')
 
 server = express();
-server.set('port', process.env.PORT || 4000);
+server.set('port', process.env.PORT || 5000);
 
 //server routes
 server.use(cors());
@@ -44,6 +44,6 @@ server.use((request,response)=>{
    response.send('Error page');
 });
 
-server.listen(4000,()=>{
-  console.log('Express server created at port 4000');
+server.listen(5000,()=>{
+  console.log('Express server created at http://localhost:5000');
 });

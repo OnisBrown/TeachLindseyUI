@@ -23,7 +23,7 @@
 				float: right;
 				border-color: black;
 				margin-left: 70%;
-				text-align: center;
+				text-align: left;
 				background-color: #696969;
 				overflow: auto;
 				opacity: 0.7;
@@ -55,6 +55,9 @@
 				opacity: 0.7;
 				background-color: #ffff6e;
 				overflow: auto;
+			}
+			#currentDiv.pre{
+				padding-left: 10px;
 			}
 			#blocklyDiv{
 				height: 90%;
@@ -151,35 +154,33 @@
 		<button onclick="loadCode()" style="position:absolute;  bottom: 1%; left: 1%"> load code </button>
 		<!-- Toolbox definition -->
 		<xml id="toolbox" style="display: none">
+
 			<category name="Senses">
 				<block type="waitPerson"></block>
-				<block type="gazePer"></block>
 				<block type="pause"></block>
-				<!-- <block type="startTour"></block> -->
-				<!--<block type="askYNQuestion"></block>-->
+				<block type="NearestPerDist"></block>
+				<block type="NearestExhDist"></block>
 			</category>
 
-			<!--  -->
-			<category name="Navigation & Movement">
-				<block type="move"></block>
+			<category name="Museum blocks and movement">
+				<!-- <block type="gazePer"></block> -->
 				<!-- <block type="gazePos"></block> -->
-				<!--<block type="goToNode"></block>-->
+				<block type="goToCoord"></block>
+				<block type="move"></block>
+				<block type="coord"></block>
+				<block type="describe"></block>
 				<block type="goTo"></block>
 				<block type="goToDescribe"></block>
 				<!--<block type="goToDescribeWhile"></block>-->
 				<block type="exhibitLs"></block>
 			</category>
 
-			<category name="Speech">
-				<block type="giveSpeech"></block>
-				<!-- <block type="script"></block> -->
-				<block type="askOQuestion"></block>
-				<block type="describe"></block>
-			</category>
-
-			<category name="loops">
+			<category name="loops and logic">
 				<block type="lindFor"></block>
 				<block type="lindWhile"></block>
+				<block type="listCond"></block>
+				<!-- <block type="logic_operation"></block> -->
+				<block type="lindIf"></block>
 			</category>
 
 			<category name="variables">
@@ -189,18 +190,15 @@
 				<block type="variables_set"></block>
 			</category>
 
-			<category name="numbers and text">
+			<category name="numbers, text, and speech">
+				<block type="giveSpeech"></block>
+				<block type="askOQuestion"></block>
+				<block type="askResQuestion"></block>
 				<block type="math_number"></block>
-				<block type="text"></block>
+				<block type="script"></block>
+				<block type="text_join"></block>
 				<block type="math_arithmetic"></block>
-				<block type="text_multiline"></block>
-			</category>
-
-			<category name="logic">
-				<block type="listCond"></block>
-				<!-- <block type="logic_operation"></block> -->
-				<block type="lindIf"></block>
-
+				<block type="text"></block>
 			</category>
 		</xml>
 	</body>

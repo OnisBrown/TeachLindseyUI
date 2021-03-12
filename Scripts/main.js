@@ -117,22 +117,27 @@ function executeCode() { // executes code made by blocks
   window.LoopTrap = 100;
   Blockly.JavaScript.INFINITE_LOOP_TRAP = 'if(--window.LoopTrap == 0) throw "Infinite loop.";\n';
   var code = Blockly.JavaScript.workspaceToCode(workspace);
-  var parsedCode = code.match(/^.*((\r\n|\n|\r)|$)/gm); //seperates entire code into
+  var parsedCode = code.match(/^.*((\r\n|\n|\r)|$)/gm); //seperates entire code into lines
   var block = new Array();
   var lCount = 0;
   console.log(parsedCode);
   try{
     for(let line of parsedCode){
-      if(line.includes("for (i =")|| line.includes("while(")){
+      if(line.includes("for (i =") || line.includes("while(")){
         lCount +=1;
-        block[block.length-1] += line;
+        if(block.length==0){
+          block[block.length] = line;
+        }
+        else{
+          block[block.length-1] += line;
+        }
       }
       else if(line.includes("}")){
         lCount -=1;
         block[block.length-1] += line + "\n";
       }
       else if(lCount>0){
-        block[block.length-1] +=line;
+        block[block.length-1] += "\t" + line;
       }
       else{
         if (line) {
