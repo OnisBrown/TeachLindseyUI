@@ -2,7 +2,7 @@
 ## Intro
 An interface for creating custom tours of the collection museum using the Lindsey robot
 
-This project aims to establish accessible ways to create robot behaviors on a highly abstracted level
+This project aims to establish accessible ways to create robot behaviors on a highly abstracted level. A report on the initial study can be found here (https://dl.acm.org/doi/abs/10.1145/3371382.3378271).
 
 ## Installation
 ### Setting up the blockly page
